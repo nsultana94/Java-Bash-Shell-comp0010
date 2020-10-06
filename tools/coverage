@@ -1,0 +1,5 @@
+#!/bin/bash
+
+TOOLS_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+cd "$TOOLS_ROOT/../" && mvn jacoco:prepare-agent test jacoco:report && cd target/site/ && python3 -m http.server

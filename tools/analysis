@@ -1,0 +1,5 @@
+#!/bin/bash
+
+TOOLS_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+cd "$TOOLS_ROOT/../" && mvn pmd:pmd && cd target/site/ && python3 -m http.server
