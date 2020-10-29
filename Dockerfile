@@ -23,3 +23,7 @@ ENV DEBIAN_FRONTEND=
 
 EXPOSE 8000
 
+RUN chmod u+x /jsh/jsh
+RUN chmod u+x /jsh/tools/test
+RUN chmod u+x /jsh/tools/coverage
+RUN chmod u+x /jsh/tools/analysis
