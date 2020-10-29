@@ -12,9 +12,16 @@ RUN apt-get update \
 
 COPY . /jsh
 
+
+
 RUN cd /jsh && mvn package -DskipTests
 
 ENV DEBIAN_FRONTEND=
+
+RUN chmod u+x /jsh/jsh 
+RUN chmod u+x /jsh/tools/test 
+RUN chmod u+x /jsh/tools/coverage 
+RUN chmod u+x /jsh/tools/analysis
 
 EXPOSE 8000
 
