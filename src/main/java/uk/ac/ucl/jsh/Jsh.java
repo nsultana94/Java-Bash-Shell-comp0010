@@ -29,14 +29,14 @@ public class Jsh {
     public static void eval(String cmdline, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
 
-        CharStream parserInput = CharStreams.fromString(cmdline); 
+        CharStream parserInput = CharStreams.fromString(cmdline);
         JshGrammarLexer lexer = new JshGrammarLexer(parserInput);
-        CommonTokenStream tokenStream = new CommonTokenStream(lexer);        
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JshGrammarParser parser = new JshGrammarParser(tokenStream);
         ParseTree tree = parser.command();
         ArrayList<String> rawCommands = new ArrayList<String>();
         String lastSubcommand = "";
-        for (int i=0; i<tree.getChildCount(); i++) {
+        for (int i = 0; i < tree.getChildCount(); i++) {
             if (!tree.getChild(i).getText().equals(";")) {
                 lastSubcommand += tree.getChild(i).getText();
             } else {
@@ -54,7 +54,7 @@ public class Jsh {
             while (regexMatcher.find()) {
                 if (regexMatcher.group(1) != null || regexMatcher.group(2) != null) {
                     String quoted = regexMatcher.group(0).trim();
-                    tokens.add(quoted.substring(1,quoted.length()-1));
+                    tokens.add(quoted.substring(1, quoted.length() - 1));
                 } else {
                     nonQuote = regexMatcher.group().trim();
                     ArrayList<String> globbingResult = new ArrayList<String>();
@@ -239,7 +239,7 @@ public class Jsh {
                         for (int i = index; i < storage.size(); i++) {
                             writer.write(storage.get(i) + System.getProperty("line.separator"));
                             writer.flush();
-                        }            
+                        }
                     } catch (IOException e) {
                         throw new RuntimeException("tail: cannot open " + tailArg);
                     }
@@ -258,8 +258,8 @@ public class Jsh {
                 Path currentDir = Paths.get(currentDirectory);
                 for (int i = 0; i < numOfFiles; i++) {
                     filePath = currentDir.resolve(appArgs.get(i + 1));
-                    if (Files.notExists(filePath) || Files.isDirectory(filePath) || 
-                        !Files.exists(filePath) || !Files.isReadable(filePath)) {
+                    if (Files.notExists(filePath) || Files.isDirectory(filePath) || !Files.exists(filePath)
+                            || !Files.isReadable(filePath)) {
                         throw new RuntimeException("grep: wrong file argument");
                     }
                     filePathArray[i] = filePath;
@@ -272,7 +272,7 @@ public class Jsh {
                             Matcher matcher = grepPattern.matcher(line);
                             if (matcher.find()) {
                                 if (numOfFiles > 1) {
-                                    writer.write(appArgs.get(j+1));
+                                    writer.write(appArgs.get(j + 1));
                                     writer.write(":");
                                 }
                                 writer.write(line);
@@ -306,7 +306,7 @@ public class Jsh {
                 System.out.println("jsh: " + e.getMessage());
             }
         } else {
-            System.out.println("Welcome to jsh");
+            System.out.println("Welcome to JSH!");
             Scanner input = new Scanner(System.in);
             try {
                 while (true) {
