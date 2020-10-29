@@ -12,10 +12,7 @@ RUN apt-get update \
 
 COPY . /jsh
 
-RUN chmod u+x /jsh/jsh
-RUN chmod u+x /jsh/tools/test
-RUN chmod u+x /jsh/tools/coverage
-RUN chmod u+x /jsh/tools/analysis
+
 
 RUN cd /jsh && mvn package -DskipTests
 
