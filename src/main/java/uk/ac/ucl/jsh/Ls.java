@@ -3,10 +3,16 @@ package uk.ac.ucl.jsh;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ls implements Application {
     private static String currentDirectory = System.getProperty("user.dir");
+
+    public Ls(ArrayList<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
+        exec(appArgs,input,writer);
+	}
+
 
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
         File currDir;
