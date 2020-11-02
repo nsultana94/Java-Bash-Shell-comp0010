@@ -21,7 +21,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import jdk.internal.net.http.hpack.ISO_8859_1.Writer;
 
 public class Jsh {
 
@@ -93,29 +92,7 @@ public class Jsh {
                 new Ls(appArgs,"hi",writer);
                 break;
             case "cat":
-                if (appArgs.isEmpty()) {
-                    throw new RuntimeException("cat: missing arguments");
-                } else {
-                    for (String arg : appArgs) {
-                        Charset encoding = StandardCharsets.UTF_8;
-                        File currFile = new File(currentDirectory + File.separator + arg);
-                        if (currFile.exists()) {
-                            Path filePath = Paths.get(currentDirectory + File.separator + arg);
-                            try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
-                                String line = null;
-                                while ((line = reader.readLine()) != null) {
-                                    writer.write(String.valueOf(line));
-                                    writer.write(System.getProperty("line.separator"));
-                                    writer.flush();
-                                }
-                            } catch (IOException e) {
-                                throw new RuntimeException("cat: cannot open " + arg);
-                            }
-                        } else {
-                            throw new RuntimeException("cat: file does not exist");
-                        }
-                    }
-                }
+                new cat(appArgs,"hi",writer);
                 break;
             case "echo":
                 boolean atLeastOnePrinted = false;

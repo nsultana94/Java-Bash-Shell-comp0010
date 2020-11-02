@@ -9,7 +9,7 @@ import java.util.List;
 public class Ls implements Application {
     private static String currentDirectory = System.getProperty("user.dir");
 
-    public Ls(ArrayList<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
+    public Ls(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
         exec(appArgs,input,writer);
 	}
 
