@@ -21,6 +21,8 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import jdk.internal.net.http.hpack.ISO_8859_1.Writer;
+
 public class Jsh {
 
     private static String currentDirectory = System.getProperty("user.dir");
@@ -90,32 +92,7 @@ public class Jsh {
                 writer.flush();
                 break;
             case "ls":
-                File currDir;
-                if (appArgs.isEmpty()) {
-                    currDir = new File(currentDirectory);
-                } else if (appArgs.size() == 1) {
-                    currDir = new File(appArgs.get(0));
-                } else {
-                    throw new RuntimeException("ls: too many arguments");
-                }
-                try {
-                    File[] listOfFiles = currDir.listFiles();
-                    boolean atLeastOnePrinted = false;
-                    for (File file : listOfFiles) {
-                        if (!file.getName().startsWith(".")) {
-                            writer.write(file.getName());
-                            writer.write("\t");
-                            writer.flush();
-                            atLeastOnePrinted = true;
-                        }
-                    }
-                    if (atLeastOnePrinted) {
-                        writer.write(System.getProperty("line.separator"));
-                        writer.flush();
-                    }
-                } catch (NullPointerException e) {
-                    throw new RuntimeException("ls: no such directory");
-                }
+                new Ls(appArgs,"hi",writer);
                 break;
             case "cat":
                 if (appArgs.isEmpty()) {
