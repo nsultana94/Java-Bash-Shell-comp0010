@@ -87,9 +87,7 @@ public class Jsh {
                 currentDirectory = dir.getCanonicalPath();
                 break;
             case "pwd":
-                writer.write(currentDirectory);
-                writer.write(System.getProperty("line.separator"));
-                writer.flush();
+                new Pwd(appArgs,"hi",writer);
                 break;
             case "ls":
                 new Ls(appArgs,"hi",writer);
