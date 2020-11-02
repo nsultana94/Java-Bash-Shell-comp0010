@@ -3,7 +3,6 @@ package uk.ac.ucl.jsh;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Ls implements Application {
