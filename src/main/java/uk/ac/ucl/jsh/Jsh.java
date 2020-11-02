@@ -95,17 +95,7 @@ public class Jsh {
                 new cat(appArgs,"hi",writer);
                 break;
             case "echo":
-                boolean atLeastOnePrinted = false;
-                for (String arg : appArgs) {
-                    writer.write(arg);
-                    writer.write(" ");
-                    writer.flush();
-                    atLeastOnePrinted = true;
-                }
-                if (atLeastOnePrinted) {
-                    writer.write(System.getProperty("line.separator"));
-                    writer.flush();
-                }
+                new echo(appArgs,"hi",writer);
                 break;
             case "head":
                 if (appArgs.isEmpty()) {
