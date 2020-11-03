@@ -68,6 +68,12 @@ public class Jsh {
             }
             String appName = tokens.get(0);
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
+            // possible factory method 
+            ApplicationFactory applicationFactory = new ApplicationFactory();
+            Application command = applicationFactory.getApplication(appName, appArgs, "input", writer);
+            command.exec(appArgs, "input", writer);
+            // pls change if wrong
+            
             switch (appName) {
             case "cd":
                 if (appArgs.isEmpty()) {
