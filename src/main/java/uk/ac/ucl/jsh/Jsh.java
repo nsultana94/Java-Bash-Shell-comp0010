@@ -71,47 +71,6 @@ public class Jsh {
             // possible factory method 
             ApplicationFactory applicationFactory = new ApplicationFactory();
             Application command = applicationFactory.getApplication(appName, appArgs, "input", writer);
-            command.exec(appArgs, "input", writer);
-            // pls change if wrong
-            
-            switch (appName) {
-            case "cd":
-                if (appArgs.isEmpty()) {
-                    throw new RuntimeException("cd: missing argument");
-                } else if (appArgs.size() > 1) {
-                    throw new RuntimeException("cd: too many arguments");
-                }
-                String dirString = appArgs.get(0);
-                File dir = new File(currentDirectory, dirString);
-                if (!dir.exists() || !dir.isDirectory()) {
-                    throw new RuntimeException("cd: " + dirString + " is not an existing directory");
-                }
-                currentDirectory = dir.getCanonicalPath();
-                break;
-            case "pwd":
-                new Pwd(appArgs,"input",writer);
-                break;
-            case "ls":
-                new Ls(appArgs,"input",writer);
-                break;
-            case "cat":
-                new cat(appArgs,"input",writer);
-                break;
-            case "echo":
-                new echo(appArgs,"input",writer);
-                break;
-            case "head":
-                new head(appArgs,"input",writer);
-                break;
-            case "tail":
-                new tail(appArgs,"input",writer);
-                break;
-            case "grep":
-                new grep(appArgs,"input",writer);
-                break;
-            default:
-                throw new RuntimeException(appName + ": unknown application");
-            }
         }
     }
 
