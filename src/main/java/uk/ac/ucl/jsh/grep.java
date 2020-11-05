@@ -15,12 +15,12 @@ import java.util.regex.Matcher;
 
 
 public class grep implements Application {
-    private static String currentDirectory = System.getProperty("user.dir");
 
     public grep() throws IOException {
     }
 
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException{
+        String currentDirectory = directory.getCurrentDirectory();
         if (args.size() < 2) {
             throw new RuntimeException("grep: wrong number of arguments");
         }

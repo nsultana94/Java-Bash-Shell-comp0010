@@ -1,8 +1,7 @@
 package uk.ac.ucl.jsh;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.List;
+
 
 public class ApplicationFactory {
 
@@ -34,6 +33,9 @@ public class ApplicationFactory {
         }
         else if(appName.equalsIgnoreCase("grep")){
             return new grep();
+        }
+        else if(appName.equalsIgnoreCase("cd")){
+            return new Cd();
         }
         else{
             throw new RuntimeException(appName + ": unknown application");

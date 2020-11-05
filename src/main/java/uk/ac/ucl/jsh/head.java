@@ -12,13 +12,14 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class head implements Application {
-    private static String currentDirectory = System.getProperty("user.dir");
 
 
     public head() throws IOException {
     }
     
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException{
+        String currentDirectory = directory.getCurrentDirectory();
+
         if (args.isEmpty()) {
             throw new RuntimeException("head: missing arguments");
         }

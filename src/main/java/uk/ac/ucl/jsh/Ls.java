@@ -6,13 +6,13 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 
 public class Ls implements Application {
-    private static String currentDirectory = System.getProperty("user.dir");
 
     public Ls() throws IOException {
 	}
 
 
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
+        String currentDirectory = directory.getCurrentDirectory();
         File currDir;
         if (args.isEmpty()) {
             currDir = new File(currentDirectory);

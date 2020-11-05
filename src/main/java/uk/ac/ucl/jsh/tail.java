@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class tail implements Application {
-    private static String currentDirectory = System.getProperty("user.dir");
 
     public tail() throws IOException {
 	}
 
     
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException{
+        String currentDirectory = directory.getCurrentDirectory();
         if (args.isEmpty()) {
             throw new RuntimeException("tail: missing arguments");
         }
