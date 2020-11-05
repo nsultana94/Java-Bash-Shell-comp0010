@@ -15,8 +15,7 @@ public class head implements Application {
     private static String currentDirectory = System.getProperty("user.dir");
 
 
-    public head(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
-        exec(appArgs,input,writer);
+    public head() throws IOException {
     }
     
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException{

@@ -6,8 +6,7 @@ import java.util.List;
 
 public class echo implements Application {
 
-    public echo(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
-        exec(appArgs,input,writer);
+    public echo() throws IOException {
 	}
 
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException{

@@ -17,8 +17,7 @@ import java.util.regex.Matcher;
 public class grep implements Application {
     private static String currentDirectory = System.getProperty("user.dir");
 
-    public grep(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
-        exec(appArgs,input,writer);
+    public grep() throws IOException {
     }
 
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException{

@@ -6,34 +6,34 @@ import java.util.List;
 
 public class ApplicationFactory {
 
-    public  Application getApplication(String appName, List<String> args, String input, OutputStreamWriter output)
+    public  Application getApplication(String appName)
             throws IOException {
         if(appName == null){
             return null;
         }
         else if(appName.equalsIgnoreCase("pwd")){
-            return new Pwd(args, input,output);
+            return new Pwd();
         }
         
         else if(appName.equalsIgnoreCase("ls")){
-            return new Ls(args, input, output);
+            return new Ls();
         }
         else if(appName.equalsIgnoreCase("cat")){
-            return new cat(args, input, output);
+            return new cat();
         }
 
         else if(appName.equalsIgnoreCase("echo")){
-            return new echo(args, input, output);
+            return new echo();
         }
 
         else if(appName.equalsIgnoreCase("head")){
-            return new head(args, input, output);
+            return new head();
         }
         else if(appName.equalsIgnoreCase("tail")){
-            return new tail(args, input, output);
+            return new tail();
         }
         else if(appName.equalsIgnoreCase("grep")){
-            return new grep(args, input, output);
+            return new grep();
         }
         else{
             throw new RuntimeException(appName + ": unknown application");

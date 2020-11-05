@@ -15,9 +15,7 @@ public class cat implements Application {
     private static String currentDirectory = System.getProperty("user.dir");
 
 
-    public cat(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
-        exec(appArgs,input,writer);
-	}
+    public cat() throws IOException {}
 
     @Override
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {

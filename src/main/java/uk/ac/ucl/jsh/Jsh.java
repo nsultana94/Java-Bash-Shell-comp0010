@@ -70,7 +70,8 @@ public class Jsh {
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
             // possible factory method 
             ApplicationFactory applicationFactory = new ApplicationFactory();
-            Application command = applicationFactory.getApplication(appName, appArgs, "input", writer);
+            Application command = applicationFactory.getApplication(appName);
+            command.exec(appArgs, "input", writer);
         }
     }
 

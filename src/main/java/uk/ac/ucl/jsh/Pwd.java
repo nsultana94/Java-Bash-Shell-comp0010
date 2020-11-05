@@ -7,8 +7,7 @@ import java.util.List;
 public class Pwd implements Application {
     
     private static String currentDirectory = System.getProperty("user.dir");
-    public Pwd(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
-        exec(appArgs,input,writer);
+    public Pwd() throws IOException {
 	}
 
 

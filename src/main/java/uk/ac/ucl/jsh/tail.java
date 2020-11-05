@@ -15,8 +15,7 @@ import java.util.List;
 public class tail implements Application {
     private static String currentDirectory = System.getProperty("user.dir");
 
-    public tail(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
-        exec(appArgs,input,writer);
+    public tail() throws IOException {
 	}
 
     

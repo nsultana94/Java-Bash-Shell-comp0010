@@ -8,8 +8,7 @@ import java.util.List;
 public class Ls implements Application {
     private static String currentDirectory = System.getProperty("user.dir");
 
-    public Ls(List<String> appArgs, String input, OutputStreamWriter writer) throws IOException {
-        exec(appArgs,input,writer);
+    public Ls() throws IOException {
 	}
 
 
