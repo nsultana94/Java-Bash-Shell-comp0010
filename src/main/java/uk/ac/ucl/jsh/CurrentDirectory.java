@@ -1,9 +1,10 @@
 package uk.ac.ucl.jsh;
 
-public class CurrentDirectory {
+public final class CurrentDirectory {
     private String currentDirectory;
+    private static CurrentDirectory INSTANCE = null;
     
-    public CurrentDirectory(String dir){
+    private CurrentDirectory(String dir){
         currentDirectory = dir;
     }
 
@@ -13,6 +14,13 @@ public class CurrentDirectory {
 
     public void SetCurrentDirectory(String dir){
         currentDirectory = dir;
+    }
+
+    public static CurrentDirectory getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new CurrentDirectory(System.getProperty("user.dir")); 
+        }
+        return INSTANCE;
     }
     
 }

@@ -20,7 +20,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class Jsh {
 
-    private static String currentDirectory = System.getProperty("user.dir");
+    private static CurrentDirectory currentDirectory = CurrentDirectory.getInstance();
 
     public static void eval(String cmdline, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
@@ -29,7 +29,7 @@ public class Jsh {
         JshGrammarLexer lexer = new JshGrammarLexer(parserInput);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JshGrammarParser parser = new JshGrammarParser(tokenStream);
-        ParseTree tree = parser.command();
+        ParseTree tree = parser.command(); // tree of command terminals 
         ArrayList<String> rawCommands = new ArrayList<String>();
         String lastSubcommand = "";
         for (int i = 0; i < tree.getChildCount(); i++) {
@@ -54,7 +54,7 @@ public class Jsh {
                 } else {
                     nonQuote = regexMatcher.group().trim();
                     ArrayList<String> globbingResult = new ArrayList<String>();
-                    Path dir = Paths.get(currentDirectory);
+                    Path dir = Paths.get(currentDirectory.getCurrentDirectory());
                     DirectoryStream<Path> stream = Files.newDirectoryStream(dir, nonQuote);
                     for (Path entry : stream) {
                         globbingResult.add(entry.getFileName().toString());
@@ -93,7 +93,7 @@ public class Jsh {
             Scanner input = new Scanner(System.in);
             try {
                 while (true) {
-                    String prompt = currentDirectory + "> ";
+                    String prompt = currentDirectory.getCurrentDirectory() + "> ";
                     System.out.print(prompt);
                     try {
                         String cmdline = input.nextLine();
