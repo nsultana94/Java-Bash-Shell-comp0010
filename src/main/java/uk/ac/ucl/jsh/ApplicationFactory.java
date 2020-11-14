@@ -5,43 +5,45 @@ import java.io.IOException;
 
 public class ApplicationFactory {
 
-    public  Application getApplication(String appName)
-            throws IOException {
+    public  Application getApplication(String appName, Boolean unsafe) throws IOException {
+        Application app;
+
         if(appName == null){
             return null;
         }
         else if(appName.equalsIgnoreCase("pwd")){
-            return new Pwd();
+            app =  new Pwd();
         }
         
         else if(appName.equalsIgnoreCase("ls")){
-            return new Ls();
+            app =  new Ls();
         }
         else if(appName.equalsIgnoreCase("cat")){
-            return new cat();
+            app =  new cat();
         }
 
         else if(appName.equalsIgnoreCase("echo")){
-            return new echo();
+            app =  new echo();
         }
 
         else if(appName.equalsIgnoreCase("head")){
-            return new head();
+            app =  new head();
         }
         else if(appName.equalsIgnoreCase("tail")){
-            return new tail();
+            app =  new tail();
         }
         else if(appName.equalsIgnoreCase("grep")){
-            return new grep();
+            app =  new grep();
         }
         else if(appName.equalsIgnoreCase("cd")){
-            return new Cd();
+            app =  new Cd();
+        }
+        else if (appName.equalsIgnoreCase("sort")){
+            app =  new Sort();
         }
         else{
             throw new RuntimeException(appName + ": unknown application");
         }
-        
-        
-
-}
+        return (unsafe? new UnsafeDecorator(app) : app);
+    }
 }

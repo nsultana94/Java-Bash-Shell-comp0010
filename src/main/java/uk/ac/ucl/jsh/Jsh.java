@@ -41,12 +41,15 @@ public class Jsh {
             }
         }
         rawCommands.add(lastSubcommand);
+
+        ApplicationFactory applicationFactory = new ApplicationFactory();
         for (String rawCommand : rawCommands) {
             String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
             ArrayList<String> tokens = new ArrayList<String>();
             Pattern regex = Pattern.compile(spaceRegex);
             Matcher regexMatcher = regex.matcher(rawCommand);
             String nonQuote;
+            Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
             while (regexMatcher.find()) {
                 if (regexMatcher.group(1) != null || regexMatcher.group(2) != null) {
                     String quoted = regexMatcher.group(0).trim();
@@ -66,10 +69,9 @@ public class Jsh {
                 }
             }
             String appName = tokens.get(0);
+            appName = (unsafe? appName.substring(1): appName);
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
-            // possible factory method 
-            ApplicationFactory applicationFactory = new ApplicationFactory();
-            Application command = applicationFactory.getApplication(appName);
+            Application command = applicationFactory.getApplication(appName, unsafe);
             command.exec(appArgs, "input", writer);
         }
     }
