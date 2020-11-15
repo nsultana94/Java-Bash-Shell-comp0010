@@ -6,14 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/*
-The find command recursively searches for files with matching names. It outputs the list of relative paths, each followed by a newline:
-find [PATH] -name PATTERN
-•	PATTERN – file name with some parts replaced with * (asterisk).
-•	PATH – the root directory for search. If not specified, use the current directory.
 
-can be find -name PATTERN or find [PATH] -name PATTERN 
-*/
 
 public class find implements Application {
 
