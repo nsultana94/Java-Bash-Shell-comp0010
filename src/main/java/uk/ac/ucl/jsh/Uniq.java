@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 public class Uniq implements Application {
 
