@@ -39,7 +39,11 @@ public class Cut implements Application {
                 List<String> newLines = new ArrayList<>();
                 while((line = br.readLine()) != null){
                     String cutline = "";
-                    if(args.get(1).equals("1,2,3")){
+                    if (line.length() < 3){
+                        cutline = line;
+                        newLines.add(cutline);
+                    }
+                    else if(args.get(1).equals("1,2,3")){
                         cutline = line.substring(0,3);
                         newLines.add(cutline);
                     }
