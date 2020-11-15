@@ -45,6 +45,9 @@ public class ApplicationFactory {
         else if(appName.equalsIgnoreCase("uniq")){
             app = new Uniq();
         }
+        else if(appName.equalsIgnoreCase("cut")){
+            app = new Cut();
+        }
         else{
             throw new RuntimeException(appName + ": unknown application");
         }

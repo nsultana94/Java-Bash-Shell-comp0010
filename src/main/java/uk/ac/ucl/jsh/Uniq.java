@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
+
 public class Uniq implements Application {
 
     public Uniq() throws IOException {}
@@ -40,13 +42,14 @@ public class Uniq implements Application {
         if(file.exists()){
           try(  BufferedReader br = new BufferedReader(new FileReader(file))){
             //creating list of lines in files
-            String line =  br.readLine();   
+            String line = br.readLine(); 
             List<String> filelines = new ArrayList<>();
             List<String> uniqueFileLines = new ArrayList<>();
             
             while((line = br.readLine()) != null){
-                filelines.add(line);
+                filelines.add(line);  
             }
+            
             // removing duplicates
             if (options){ //ignores case
                 uniqueFileLines = filelines.stream().map(String::toLowerCase).distinct().collect(Collectors.toList());
