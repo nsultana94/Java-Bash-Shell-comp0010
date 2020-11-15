@@ -40,7 +40,7 @@ public class ApplicationFactory {
         }
 
         else if (appName.equalsIgnoreCase("find")) {
-            app = new Find();
+            app = new find();
         } else {
             throw new RuntimeException(appName + ": unknown application");
         }

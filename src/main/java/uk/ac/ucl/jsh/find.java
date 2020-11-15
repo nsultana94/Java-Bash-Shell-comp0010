@@ -1,20 +1,9 @@
 package uk.ac.ucl.jsh;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.regex.Pattern;
 
 /*
@@ -28,7 +17,8 @@ can be find -name PATTERN or find [PATH] -name PATTERN
 
 public class find implements Application {
 
-    public Find() throws IOException {}
+    public find() throws IOException {
+    }
 
     @Override
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
