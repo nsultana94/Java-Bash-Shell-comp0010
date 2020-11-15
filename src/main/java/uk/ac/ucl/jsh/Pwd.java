@@ -15,6 +15,5 @@ public class Pwd implements Application {
         output.write(currentDirectory);
         output.write(System.getProperty("line.separator"));
         output.flush();
-
     }
 }
