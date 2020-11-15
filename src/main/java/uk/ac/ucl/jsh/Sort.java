@@ -10,8 +10,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Sort implements Application {
 
@@ -23,16 +26,16 @@ public class Sort implements Application {
         if (args.isEmpty()) {
             throw new RuntimeException("sort: missing arguments");
         }
-        if (!(args.size() < 2)) {
+        if (!(args.size() <= 2)) {
             throw new RuntimeException("sort: wrong arguments");
         }
         if (args.size() == 2 && !args.get(0).equals("-r")) {
             throw new RuntimeException("sort: wrong argument " + args.get(0));
         }
-        Boolean x = false;
+        Boolean reverse = false;
         String fileArg; 
         if(args.size() == 2){
-            x = true;
+            reverse = true;
             fileArg = args.get(1);
         }else{
             fileArg = args.get(0);
@@ -42,7 +45,9 @@ public class Sort implements Application {
             Charset encoding = StandardCharsets.UTF_8;
             Path filePath = Paths.get((String) currentDirectory + File.separator + fileArg);
             try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
-                ArrayList<String> lines = (ArrayList<String>) reader.lines().sorted().collect(Collectors.toList());
+                ArrayList<String> lines = new ArrayList<String>();
+                if(reverse){lines = (ArrayList<String>) reader.lines().sorted(Comparator.reverseOrder()).collect(Collectors.toList());}
+                else {lines = (ArrayList<String>) reader.lines().sorted().collect(Collectors.toList());}
                 for(String line:lines){
                     output.write(line);
                     output.write(System.getProperty("line.separator"));
