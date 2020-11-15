@@ -6,7 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+
 
 
 public class Cut implements Application {
@@ -25,8 +28,8 @@ public class Cut implements Application {
         if(!(args.get(0).equals("-b"))){
             throw new RuntimeException("cut: incorrect argument" + args.get(0));
         }
-        if(!(args.get(1).equals("1,2,3")) && !(args.get(1).equals("1-3,5-7")) && !(args.get(1).equals("-3,5-"))){
-            throw new RuntimeException("cut: wrong argument" + args.get(1));
+        if(!(args.get(1).matches("[0-9]+,[0-9]+,[0-9]+")) && !(args.get(1).matches("[0-9]+-[0-9]+,[0-9]+-[0-9]+")) &&!(args.get(1).matches("-[0-9]+,[0-9]+-"))){
+            throw new RuntimeException("cut: wrong argument " + args.get(1));
         }
 
         String filename = args.get(2);
@@ -43,14 +46,31 @@ public class Cut implements Application {
                         cutline = line;
                         newLines.add(cutline);
                     }
-                    else if(args.get(1).equals("1,2,3")){
-                        cutline = line.substring(0,3);
+
+                    // when in format x, y ,z
+                    else if(args.get(1).matches("[0-9]+,[0-9]+,[0-9]+")){
+                        String arguments[] = args.get(1).split(","); // splits the integers
+                        int[] intargs = Arrays.asList(arguments).stream().mapToInt(Integer::parseInt).toArray(); 
+                        for(int i: intargs){
+                            if (i >= line.length()){
+                                cutline = cutline.concat(line.substring(line.length()-1)); // if byte bigger than length give last byte
+                            }
+                            else{
+                                cutline = cutline.concat(line.substring(i-1, i));// concat into string of byte at each index
+                            }
+                        }
                         newLines.add(cutline);
                     }
-                    else if(args.get(1).equals("1-3,5-7")){
+                    // when in format -x, y-
+                    else if(args.get(1).matches("-[0-9]+,[0-9]+-")){
+                        String arguments[] = args.get(1).split(",");
+                        int[] intargs = Arrays.asList(arguments).stream().mapToInt(Integer::parseInt).toArray();
+                        
+                        
                         cutline = cutline.concat(line.substring(0,3)).concat(line.substring(4,7));
                         newLines.add(cutline);
                     }
+
                     else{
                         cutline = cutline.concat(line.substring(0,3)).concat(line.substring(4, line.length()));
                         newLines.add(cutline);

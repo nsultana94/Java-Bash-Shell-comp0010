@@ -50,7 +50,7 @@ public class Uniq implements Application {
             }
             
             // removing duplicates
-            
+
             if (options){ //removes duplicates ignoring case
                 uniqueFileLines = filelines.stream().map(String::toLowerCase).distinct().collect(Collectors.toList());
             }
