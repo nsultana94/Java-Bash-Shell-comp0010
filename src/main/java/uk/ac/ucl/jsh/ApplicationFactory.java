@@ -41,6 +41,10 @@ public class ApplicationFactory {
         else if (appName.equalsIgnoreCase("sort")){
             app =  new Sort();
         }
+
+        else if(appName.equalsIgnoreCase("uniq")){
+            app = new Uniq();
+        }
         else{
             throw new RuntimeException(appName + ": unknown application");
         }
