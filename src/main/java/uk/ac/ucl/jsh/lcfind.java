@@ -26,7 +26,10 @@ find [PATH] -name PATTERN
 can be find -name PATTERN or find [PATH] -name PATTERN 
 */
 
-public class Find implements Application {
+public class find implements Application {
+
+    public Find() throws IOException {}
+
     @Override
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();
