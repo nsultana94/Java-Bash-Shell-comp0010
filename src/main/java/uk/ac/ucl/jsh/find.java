@@ -23,6 +23,7 @@ public class find implements Application {
     @Override
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();
+
         // throw exception if 0 arguments given
         if (args.isEmpty()) {
             throw new RuntimeException("find: missing arguments");
@@ -44,10 +45,11 @@ public class find implements Application {
         // set targetDirectory as currentDirectory
         File targetDirectory;
         String patternArg;
+
         if (args.size() == 2) {
             targetDirectory = new File(currentDirectory);
             patternArg = args.get(1);
-        } else if (args.size() == 3) {
+        } else {
             String pathArg = args.get(0);
             targetDirectory = new File(pathArg);
             if (!targetDirectory.exists()) {
