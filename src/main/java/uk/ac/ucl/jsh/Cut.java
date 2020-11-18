@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 
@@ -18,6 +20,9 @@ public class Cut implements Application {
     @Override
     public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();
+
+        String regex = "(-?[1-9]+[0-9]*-?([1-9]+[0-9]*)*-?)(,-?[1-9]+[0-9]*-?([1-9]+[0-9]*)*-?)*";
+        // regex accepting formats of cut e.g 1,2,3 or 2-,3- or 1-2,2-3, or -2,3-
         
         if (args.isEmpty()) {
             throw new RuntimeException("cut: missing arguments");
@@ -28,7 +33,7 @@ public class Cut implements Application {
         if(!(args.get(0).equals("-b"))){
             throw new RuntimeException("cut: incorrect argument" + args.get(0));
         }
-        if(!(args.get(1).matches("[0-9]+,[0-9]+,[0-9]+")) && !(args.get(1).matches("[0-9]+-[0-9]+,[0-9]+-[0-9]+")) &&!(args.get(1).matches("-[0-9]+,[0-9]+-"))){
+        if(!(args.get(1).matches(regex))){
             throw new RuntimeException("cut: wrong argument " + args.get(1));
         }
 
@@ -42,45 +47,42 @@ public class Cut implements Application {
                 List<String> newLines = new ArrayList<>();
                 while((line = br.readLine()) != null){
                     String cutline = "";
-                    if (line.length() < 3){
-                        cutline = line;
-                        newLines.add(cutline);
-                    }
-
-                    // when in format x, y ,z
-                    else if(args.get(1).matches("[0-9]+,[0-9]+,[0-9]+")){
-                        String arguments[] = args.get(1).split(","); // splits the integers
-                        int[] intargs = Arrays.asList(arguments).stream().mapToInt(Integer::parseInt).toArray(); 
-                        for(int i: intargs){
-                            if (i >= line.length()){
-                                cutline = cutline.concat(line.substring(line.length()-1)); // if byte bigger than length give last byte
+                
+                    String arguments[] = args.get(1).split(",");
+                    System.out.println(arguments[1]);
+                    // splits the arguments by ,
+                    char[] argumentchars = arguments[1].toCharArray();
+                    for(int i = 0; i < argumentchars.length; i++){
+                        int startindex = 0;
+                        int lastindex = 0;
+                        if (argumentchars[i]=='-'){
+                            if(i == 0){
+                                startindex = 0;
+                                lastindex = Character.getNumericValue(argumentchars[i+1]);
+                            }
+                            else if(i == argumentchars.length-1 ){
+                                startindex = Character.getNumericValue(argumentchars[i-2]);
+                                lastindex = line.length()-1;
                             }
                             else{
-                                cutline = cutline.concat(line.substring(i-1, i));// concat into string of byte at each index
+                                lastindex = Character.getNumericValue(argumentchars[i+1]);
+                                startindex = Character.getNumericValue(argumentchars[i-1]);
                             }
+                            if (lastindex)
+                            System.out.println(argumentchars[i+1]);
+                            System.out.println(argumentchars[i-1]);
+                            cutline = cutline.concat(line.substring(startindex, lastindex));
                         }
-                        newLines.add(cutline);
                     }
-                    // when in format -x, y-
-                    else if(args.get(1).matches("-[0-9]+,[0-9]+-")){
-                        String arguments[] = args.get(1).split(",");
-                        int[] intargs = Arrays.asList(arguments).stream().mapToInt(Integer::parseInt).toArray();
-                        
-                        
-                        cutline = cutline.concat(line.substring(0,3)).concat(line.substring(4,7));
-                        newLines.add(cutline);
-                    }
-
-                    else{
-                        cutline = cutline.concat(line.substring(0,3)).concat(line.substring(4, line.length()));
-                        newLines.add(cutline);
-                    }
+                    newLines.add(cutline);
                 }
+
                 for(String lines: newLines){
                     output.write(lines);
                     output.write(System.getProperty("line.separator"));
                     output.flush();
                 } 
+            
             }
 
           
