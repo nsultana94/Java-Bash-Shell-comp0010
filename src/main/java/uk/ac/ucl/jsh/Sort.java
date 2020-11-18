@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,14 +42,17 @@ public class Sort implements Application {
             Charset encoding = StandardCharsets.UTF_8;
             Path filePath = Paths.get((String) currentDirectory + File.separator + fileArg);
             try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
-                ArrayList<String> lines = new ArrayList<String>();
-                if(reverse){lines = (ArrayList<String>) reader.lines().sorted(Comparator.reverseOrder()).collect(Collectors.toList());}
-                else {lines = (ArrayList<String>) reader.lines().sorted().collect(Collectors.toList());}
+                
+                List<String> lines;
+                if(reverse){lines = reader.lines().sorted(Comparator.reverseOrder()).collect(Collectors.toList());}
+                else {lines = reader.lines().sorted().collect(Collectors.toList());}
+                
                 for(String line:lines){
                     output.write(line);
                     output.write(System.getProperty("line.separator"));
                     output.flush();
                 }
+
             } catch (IOException e) {
                 throw new RuntimeException("head: cannot open " + fileArg);
             }

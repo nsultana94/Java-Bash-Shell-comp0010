@@ -50,12 +50,14 @@ public class Uniq implements Application {
             }
             
             // removing duplicates
-            if (options){ //ignores case
+
+            if (options){ //removes duplicates ignoring case
                 uniqueFileLines = filelines.stream().map(String::toLowerCase).distinct().collect(Collectors.toList());
             }
-            else{
+            else{ // removes duplicates case sensitive
                 uniqueFileLines = filelines.stream().distinct().collect(Collectors.toList());
             }
+            // for each unique line prints to output
             for(String lines: uniqueFileLines){
                 output.write(lines);
                 output.write(System.getProperty("line.separator"));
