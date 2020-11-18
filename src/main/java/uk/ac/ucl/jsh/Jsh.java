@@ -29,7 +29,7 @@ public class Jsh {
         JshGrammarLexer lexer = new JshGrammarLexer(parserInput);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JshGrammarParser parser = new JshGrammarParser(tokenStream);
-        ParseTree tree = parser.command(); // tree of command terminals 
+        ParseTree tree = parser.command(); 
         ArrayList<String> rawCommands = new ArrayList<String>();
         String lastSubcommand = "";
         for (int i = 0; i < tree.getChildCount(); i++) {
@@ -49,7 +49,6 @@ public class Jsh {
             Pattern regex = Pattern.compile(spaceRegex);
             Matcher regexMatcher = regex.matcher(rawCommand);
             String nonQuote;
-            Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
             while (regexMatcher.find()) {
                 if (regexMatcher.group(1) != null || regexMatcher.group(2) != null) {
                     String quoted = regexMatcher.group(0).trim();
@@ -69,6 +68,7 @@ public class Jsh {
                 }
             }
             String appName = tokens.get(0);
+            Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
             appName = (unsafe? appName.substring(1): appName);
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
             Application command = applicationFactory.getApplication(appName, unsafe);
@@ -109,5 +109,4 @@ public class Jsh {
             }
         }
     }
-
 }
