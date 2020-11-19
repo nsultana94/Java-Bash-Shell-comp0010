@@ -3,14 +3,9 @@ package uk.ac.ucl.jsh;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -43,34 +38,14 @@ public class Jsh {
         rawCommands.add(lastSubcommand);
 
         ApplicationFactory applicationFactory = new ApplicationFactory();
+        glob glob_processor = new glob();
         for (String rawCommand : rawCommands) {
-            String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
-            ArrayList<String> tokens = new ArrayList<String>();
-            Pattern regex = Pattern.compile(spaceRegex);
-            Matcher regexMatcher = regex.matcher(rawCommand);
-            String nonQuote;
-            while (regexMatcher.find()) {
-                if (regexMatcher.group(1) != null || regexMatcher.group(2) != null) {
-                    String quoted = regexMatcher.group(0).trim();
-                    tokens.add(quoted.substring(1, quoted.length() - 1));
-                } else {
-                    nonQuote = regexMatcher.group().trim();
-                    ArrayList<String> globbingResult = new ArrayList<String>();
-                    Path dir = Paths.get(currentDirectory.getCurrentDirectory());
-                    DirectoryStream<Path> stream = Files.newDirectoryStream(dir, nonQuote);
-                    for (Path entry : stream) {
-                        globbingResult.add(entry.getFileName().toString());
-                    }
-                    if (globbingResult.isEmpty()) {
-                        globbingResult.add(nonQuote);
-                    }
-                    tokens.addAll(globbingResult);
-                }
-            }
+            List<String> tokens = glob_processor.get_tokens(rawCommand);
             String appName = tokens.get(0);
             Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
             appName = (unsafe? appName.substring(1): appName);
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
+           
             Application command = applicationFactory.getApplication(appName, unsafe);
             command.exec(appArgs, "input", writer);
         }
