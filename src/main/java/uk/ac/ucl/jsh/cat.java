@@ -17,7 +17,7 @@ public class cat implements Application {
     public cat() throws IOException {}
 
     @Override
-    public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
+    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
         if (args.isEmpty()) {
             throw new RuntimeException("cat: missing arguments");

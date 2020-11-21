@@ -3,6 +3,7 @@ package uk.ac.ucl.jsh;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +19,7 @@ public class tail implements Application {
 	}
 
     
-    public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException{
+    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
         if (args.isEmpty()) {
             throw new RuntimeException("tail: missing arguments");

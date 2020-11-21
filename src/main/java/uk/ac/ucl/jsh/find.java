@@ -1,5 +1,6 @@
 package uk.ac.ucl.jsh;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -12,7 +13,7 @@ public class find implements Application {
     }
 
     @Override
-    public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
+    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
 
         if (args.isEmpty()) {

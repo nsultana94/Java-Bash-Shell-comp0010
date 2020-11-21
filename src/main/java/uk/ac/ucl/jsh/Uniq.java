@@ -15,7 +15,7 @@ public class Uniq implements Application {
     public Uniq() throws IOException {}
 
     @Override
-    public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
+    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
         String filename;
         boolean options = false;
