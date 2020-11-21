@@ -25,7 +25,6 @@ public class Uniq implements Application {
         }
         if(args.size() == 2 && !args.get(0).equals( "-i")){
             throw new RuntimeException("uniq: incorrect argument" + args.get(0));
-
         }
         if(args.size() > 2){
             throw new RuntimeException("uniq: incorrect number of arguments");
@@ -41,7 +40,7 @@ public class Uniq implements Application {
         if(file.exists()){
           try(  BufferedReader br = new BufferedReader(new FileReader(file))){
             //creating list of lines in files
-            String line = br.readLine(); 
+            String line;
             List<String> filelines = new ArrayList<>();
             List<String> uniqueFileLines = new ArrayList<>();
             

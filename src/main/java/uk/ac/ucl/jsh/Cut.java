@@ -142,10 +142,7 @@ public class Cut implements Application {
             finalintervals.add(new Range(min, max));
         }
         
-        
         return finalintervals;
-
-
 
     }
 }
