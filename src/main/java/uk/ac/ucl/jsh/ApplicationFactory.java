@@ -12,17 +12,14 @@ public class ApplicationFactory {
         } else if (appName.equalsIgnoreCase("pwd")) {
             app = new Pwd();
         }
-
         else if (appName.equalsIgnoreCase("ls")) {
             app = new Ls();
         } else if (appName.equalsIgnoreCase("cat")) {
             app = new cat();
         }
-
         else if (appName.equalsIgnoreCase("echo")) {
             app = new echo();
         }
-
         else if (appName.equalsIgnoreCase("head")) {
             app = new head();
         } else if (appName.equalsIgnoreCase("tail")) {

@@ -14,7 +14,7 @@ public class Cut implements Application {
     public Cut() throws IOException {}
 
     @Override
-    public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
+    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();
 
         String regex = "(-?[1-9]+[0-9]*-?([1-9]+[0-9]*)*-?)(,-?[1-9]+[0-9]*-?([1-9]+[0-9]*)*-?)*";

@@ -47,7 +47,7 @@ public class Jsh {
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
            
             Application command = applicationFactory.getApplication(appName, unsafe);
-            command.exec(appArgs, "input", writer);
+            command.exec(appArgs, null, writer);
         }
     }
 

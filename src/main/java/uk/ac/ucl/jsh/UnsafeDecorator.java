@@ -1,5 +1,6 @@
 package uk.ac.ucl.jsh;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
@@ -11,7 +12,7 @@ public class UnsafeDecorator implements Application {
         app = appIn;
     }
 
-    public void exec(List<String> args, String input, OutputStreamWriter output) throws IOException {
+    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException {
         try{
             app.exec(args,input,output);
         }catch(Exception e){
