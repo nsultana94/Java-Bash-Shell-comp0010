@@ -1,6 +1,8 @@
 package uk.ac.ucl.jsh;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class Jsh {
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
            
             Application command = applicationFactory.getApplication(appName, unsafe);
-            command.exec(appArgs, null, writer);
+            command.exec(appArgs, new BufferedReader(new InputStreamReader(System.in)), writer);
         }
     }
 

@@ -19,21 +19,20 @@ public class cat implements Application {
     @Override
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
+        BufferedReader reader;
+        Charset encoding = StandardCharsets.UTF_8;
+        
         if (args.isEmpty()) {
-            throw new RuntimeException("cat: missing arguments");
+            reader = input;
+            write(reader,output);
         } else {
             for (String arg : args) {
-                Charset encoding = StandardCharsets.UTF_8;
                 File currFile = new File(currentDirectory + File.separator + arg);
                 if (currFile.exists()) {
                     Path filePath = Paths.get(currentDirectory + File.separator + arg);
-                    try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
-                        String line = null;
-                        while ((line = reader.readLine()) != null) {
-                            output.write(String.valueOf(line));
-                            output.write(System.getProperty("line.separator"));
-                            output.flush();
-                        }
+                    try{
+                        reader = Files.newBufferedReader(filePath, encoding);
+                        write(reader,output);
                     } catch (IOException e) {
                         throw new RuntimeException("cat: cannot open " + arg);
                     }
@@ -42,6 +41,14 @@ public class cat implements Application {
                 }
             }
         }
-
+    }
+   
+    private void write(BufferedReader reader,OutputStreamWriter output) throws IOException {
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            output.write(String.valueOf(line));
+            output.write(System.getProperty("line.separator"));
+            output.flush();
+        }
     }
 }
