@@ -19,6 +19,7 @@ public class tail implements Application {
 
     
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
+
         String currentDirectory = directory.getCurrentDirectory();
         if (args.size() > 3) {
             throw new RuntimeException("tail: wrong arguments");
@@ -33,16 +34,7 @@ public class tail implements Application {
         
         int tailLines = 10;
         String tailArg;
-        if (args.size() == 3) {
-            try {
-                tailLines = Integer.parseInt(args.get(1));
-            } catch (Exception e) {
-                throw new RuntimeException("tail: wrong argument " + args.get(1));
-            }
-            tailArg = args.get(2);
-        } else {
-            tailArg = args.get(0);
-        } 
+        
 
         if(args.size() == 0 || args.size() == 2){
             if(args.size() == 0){
@@ -51,9 +43,18 @@ public class tail implements Application {
             else{
                 tailLines = get_tailLines(args.get(1));
             }
-            BufferedReader reader = input;
-            write(reader,output,tailLines);
+            write(input,output,tailLines);
         }else{
+            if (args.size() == 3) {
+                try {
+                    tailLines = Integer.parseInt(args.get(1));
+                } catch (Exception e) {
+                    throw new RuntimeException("tail: wrong argument " + args.get(1));
+                }
+                tailArg = args.get(2);
+            } else {
+                tailArg = args.get(0);
+            } 
             File tailFile = new File(currentDirectory + File.separator + tailArg);
             if (tailFile.exists()) {
                 Charset encoding = StandardCharsets.UTF_8;
