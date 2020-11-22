@@ -23,7 +23,7 @@ public class Cut implements Application {
         if (args.isEmpty()) {
             throw new RuntimeException("cut: missing arguments");
         }
-        if(args.size() != 3){
+        if(args.size() != 3 && args.size() != 2){
             throw new RuntimeException("cut: wrong number of arguments");
         }
         if(!(args.get(0).equals("-b"))){
@@ -34,84 +34,86 @@ public class Cut implements Application {
         }
 
         // 
-        String filename = args.get(2);
-        File file = new File(currentDirectory + "/" + filename);
-        
-        if(file.exists()){
-
-            try(  BufferedReader br = new BufferedReader(new FileReader(file))){
-                String line;
-                List<String> newLines = new ArrayList<>();
-                while((line = br.readLine()) != null){
-                    StringBuilder newline = new StringBuilder();
-                    String arguments[] = args.get(1).split(",");
-                    ArrayList<Range> intervals = new ArrayList<Range>();
-                    
-                    // splits the arguments by ,
-                    
-                for (int j = 0; j < arguments.length; j++){
-                    char[] argumentchars = arguments[j].toCharArray();
-                    for(int i = 0; i < argumentchars.length; i++){
-                        int startindex = 0;
-                        int lastindex = 0;
-                        if(argumentchars.length == 1){
-                            
-                            startindex = Character.getNumericValue(argumentchars[i]-1);
-                            lastindex = Character.getNumericValue(argumentchars[i]);
-                        }
-                        else if (argumentchars[i]=='-'){
-                            if(i == 0){
-                                startindex = 0;
-                                lastindex = Character.getNumericValue(argumentchars[i+1]);
-                            }
-                            else if(i == argumentchars.length-1 ){
-                                startindex = Character.getNumericValue(argumentchars[i-1]-1);
-                                lastindex = line.length();
-                            }
-                            else{
-                                lastindex = Character.getNumericValue(argumentchars[i+1]);
-                                startindex = Character.getNumericValue(argumentchars[i-1]-1);
-                            
-                            }
-
-                        }
-                        
-                        if(startindex < lastindex && startindex < line.length()){
-                            Range interval = new Range(startindex, lastindex);
-                            intervals.add(interval);
-                        }
-                    }
-                }
-                
-                ArrayList<Range> finalintervals1 = overlapIntervals(intervals);
-
-                for( Range r: finalintervals1 ){
-                    if (r.end > line.length()){
-                        r.end = line.length();
-                    }
-                    newline.append(line.substring(r.start, r.end));
-                }
-               // newLines.add(newline.toString());
-                newLines.add(newline.toString());
-            }
-                for(String lines: newLines){
-                    output.write(lines);
-                    output.write(System.getProperty("line.separator"));
-                    output.flush();
-                } 
+        BufferedReader br;
+        if(args.size() == 3){
+            String filename = args.get(2);
+            File file = new File(currentDirectory + "/" + filename);
             
+            if(file.exists()){
+                try{br = new BufferedReader(new FileReader(file));}
+                catch (IOException e) {throw new RuntimeException("Cannot open " + filename);}
+            }else{
+                throw new RuntimeException("file " + filename + " does not exist");
             }
+        }else{
+            br = input;
+        } 
+
+        String line;
+        List<String> newLines = new ArrayList<>();
+        while((line = br.readLine()) != null){
+            StringBuilder newline = new StringBuilder();
+            String arguments[] = args.get(1).split(",");
+            ArrayList<Range> intervals = new ArrayList<Range>();
+            
+            // splits the arguments by ,
+            
+            for (int j = 0; j < arguments.length; j++){
+                char[] argumentchars = arguments[j].toCharArray();
+                for(int i = 0; i < argumentchars.length; i++){
+                    int startindex = 0;
+                    int lastindex = 0;
+                    if(argumentchars.length == 1){
+                        
+                        startindex = Character.getNumericValue(argumentchars[i]-1);
+                        lastindex = Character.getNumericValue(argumentchars[i]);
+                    }
+                    else if (argumentchars[i]=='-'){
+                        if(i == 0){
+                            startindex = 0;
+                            lastindex = Character.getNumericValue(argumentchars[i+1]);
+                        }
+                        else if(i == argumentchars.length-1 ){
+                            startindex = Character.getNumericValue(argumentchars[i-1]-1);
+                            lastindex = line.length();
+                        }
+                        else{
+                            lastindex = Character.getNumericValue(argumentchars[i+1]);
+                            startindex = Character.getNumericValue(argumentchars[i-1]-1);
+                        
+                        }
+
+                    }
+                    
+                    if(startindex < lastindex && startindex < line.length()){
+                        Range interval = new Range(startindex, lastindex);
+                        intervals.add(interval);
+                    }
+                }
+            }
+        
+            ArrayList<Range> finalintervals1 = overlapIntervals(intervals);
+
+            for( Range r: finalintervals1 ){
+                if (r.end > line.length()){
+                    r.end = line.length();
+                }
+                newline.append(line.substring(r.start, r.end));
+            }
+        // newLines.add(newline.toString());
+            newLines.add(newline.toString());
+            for(String lines: newLines){
+                output.write(lines);
+                output.write(System.getProperty("line.separator"));
+                output.flush();
+            }
+            newLines.clear(); 
+        }
           
-          catch (IOException e) {
-              throw new RuntimeException("Cannot open " + filename);
-          }
+         
   
-      }
-      else{
-              throw new RuntimeException("file " + filename + " does not exist");
-          }
-    
     }
+    
     
     public ArrayList<Range> overlapIntervals(ArrayList<Range> intervals) {
         ArrayList<Range> finalintervals = new ArrayList<Range>();
