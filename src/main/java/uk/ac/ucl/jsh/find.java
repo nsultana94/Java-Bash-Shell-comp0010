@@ -6,14 +6,31 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 public class find implements Application {
+
+    public ArrayList<String> findFile(File targetDirectory, String patternArg, String returnPath,
+            ArrayList<String> returnPaths) {
+        File[] targetDirListing = targetDirectory.listFiles();
+        if (targetDirListing != null) {
+            for (File child : targetDirListing) {
+                if (Pattern.matches(patternArg, child.getName())) {
+                    returnPaths.add(returnPath + "/" + targetDirectory.getName() + "/" + child.getName());
+
+                }
+                findFile(child, patternArg, returnPath + "/" + targetDirectory.getName(), returnPaths);
+            }
+        }
+
+        return returnPaths;
+    }
 
     public find() throws IOException {
     }
 
     @Override
-    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
+    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();
 
         if (args.isEmpty()) {
@@ -41,17 +58,18 @@ public class find implements Application {
             patternArg = args.get(2);
         }
 
-        File[] targetDirListing = targetDirectory.listFiles();
-        if (targetDirListing != null) {
-            for (File child : targetDirListing) {
-                if (Pattern.matches(patternArg, child.getName())) {
-                    output.write(child.getName());
-                    output.write(System.getProperty("line.separator"));
-                    output.flush();
-                }
-            }
-        } else {
+        if (targetDirectory.listFiles() == null) {
             throw new RuntimeException("find: directory is empty");
         }
+        ArrayList<String> emptyPath = new ArrayList<>();
+
+        ArrayList<String> returnPaths = findFile(targetDirectory, patternArg, "", emptyPath);
+
+        for (String path : returnPaths) {
+            output.write(path);
+            output.write(System.getProperty("line.separator"));
+            output.flush();
+        }
+
     }
 }
