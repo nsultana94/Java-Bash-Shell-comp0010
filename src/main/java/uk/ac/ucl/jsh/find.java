@@ -14,6 +14,7 @@ public class find implements Application {
 
     @Override
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
+
         String currentDirectory = directory.getCurrentDirectory();
 
         if (args.isEmpty()) {

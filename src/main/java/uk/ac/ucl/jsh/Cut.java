@@ -33,7 +33,7 @@ public class Cut implements Application {
             throw new RuntimeException("cut: wrong argument " + args.get(1));
         }
 
-        // 
+        
         BufferedReader br;
         if(args.size() == 3){
             String filename = args.get(2);
