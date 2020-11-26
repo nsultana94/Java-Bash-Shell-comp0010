@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.io.OutputStreamWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 
 //*.[^\n"'`;|]* | (".["|'\w*'|`\w`))* 
 
@@ -16,65 +19,102 @@ public class Call implements Command {
     public Call(String type, ArrayList<String> Args, Boolean unsafe) throws IOException {
         app = new ApplicationFactory().getApplication(type, unsafe);
         args = Args;
+        String currentDirectory = directory.getCurrentDirectory();
 
         String quotedRegex = "'.[^\n']*'|`.[^\n`]*`|\"(`.[^\n`]`|.[^\n\"`])*\"";
         String unquotedRegex = ".[^\"'`\n;|<>]";
         String argumentRegex = "(" + quotedRegex + "|" + unquotedRegex + ")+";
 
-        Integer argumentArgsCount = 0;
-        Integer redirectionBeforeArgsCount = 0;
-        Integer AfterCommandArgsCount = 0;
+        // Integer argumentArgsCount = 0;
+        // ArrayList<String> commandArguments = new ArrayList<>();
+
+        File inputFile = null;
+        File outputFile = null;
+        Boolean inputFileBool = false;
+        Boolean outputFileBool = false;
+        OutputStream output;
+        int inputFileArgIndex;
+        int outputFileArgIndex;
+        int commandIndex;
+        BufferedReader input;
+
+        String command;
+        String toRun = "";
+
+        // check if there are input and output redirections
+        for (int i = 0; i <= args.size();) {
+            String arg = args.get(i);
+            String nextArg = args.get(i + 1);
+            if (arg == "<") {
+                if (inputFileBool == true) {
+                    throw new RuntimeException("find: more than one I/O in same direction " + args.get(i + 1));
+                } else if (i == args.size() - 1) {
+                    throw new RuntimeException("find: no I/O file specified " + args.get(i));
+                } else if (!new File(nextArg).exists()) {
+                    throw new RuntimeException("find: file does not exist" + args.get(i + 1));
+                } else {
+                    inputFile = new File(currentDirectory + File.separator + nextArg);
+                    inputFileArgIndex = i;
+                    inputFileBool = true;
+                    args.remove(arg);
+                    args.remove(nextArg);
+                }
+            } else if (arg == ">") {
+                if (outputFileBool = true) {
+                    throw new RuntimeException("find: more than one I/O in same direction " + args.get(i + 1));
+                } else if (i == args.size() - 1) {
+                    throw new RuntimeException("find: no I/O file specified " + args.get(i));
+                } else if (!new File(nextArg).exists()) {
+                    outputFile = new File(currentDirectory + File.separator + nextArg);
+                    outputFile.createNewFile();
+                    outputFileBool = true;
+                } else {
+                    outputFile = new File(currentDirectory + File.separator + nextArg);
+                    outputFileArgIndex = i;
+                    outputFileBool = true;
+                    args.remove(arg);
+                    args.remove(nextArg);
+                }
+            }
+            /*
+             * else{ if (arg.matches(argumentRegex)) { argumentArgsCount += 1;
+             * commandArguments.add(arg); } }
+             */
+        }
+
+        // extracting command and args in case we need it
+        /*
+         * if (args.get(0) == "<" || args.get(0) == ">"){ if (args.get(2) == "<" ||
+         * args.get(2) == ">"){ if (args.get(4).matches(argumentRegex)) { command =
+         * args.get(4); commandIndex = 4; } } else{ if
+         * (args.get(2).matches(argumentRegex)) { command = args.get(2); commandIndex =
+         * 2; } } } else { if (args.get(0).matches(argumentRegex)) { command =
+         * args.get(0); commandIndex = 0;} }
+         * 
+         * for (int i = commandIndex; i <= args.size();) { String arg = args.get(i);
+         * String nextArg = args.get(i + 1);
+         * 
+         * if (arg.matches(argumentRegex) && nextArg != "<" && nextArg != ">" { //store
+         * as arguments }
+         * 
+         * }
+         */
+
+        // input and output streams
+        if (outputFileBool == true) {
+            output = new FileOutputStream(outputFile);
+            // OutputStreamWriter output = new OutputStreamWriter(new
+            // FileOutputStream(outputFile));
+        }
+        if (inputFileBool == true) {
+            input = new BufferedReader(new FileReader(inputFile));
+            // replace arguments with input file contents
+            // add buffered reader on the end of args
+        }
 
         for (String arg : args) {
-            if (arg.matches(argumentRegex)) {
-                argumentArgsCount += 1;
-            } else if (argumentArgsCount == 0 && !arg.matches(argumentRegex)) {
-                redirectionBeforeArgsCount += 1;
-            } else if (argumentArgsCount != 0 && !arg.matches(argumentRegex)){
-                AfterCommandArgsCount += 1;
-            }
+            toRun += arg;
         }
-
-        //REDIRECTIONS BEFORE main command!
-        ArrayList<String> inputFiles = new ArrayList<>();
-        ArrayList<String> outputFiles = new ArrayList<>();
-        Integer redirectionPairsBefore = (redirectionBeforeArgsCount - 1) / 2;
-
-        //if odd number of redirection arguments, throw exception
-        //because redirection must always have an argument afterwards - should come in pairs
-        if (redirectionPairsBefore%2 != 0){
-            throw new RuntimeException("find: wrong arguments " + args.get(0));
-        }
-
-        for (int i = 0; i <= redirectionPairsBefore;) {
-            if (args.get(2 * i) == "<") {
-                inputFiles.add(args.get(2 + i + 1));
-
-            } else if (args.get(2 * i) == ">") {
-                outputFiles.add(args.get(2 + i + 1));
-            }
-        }
-
-        ArrayList<Integer> redirectionArgIndexes = new ArrayList<>();
-        //REDIRECTIONS AFTER main command!
-        for (int i = 0; i <= AfterCommandArgsCount;) {
-            Integer j = argumentArgsCount + redirectionBeforeArgsCount+ i;
-            if (args.get(j) == "<"){
-                inputFiles.add(args.get(j+1));
-                redirectionArgIndexes.add(j, j+1);
-            }
-            else if (args.get(j) == ">") {
-                outputFiles.add(args.get(j + 1));
-                redirectionArgIndexes.add(j j+1);
-            }
-            else if (!redirectionArgIndexes.contains(j)){
-                //deal with the rest of the arguments? 
-            }
-
-        }
-        
-
-
 
     }
 
