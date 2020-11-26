@@ -21,24 +21,18 @@ public class Call implements Command {
         args = Args;
         String currentDirectory = directory.getCurrentDirectory();
 
-        String quotedRegex = "'.[^\n']*'|`.[^\n`]*`|\"(`.[^\n`]`|.[^\n\"`])*\"";
-        String unquotedRegex = ".[^\"'`\n;|<>]";
-        String argumentRegex = "(" + quotedRegex + "|" + unquotedRegex + ")+";
-
-        // Integer argumentArgsCount = 0;
-        // ArrayList<String> commandArguments = new ArrayList<>();
-
+        /*
+         * String quotedRegex = "'.[^\n']*'|`.[^\n`]*`|\"(`.[^\n`]`|.[^\n\"`])*\"";
+         * String unquotedRegex = ".[^\"'`\n;|<>]"; String argumentRegex = "(" +
+         * quotedRegex + "|" + unquotedRegex + ")+"; int inputFileArgIndex; int
+         * outputFileArgIndex; int commandIndex; String command;
+         */
         File inputFile = null;
         File outputFile = null;
         Boolean inputFileBool = false;
         Boolean outputFileBool = false;
         OutputStream output;
-        int inputFileArgIndex;
-        int outputFileArgIndex;
-        int commandIndex;
         BufferedReader input;
-
-        String command;
         String toRun = "";
 
         // check if there are input and output redirections
@@ -76,10 +70,6 @@ public class Call implements Command {
                     args.remove(nextArg);
                 }
             }
-            /*
-             * else{ if (arg.matches(argumentRegex)) { argumentArgsCount += 1;
-             * commandArguments.add(arg); } }
-             */
         }
 
         // extracting command and args in case we need it
@@ -103,13 +93,9 @@ public class Call implements Command {
         // input and output streams
         if (outputFileBool == true) {
             output = new FileOutputStream(outputFile);
-            // OutputStreamWriter output = new OutputStreamWriter(new
-            // FileOutputStream(outputFile));
         }
         if (inputFileBool == true) {
             input = new BufferedReader(new FileReader(inputFile));
-            // replace arguments with input file contents
-            // add buffered reader on the end of args
         }
 
         for (String arg : args) {
