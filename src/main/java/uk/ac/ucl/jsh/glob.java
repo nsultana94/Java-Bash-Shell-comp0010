@@ -14,7 +14,7 @@ public class glob {
 
     private static CurrentDirectory currentDirectory = CurrentDirectory.getInstance();
 
-    public List<String> get_tokens(String rawCommand) throws IOException {
+    public ArrayList<String> get_tokens(String rawCommand) throws IOException {
         String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
         ArrayList<String> tokens = new ArrayList<String>();
         Pattern regex = Pattern.compile(spaceRegex);

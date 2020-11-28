@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.OutputStreamWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,13 +16,32 @@ import java.io.FileReader;
 
 public class Call implements Command {
 
-    private Application app;
-    private ArrayList<String> args;
+    private String rawCommand;
+   
+    
+	public Call(String rawC) {
+        rawCommand = rawC;
+	}
 
-    public Call(String type, ArrayList<String> Args, Boolean unsafe) throws IOException {
-        app = new ApplicationFactory().getApplication(type, unsafe);
-        args = Args;
+
+
+	public void eval(BufferedReader input, OutputStream output) throws IOException {
+        ApplicationFactory applicationFactory = new ApplicationFactory();
+        ArrayList<String> args = tokenizeCommand(rawCommand, output);
         String currentDirectory = directory.getCurrentDirectory();
+        String cmdsub = "";
+        //String regex = "`(.*?)`";
+
+        //command substitution
+        Pattern pattern = Pattern.compile("`(.*?)`");
+        Matcher matcher = pattern.matcher(rawCommand);
+         if (matcher.find()){
+             cmdsub = matcher.group();
+            cmdsub = cmdsub.replace("`", "");
+            CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
+
+        }
+       
 
         /*
          * String quotedRegex = "'.[^\n']*'|`.[^\n`]*`|\"(`.[^\n`]`|.[^\n\"`])*\"";
@@ -27,68 +49,58 @@ public class Call implements Command {
          * quotedRegex + "|" + unquotedRegex + ")+"; int inputFileArgIndex; int
          * outputFileArgIndex; int commandIndex; String command;
          */
+
         File inputFile = null;
         File outputFile = null;
         Boolean inputFileBool = false;
         Boolean outputFileBool = false;
-        OutputStream output;
-        BufferedReader input;
         String toRun = "";
+        String nextArg ="";
 
         // check if there are input and output redirections
-        for (int i = 0; i <= args.size();) {
+        for (int i = 0; i < args.size(); i++) {
             String arg = args.get(i);
-            String nextArg = args.get(i + 1);
-            if (arg == "<") {
+            
+            if(i!= args.size() - 1)
+            {
+                nextArg = args.get(i + 1);
+            }
+            else{
+                nextArg = args.get(i);
+            }
+            
+            
+            if (arg.equalsIgnoreCase("<")) {
                 if (inputFileBool == true) {
-                    throw new RuntimeException("find: more than one I/O in same direction " + args.get(i + 1));
+                    throw new RuntimeException("jsh: more than one I/O in same direction " /* + nextArg*/);
                 } else if (i == args.size() - 1) {
-                    throw new RuntimeException("find: no I/O file specified " + args.get(i));
+                    throw new RuntimeException("jsh: no I/O file specified " + args.get(i));
                 } else if (!new File(nextArg).exists()) {
-                    throw new RuntimeException("find: file does not exist" + args.get(i + 1));
+                    throw new RuntimeException("jsh: file does not exist" /* + nextArg*/);
                 } else {
-                    inputFile = new File(currentDirectory + File.separator + nextArg);
-                    inputFileArgIndex = i;
+                    inputFile = new File(currentDirectory + File.separator /* + nextArg*/);
                     inputFileBool = true;
                     args.remove(arg);
                     args.remove(nextArg);
                 }
-            } else if (arg == ">") {
+            } else if (arg.equalsIgnoreCase(">")) {
                 if (outputFileBool = true) {
-                    throw new RuntimeException("find: more than one I/O in same direction " + args.get(i + 1));
+                    throw new RuntimeException("jsh: more than one I/O in same direction " /* + nextArg*/);
                 } else if (i == args.size() - 1) {
-                    throw new RuntimeException("find: no I/O file specified " + args.get(i));
+                    throw new RuntimeException("jsh: no I/O file specified " + args.get(i));
                 } else if (!new File(nextArg).exists()) {
                     outputFile = new File(currentDirectory + File.separator + nextArg);
                     outputFile.createNewFile();
                     outputFileBool = true;
                 } else {
                     outputFile = new File(currentDirectory + File.separator + nextArg);
-                    outputFileArgIndex = i;
                     outputFileBool = true;
                     args.remove(arg);
                     args.remove(nextArg);
                 }
             }
-        }
+        } 
 
-        // extracting command and args in case we need it
-        /*
-         * if (args.get(0) == "<" || args.get(0) == ">"){ if (args.get(2) == "<" ||
-         * args.get(2) == ">"){ if (args.get(4).matches(argumentRegex)) { command =
-         * args.get(4); commandIndex = 4; } } else{ if
-         * (args.get(2).matches(argumentRegex)) { command = args.get(2); commandIndex =
-         * 2; } } } else { if (args.get(0).matches(argumentRegex)) { command =
-         * args.get(0); commandIndex = 0;} }
-         * 
-         * for (int i = commandIndex; i <= args.size();) { String arg = args.get(i);
-         * String nextArg = args.get(i + 1);
-         * 
-         * if (arg.matches(argumentRegex) && nextArg != "<" && nextArg != ">" { //store
-         * as arguments }
-         * 
-         * }
-         */
 
         // input and output streams
         if (outputFileBool == true) {
@@ -98,15 +110,26 @@ public class Call implements Command {
             input = new BufferedReader(new FileReader(inputFile));
         }
 
-        for (String arg : args) {
-            toRun += arg;
-        }
-
+        String appName = args.get(0);
+        Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
+        appName = (unsafe? appName.substring(1): appName);
+        Application command = applicationFactory.getApplication(appName, unsafe);
+        
+        System.out.println(appName);
+        ArrayList<String> appArgs = new ArrayList<String>(args.subList(1, args.size()));
+        System.out.println(appArgs);
+        command.exec(appArgs, input, new OutputStreamWriter(output));
+        
     }
+        
 
-    public void eval(BufferedReader input, OutputStream output) throws IOException {
-        app.exec(args, input, new OutputStreamWriter(output));
+    public ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
+    
+        glob glob_processor = new glob();
+        ArrayList<String> args = glob_processor.get_tokens(rawCommand);
+        return args;
+    } 
 
-    }
+    
 
 }

@@ -39,7 +39,16 @@ public class Jsh {
         }
         rawCommands.add(lastSubcommand);
 
-        ApplicationFactory applicationFactory = new ApplicationFactory();
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
+        for (String rawCommand : rawCommands){
+            Call call = new Call(rawCommand);
+            call.eval(input, output);
+        } 
+        
+        
+        // would iterate through raw commands and check if it is pipe or a normal call
+        /*ApplicationFactory applicationFactory = new ApplicationFactory();
         glob glob_processor = new glob();
         for (String rawCommand : rawCommands) {
             List<String> tokens = glob_processor.get_tokens(rawCommand);
@@ -49,11 +58,11 @@ public class Jsh {
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
            
             Application command = applicationFactory.getApplication(appName, unsafe);
-            command.exec(appArgs, new BufferedReader(new InputStreamReader(System.in)), writer);
-        }
+            
+             */
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length > 0) {
             if (args.length != 2) {
                 System.out.println("jsh: wrong number of arguments");
@@ -69,13 +78,14 @@ public class Jsh {
             }
         } else {
             System.out.println("Welcome to JSH!");
-            Scanner input = new Scanner(System.in);
+            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+            
             try {
                 while (true) {
                     String prompt = currentDirectory.getCurrentDirectory() + "> ";
                     System.out.print(prompt);
                     try {
-                        String cmdline = input.nextLine();
+                        String cmdline = input.readLine();
                         eval(cmdline, System.out);
                     } catch (Exception e) {
                         System.out.println("jsh: " + e.getMessage());
