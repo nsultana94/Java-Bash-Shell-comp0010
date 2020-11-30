@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.OutputStreamWriter;
@@ -17,7 +17,9 @@ import java.io.FileReader;
 public class Call implements Command {
 
     private String rawCommand;
-    private Boolean subcmdpresent;
+    Boolean commandsub = false;
+    
+    
    
     
 	public Call(String rawC) {
@@ -27,32 +29,36 @@ public class Call implements Command {
 
 
 	public void eval(BufferedReader input, OutputStream output) throws IOException {
-        ApplicationFactory applicationFactory = new ApplicationFactory();
-        ArrayList<String> args = tokenizeCommand(rawCommand, output);
-        ArrayList<String> args1 = tokenizeCommand(rawCommand, output);
-
-        System.out.println(args);
+        
+        
+        
         String currentDirectory = directory.getCurrentDirectory();
-        String cmdsub = "";
-        ArrayList<String> appArgs = new ArrayList<String>();
+        
         //String regex = "`(.*?)`";
 
         //command substitution
         Pattern pattern = Pattern.compile("`(.*?)`");
         Matcher matcher = pattern.matcher(rawCommand);
-        if (matcher.find()){
-            cmdsub = matcher.group();
-            cmdsub = cmdsub.replace("`", "");
-            CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
-            input = subcmd.get_output(input);
+        
+        if (matcher.find() && commandsub == false){
+            commandsub = true;
+            doCmdSub(input, output, matcher);
+            
         }
-       
+
+        else
+        {
+        // return array of args - for each arg in arg evaluate that arg and then do any other args 
+        ArrayList<String> args = tokenizeCommand(rawCommand, output);
+        ArrayList<String> args1 = tokenizeCommand(rawCommand, output);
         
         File inputFile = null;
         File outputFile = null;
         Boolean inputFileBool = false;
         Boolean outputFileBool = false;
         String nextArg ="";
+
+        
 
         // check if there are input and output redirections
         for (int i = 0; i < args.size(); i++) {
@@ -71,11 +77,11 @@ public class Call implements Command {
             
             if (arg.equalsIgnoreCase("<")) {
                 if (inputFileBool == true) {
-                    throw new RuntimeException("jsh: more than one I/O in same direction " /* + nextArg*/);
+                    throw new RuntimeException("more than one I/O in same direction "  + nextArg);
                 } else if (i == args.size() - 1) {
-                    throw new RuntimeException("jsh: no I/O file specified " + args.get(i));
+                    throw new RuntimeException(" no I/O file specified " + args.get(i));
                 } else if (!new File(currentDirectory + File.separator  + nextArg).exists()) {
-                    throw new RuntimeException("jsh: file does not exist "  + nextArg);
+                    throw new RuntimeException("file does not exist "  + nextArg);
                 } else {
                     inputFile = new File(currentDirectory + File.separator  + nextArg);
                     inputFileBool = true;
@@ -83,31 +89,39 @@ public class Call implements Command {
                     args1.remove(nextArg);
                 }
             } else if (arg.equalsIgnoreCase(">")) {
-                System.out.print(arg + " arg");
-                if (outputFileBool = true) {
-                    throw new RuntimeException("jsh: more than one I/O in same direction "  + nextArg);
+                System.out.println(arg + " arg");
+                if (outputFileBool == true) {
+                    throw new RuntimeException(" more than one I/O in same direction "  + nextArg);
                 } else if (i == args.size() - 1) {
-                    throw new RuntimeException("jsh: no I/O file specified " + args.get(i));
+                    throw new RuntimeException(" no I/O file specified " + args.get(i));
                 } else if (!new File(currentDirectory + File.separator  + nextArg).exists()) {
+                    System.out.println(" file not exist");
                     outputFile = new File(currentDirectory + File.separator + nextArg);
                     outputFile.createNewFile();
                     outputFileBool = true;
                     args1.remove(arg);
                     args1.remove(nextArg);
-                } else {
+                } else if (new File(currentDirectory + File.separator  + nextArg).exists())
+                {
+                    System.out.println(" file exist");
                     outputFile = new File(currentDirectory + File.separator + nextArg);
                     outputFileBool = true;
                     args1.remove(arg);
                     args1.remove(nextArg);
                 }
             }
+        }
             if (outputFileBool == true) {
+        
                 output = new FileOutputStream(outputFile);
             }
             if (inputFileBool == true) {
                 input = new BufferedReader(new FileReader(inputFile));
             }
+            executeCommand(args1, input, output);
             }
+            
+
            
            
 
@@ -124,16 +138,9 @@ public class Call implements Command {
          */
 
         
-
-        String appName = args1.get(0);
-        Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
-        appName = (unsafe? appName.substring(1): appName);
-        appArgs = new ArrayList<String>(args1.subList(1, args1.size()));
-        Application command = applicationFactory.getApplication(appName, unsafe);
-        
-        command.exec(appArgs, input, new OutputStreamWriter(output));
         
     }
+
         
 
     public ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
@@ -143,6 +150,50 @@ public class Call implements Command {
         return args;
     } 
 
+    public void executeCommand(ArrayList<String> args, BufferedReader input, OutputStream output) throws IOException {
+        ApplicationFactory applicationFactory = new ApplicationFactory();
+        ArrayList<String> appArgs = new ArrayList<String>();
+        String appName = args.get(0);
+        Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
+        appName = (unsafe? appName.substring(1): appName);
+        appArgs = new ArrayList<String>(args.subList(1, args.size()));
+        Application command = applicationFactory.getApplication(appName, unsafe);
+        command.exec(appArgs, input, new OutputStreamWriter(output));
+    }
+
+    public void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
+        String currentDirectory = directory.getCurrentDirectory();
+        ArrayList<String> cmdsubinput = new ArrayList<String>();
+        String cmdsub = "";
+            cmdsub = matcher.group();
+            rawCommand = rawCommand.replace(cmdsub, "");
+            cmdsub = cmdsub.replace("`", "");
+            CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
+            cmdsubinput = subcmd.get_output(input);
+            ArrayList<String> commandsubargs = new ArrayList<String>();
+            commandsubargs = tokenizeCommand(rawCommand, output);
+            System.out.println(commandsubargs+ " command sub");
+
+            for(String arg: cmdsubinput){
+                File file = new File(currentDirectory + File.separator + arg);
+                
+                if(file.exists()){
+                    try {
+                        input = new BufferedReader(new FileReader(file));
+                        System.out.println("help");
+                        executeCommand(commandsubargs, input, output);
+                    } catch (IOException e) {
+                        throw new RuntimeException("head: cannot open " + file);
+                    }
+                }
+                else{
+                    System.out.println(("head: " + arg + ": No such file or directory"));
+                } 
+             
+            }
+        }
+    }
+
     
 
-}
+
