@@ -20,10 +20,11 @@ public class Cut implements Application {
         String regex = "(-?[1-9]+[0-9]*-?([1-9]+[0-9]*)*-?)(,-?[1-9]+[0-9]*-?([1-9]+[0-9]*)*-?)*";
         // regex accepting formats of cut e.g 1,2,3 or 2-,3- or 1-2,2-3, or -2,3-
         
-        if (args.isEmpty()) {
-            throw new RuntimeException("cut: missing arguments");
+        
+        if(args.size() > 2 && args.size() != 3){
+            throw new RuntimeException("cut: wrong number of arguments");
         }
-        if(args.size() != 3 && args.size() != 2){
+        if(args.size() < 2){
             throw new RuntimeException("cut: wrong number of arguments");
         }
         if(!(args.get(0).equals("-b"))){
