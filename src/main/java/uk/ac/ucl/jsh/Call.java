@@ -29,6 +29,9 @@ public class Call implements Command {
 	public void eval(BufferedReader input, OutputStream output) throws IOException {
         ApplicationFactory applicationFactory = new ApplicationFactory();
         ArrayList<String> args = tokenizeCommand(rawCommand, output);
+        ArrayList<String> args1 = tokenizeCommand(rawCommand, output);
+
+        System.out.println(args);
         String currentDirectory = directory.getCurrentDirectory();
         String cmdsub = "";
         ArrayList<String> appArgs = new ArrayList<String>();
@@ -43,8 +46,8 @@ public class Call implements Command {
             CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
             input = subcmd.get_output(input);
         }
-        else
-        {
+       
+        
         File inputFile = null;
         File outputFile = null;
         Boolean inputFileBool = false;
@@ -53,10 +56,12 @@ public class Call implements Command {
 
         // check if there are input and output redirections
         for (int i = 0; i < args.size(); i++) {
+           
             String arg = args.get(i);
             
             if(i!= args.size() - 1)
             {
+                
                 nextArg = args.get(i + 1);
             }
             else{
@@ -74,10 +79,11 @@ public class Call implements Command {
                 } else {
                     inputFile = new File(currentDirectory + File.separator  + nextArg);
                     inputFileBool = true;
-                    args.remove(arg);
-                    args.remove(nextArg);
+                    args1.remove(arg);
+                    args1.remove(nextArg);
                 }
             } else if (arg.equalsIgnoreCase(">")) {
+                System.out.print(arg + " arg");
                 if (outputFileBool = true) {
                     throw new RuntimeException("jsh: more than one I/O in same direction "  + nextArg);
                 } else if (i == args.size() - 1) {
@@ -86,13 +92,13 @@ public class Call implements Command {
                     outputFile = new File(currentDirectory + File.separator + nextArg);
                     outputFile.createNewFile();
                     outputFileBool = true;
-                    args.remove(arg);
-                    args.remove(nextArg);
+                    args1.remove(arg);
+                    args1.remove(nextArg);
                 } else {
                     outputFile = new File(currentDirectory + File.separator + nextArg);
                     outputFileBool = true;
-                    args.remove(arg);
-                    args.remove(nextArg);
+                    args1.remove(arg);
+                    args1.remove(nextArg);
                 }
             }
             if (outputFileBool == true) {
@@ -102,9 +108,8 @@ public class Call implements Command {
                 input = new BufferedReader(new FileReader(inputFile));
             }
             }
-           appArgs = new ArrayList<String>(args.subList(1, args.size()));
-           System.out.println(appArgs);
-        } 
+           
+           
 
 
         // input and output streams
@@ -120,9 +125,10 @@ public class Call implements Command {
 
         
 
-        String appName = args.get(0);
+        String appName = args1.get(0);
         Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
         appName = (unsafe? appName.substring(1): appName);
+        appArgs = new ArrayList<String>(args1.subList(1, args1.size()));
         Application command = applicationFactory.getApplication(appName, unsafe);
         
         command.exec(appArgs, input, new OutputStreamWriter(output));
