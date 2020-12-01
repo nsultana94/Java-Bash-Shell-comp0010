@@ -5,12 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 public class Uniq implements Application {
+    private boolean case_checking = true;
 
     public Uniq() throws IOException {}
 
@@ -18,61 +18,65 @@ public class Uniq implements Application {
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
         String filename;
-        boolean options = false;
+        BufferedReader br;
 
-        if (args.isEmpty()) {
-            throw new RuntimeException("uniq: missing arguments");
-        }
-        if(args.size() == 2 && !args.get(0).equals( "-i")){
-            throw new RuntimeException("uniq: incorrect argument" + args.get(0));
-        }
-        if(args.size() > 2){
-            throw new RuntimeException("uniq: incorrect number of arguments");
-        }
-        
-        if(args.size() == 2){
-            filename = args.get(1);
-            options = true;
-             }
-        else{filename = args.get(0);}
-
-        File file = new File(currentDirectory + "/" + filename);
-        if(file.exists()){
-          try(  BufferedReader br = new BufferedReader(new FileReader(file))){
-            //creating list of lines in files
-            String line;
-            List<String> filelines = new ArrayList<>();
-            List<String> uniqueFileLines = new ArrayList<>();
-            
-            while((line = br.readLine()) != null){
-                filelines.add(line);  
+        if (args.isEmpty() || (args.size() == 1 && args.get(0).equals( "-i"))) {
+            br = input;
+            if(args.size() == 1){
+                case_checking = false;
+            }
+        }else{
+            if(args.size() == 2 && !args.get(0).equals( "-i")){
+                throw new RuntimeException("uniq: incorrect argument" + args.get(0));
+            }
+            if(args.size() > 2){
+                throw new RuntimeException("uniq: incorrect number of arguments");
             }
             
-            // removing duplicates
+            if(args.size() == 2){
+                filename = args.get(1);
+                case_checking = false;
+                }
+            else{filename = args.get(0);}
 
-            if (options){ //removes duplicates ignoring case
-                uniqueFileLines = filelines.stream().map(String::toLowerCase).distinct().collect(Collectors.toList());
+            File file = new File(currentDirectory + "/" + filename);
+            if(file.exists()){
+                try{
+                    br = new BufferedReader(new FileReader(file));
+                }
+                catch (IOException e) {
+                    throw new RuntimeException("Cannot open " + filename);
+                }
             }
-            else{ // removes duplicates case sensitive
-                uniqueFileLines = filelines.stream().distinct().collect(Collectors.toList());
+            else{
+                throw new RuntimeException("file " + filename + " does not exist");
             }
-            // for each unique line prints to output
-            for(String lines: uniqueFileLines){
-                output.write(lines);
-                output.write(System.getProperty("line.separator"));
-                output.flush();
-            }
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Cannot open " + filename);
         }
 
-    }
-    else{
-            throw new RuntimeException("file " + filename + " does not exist");
-        }
+        run_uniq(br, output);
     
-}
+    }
 
+    private void run_uniq(BufferedReader br, OutputStreamWriter output) throws IOException {
+         String line;
+         String last_line="";
+
+         
+        while((line = br.readLine()) != null){
+             if(case_checking && last_line.compareTo(line) != 0 ){
+                write_line(line, output);
+             }else if( !case_checking && last_line.toLowerCase().compareTo(line.toLowerCase()) != 0 ) {
+                write_line(line, output);
+             }
+             last_line = line;
+        }
+   
+    }       
+
+    private void write_line(String line, OutputStreamWriter output) throws IOException {
+        output.write(line);
+        output.write(System.getProperty("line.separator"));
+        output.flush();
+    }
 
 }
