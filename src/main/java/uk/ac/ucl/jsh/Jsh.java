@@ -8,12 +8,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 
-// import org.antlr.v4.runtime.CharStream;
-// import org.antlr.v4.runtime.CharStreams;
-// import org.antlr.v4.runtime.CommonTokenStream;
-// import org.antlr.v4.runtime.tree.ParseTree;
-
-
 public class Jsh {
 
     private static CurrentDirectory currentDirectory = CurrentDirectory.getInstance();
