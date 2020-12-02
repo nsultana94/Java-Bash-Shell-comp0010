@@ -8,10 +8,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
+// import org.antlr.v4.runtime.CharStream;
+// import org.antlr.v4.runtime.CharStreams;
+// import org.antlr.v4.runtime.CommonTokenStream;
+// import org.antlr.v4.runtime.tree.ParseTree;
 
 
 public class Jsh {
@@ -20,22 +20,9 @@ public class Jsh {
 
     public static void eval(String cmdline, OutputStream output) throws IOException {
 
-        CharStream parserInput = CharStreams.fromString(cmdline);
-        JshGrammarLexer lexer = new JshGrammarLexer(parserInput);
-        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-        JshGrammarParser parser = new JshGrammarParser(tokenStream);
-        ParseTree tree = parser.command(); 
-        ArrayList<String> rawCommands = new ArrayList<String>();
-        String lastSubcommand = "";
-        for (int i = 0; i < tree.getChildCount(); i++) {
-            if (!tree.getChild(i).getText().equals(";")) {
-                lastSubcommand += tree.getChild(i).getText();
-            } else {
-                rawCommands.add(lastSubcommand);
-                lastSubcommand = "";
-            }
-        }
-        rawCommands.add(lastSubcommand);
+
+        JSHParser parser = new JSHParser();
+        ArrayList<String> rawCommands = parser.get_sub_commands(cmdline);
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
