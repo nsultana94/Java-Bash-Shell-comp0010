@@ -14,10 +14,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Sort implements Application {
+    /**
+     * The Sort Application for JSH
+     * Takes files or standard input and sorts the lines
+     */
     private Boolean reverse = false;
 
     public Sort() throws IOException {}
 
+
+    /**
+     * Method to run sort
+     * @param args Files and options to be used in the sorting
+     * @param input standard input 
+     * @param output standard output
+     * @throws IOException if files passed in args cannot be opened
+     * @throws RuntimeException if wrong number of arguments given or wrong options given
+     */
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
 
@@ -56,6 +69,10 @@ public class Sort implements Application {
 
     }
 
+    /*
+    Private method used to write values from a buffered reader to the output
+    Reader can either be the standard input or the output
+    */
     private void write_sorted(BufferedReader reader,OutputStreamWriter output) throws IOException {
          
         List<String> lines;
