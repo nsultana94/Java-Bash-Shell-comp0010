@@ -24,6 +24,7 @@ public class cat implements Application {
      * @param args The files to be read from
      * @param input standard input to be used if no files are provided
      * @param output standard output to be written to
+     * @throws IOException if files given are not able to be opened
      */
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
