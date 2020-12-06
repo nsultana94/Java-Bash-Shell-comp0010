@@ -12,11 +12,19 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class cat implements Application {
-
+    /**
+     * Application implementing the JSH cat function.
+     */
 
     public cat() throws IOException {}
 
     @Override
+    /**
+     * Runs the Cat function. Takes one or more files (or input if no files are provided) and writes their content to output
+     * @param args The files to be read from
+     * @param input standard input to be used if no files are provided
+     * @param output standard output to be written to
+     */
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
         BufferedReader reader;
@@ -42,7 +50,10 @@ public class cat implements Application {
             }
         }
     }
-   
+   /*
+   Private method used to write values from a buffered reader to the output
+   Reader can either be the standard input or the output
+   */
     private void write(BufferedReader reader,OutputStreamWriter output) throws IOException {
         String line = null;
         while ((line = reader.readLine()) != null) {
