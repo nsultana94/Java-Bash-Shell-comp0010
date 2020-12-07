@@ -12,12 +12,27 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Tail function in JSH
+ * takes a file and returns bottom n lines
+ * if n is not specified the bottom 10 lines are returned
+ * if no file is specified then standard input used
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
+
 public class tail implements Application {
 
     public tail() throws IOException {
 	}
 
-    
+    /**
+     * Function to run the tail application functionality.
+     * @param args the arguments to be passed into the app.
+     * @param input {@code BufferedReader} the standard input for the app
+     * @param output {@code OutputStreamWriter} the standard output for the app
+     */
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
 
         String currentDirectory = directory.getCurrentDirectory();
@@ -70,6 +85,13 @@ public class tail implements Application {
         }
     }
 
+    /**
+     * writes the bottom tailLines lines to output
+     * @param reader {@code BufferedReader} input - From a file or standard input
+     * @param output {@code OutputStreamWriter} output to be written to
+     * @param tailLines number of lines to print
+     * @throws IOException
+     */
     private void write(BufferedReader reader,OutputStreamWriter output,int tailLines) throws IOException {
         ArrayList<String> storage = new ArrayList<>();
         String line = null;
@@ -88,6 +110,11 @@ public class tail implements Application {
         }
     }
 
+    /**
+     * Gets the number of lines to be returned
+     * @param arg the arguments to be processed
+     * @return the number of lines to return
+     */
     private int get_tailLines(String arg){
         try {
             int x =  Integer.parseInt(arg);

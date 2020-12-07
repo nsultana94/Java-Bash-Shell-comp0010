@@ -2,7 +2,25 @@ package uk.ac.ucl.jsh;
 
 import java.io.IOException;
 
+/**
+ * ApplicationFactory Class using the factory pattern to create new Applications.
+ * Can return a 'safe' and 'unsafe' version
+ * The 'unsafe' version prints its errors to standard output and terminates instead of throwing an error
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
+
+
 public class ApplicationFactory {
+    /**
+     * Creates an application object given an application name
+     * @param appName the name of the application to be created
+     * @param unsafe {@code true} if unsafe or {@code false} if normal
+     * @return Application object optionally with a UnsafeDecorator 
+     * @see UnsafeDecorator
+     * @see Application
+     */
 
     public Application getApplication(String appName, Boolean unsafe) throws IOException {
         Application app;

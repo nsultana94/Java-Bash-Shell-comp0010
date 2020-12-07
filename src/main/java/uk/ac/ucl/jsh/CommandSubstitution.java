@@ -13,16 +13,32 @@ import java.util.ArrayList;
 
 
 
+/**
+ * Class implementing command substitution
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
 
 public class CommandSubstitution {
 
     private String rawCommand;
-  
+    /**
+     * Constructor to take String and process it to run command substitution  
+     * @param cmdsub String input
+     */
 
     public CommandSubstitution(String cmdsub) {
         rawCommand = cmdsub;
 
     }
+    
+    /**
+     * gets the output from command substitution
+     * @param input {@code BufferedReader} representing the standard input
+     * @return {@code ArrayList} 
+     * @throws IOException if output writing fails
+     */
 
     public ArrayList<String> get_output(BufferedReader input) throws IOException {
         System.out.println(rawCommand);

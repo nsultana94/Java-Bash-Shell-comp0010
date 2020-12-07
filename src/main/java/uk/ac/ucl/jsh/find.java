@@ -8,7 +8,24 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
 
+/**
+ * Class implementing the JSH Application find.
+ * Takes a pattern of file to match and recursivly looks for files matching that pattern
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
+
 public class find implements Application {
+    
+    /**
+     * Method to recursivly find files matching a pattern
+     * @param targetDirectory directory to look in
+     * @param patternArg Pattern to match to locate files
+     * @param returnPath Accumulator for path followed
+     * @param returnPaths Accumulator for files found
+     * @return {@code ArrayList} of files found
+     */
 
     public ArrayList<String> findFile(File targetDirectory, String patternArg, String returnPath,
             ArrayList<String> returnPaths) {
@@ -29,6 +46,13 @@ public class find implements Application {
     public find() throws IOException {
     }
 
+    /**
+     * Method to run the Find Application
+     * @param args the arguments to be passed into the app
+     * @param input {@code BufferedReader} the standard input for the app
+     * @param output {@code OutputStreamWriter} the standard output for the app
+     * @throws IOException
+     */
     @Override
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();

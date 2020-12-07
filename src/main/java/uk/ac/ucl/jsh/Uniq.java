@@ -7,7 +7,13 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
-
+/**
+ * Uniq application in JSH.
+ * Removes adjacent duplicates in file or standard input
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
 
 public class Uniq implements Application {
     private boolean case_checking = true;
@@ -15,6 +21,13 @@ public class Uniq implements Application {
     public Uniq() throws IOException {}
 
     @Override
+    /**
+     * Function to run the uniq application functionality.
+     * Removes adjacent duplicates in file or standard input
+     * @param args the arguments to be passed into the app.
+     * @param input {@code BufferedReader} the standard input for the app
+     * @param output {@code OutputStreamWriter} the standard output for the app
+     */
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
         String filename;
@@ -57,6 +70,11 @@ public class Uniq implements Application {
     
     }
 
+    /**
+     * Method to write to output with no adjacent duplicates
+     * @param br the {@code BufferedReader} to read from
+     * @param output {@code OutputStreamWriter} the standard output
+     */
     private void run_uniq(BufferedReader br, OutputStreamWriter output) throws IOException {
          String line;
          String last_line="";
@@ -73,6 +91,11 @@ public class Uniq implements Application {
    
     }       
 
+    /**
+     * Writes a line to an output
+     * @param line the line to write
+     * @param output {@code OutputStreamWriter} the standard output to write to
+     */
     private void write_line(String line, OutputStreamWriter output) throws IOException {
         output.write(line);
         output.write(System.getProperty("line.separator"));

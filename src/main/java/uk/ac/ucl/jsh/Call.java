@@ -14,6 +14,14 @@ import java.io.FileReader;
 
 //*.[^\n"'`;|]* | (".["|'\w*'|`\w`))* 
 
+/**
+ * Call class to represent a call to an application.
+ * Handles IO redirection and String manipulation on the input
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
+
 public class Call implements Command {
 
     private String rawCommand;
@@ -21,13 +29,20 @@ public class Call implements Command {
     
     
    
-    
+    /**
+     * constructor to take the raw string input from the command line
+     * @param rawC the String to be processed to be executed 
+     */
 	public Call(String rawC) {
         rawCommand = rawC;
 	}
 
-
-
+    /**
+     * Main method of the class to run the command
+     * @param input {@code BufferedReader} the standard input for the command to be executed
+     * @param output {@code OutputStreamWriter} the standard output for the command
+     * @throws IOException if files attempted to be opened cannot be 
+     */
 	public void eval(BufferedReader input, OutputStream output) throws IOException {
         
         
@@ -142,7 +157,13 @@ public class Call implements Command {
     }
 
         
-
+    /**
+     * Takes a String command and converts this into a List of tokens. 
+     * @param rawCommands The raw unprocessed string to be converted into tokens
+     * @param output {@code OutputStream} the Standard output for the app
+     * @return ArrayList of tokens for the command
+     * @throws IOException
+     */
     public ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
     
         glob glob_processor = new glob();
@@ -150,6 +171,12 @@ public class Call implements Command {
         return args;
     } 
 
+    /**
+     * Creates the application and calls exec on it
+     * @param args The Arguments to be used bt the command
+     * @param input The Standard input
+     * @param output The standard output
+     */
     public void executeCommand(ArrayList<String> args, BufferedReader input, OutputStream output) throws IOException {
         ApplicationFactory applicationFactory = new ApplicationFactory();
         ArrayList<String> appArgs = new ArrayList<String>();
@@ -161,6 +188,13 @@ public class Call implements Command {
         command.exec(appArgs, input, new OutputStreamWriter(output));
     }
 
+    /**
+    * Runs command substitution on the application
+    * @param input The Standard input
+    * @param output The standard output
+    * @param matcher The Regular Expression to find where the sub commands are
+    * @throws IOException if cannot open file
+    */
     public void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();
         ArrayList<String> cmdsubinput = new ArrayList<String>();

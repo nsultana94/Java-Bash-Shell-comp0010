@@ -10,10 +10,24 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/**
+ * Class to implement the globbing mechanism in JSH
+ * Takes a string with wildcards ({@code *}) and processes it 
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
+
 public class glob {
 
     private static CurrentDirectory currentDirectory = CurrentDirectory.getInstance();
-
+    /**
+     * Converts raw commands to an {@code ArrayList} of tokens
+     * @param rawCommand the raw command to be processed
+     * @return {@code ArrayList} of tokens after replacing {@code *}'s
+     * @throws IOException
+     */
+    
     public ArrayList<String> get_tokens(String rawCommand) throws IOException {
         String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
         ArrayList<String> tokens = new ArrayList<String>();

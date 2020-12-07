@@ -7,11 +7,24 @@ import java.io.OutputStream;
 
 import java.util.ArrayList;
 
+/**
+ * Main Class for the application
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
 
 public class Jsh {
 
     private static CurrentDirectory currentDirectory = CurrentDirectory.getInstance();
 
+
+    /**
+     * Takes the string from the command line and runs JSH 
+     * @param cmdline The input from the command line
+     * @param output Standard output
+     * @throws IOException
+     */
     public static void eval(String cmdline, OutputStream output) throws IOException {
 
 
@@ -24,21 +37,6 @@ public class Jsh {
             Call call = new Call(rawCommand);
             call.eval(input, output);
         } 
-        
-        
-        // would iterate through raw commands and check if it is pipe or a normal call
-        /*ApplicationFactory applicationFactory = new ApplicationFactory();
-        glob glob_processor = new glob();
-        for (String rawCommand : rawCommands) {
-            List<String> tokens = glob_processor.get_tokens(rawCommand);
-            String appName = tokens.get(0);
-            Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
-            appName = (unsafe? appName.substring(1): appName);
-            ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
-           
-            Application command = applicationFactory.getApplication(appName, unsafe);
-            
-             */
     }
 
     public static void main(String[] args) throws IOException {

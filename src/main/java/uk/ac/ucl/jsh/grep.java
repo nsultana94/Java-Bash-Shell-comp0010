@@ -12,6 +12,15 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/**
+ * Grep Application for JSH 
+ * Takes a pattern and a file and returns the lines that match the pattern
+ * If multiple files specified it will search each and print the file name as well as the line found
+ * If no files specified standard input is used
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
 
 
 public class grep implements Application {
@@ -19,7 +28,16 @@ public class grep implements Application {
 
     public grep() throws IOException {
     }
-
+    /**
+     * Method to run the grep application functionality.
+     * Takes a pattern and a file and returns the lines that match the pattern
+     * If multiple files specified it will search each and print the file name as well as the line found
+     * If no files specified standard input is used
+     * @param args the arguments to be passed into the app. The Directory to be changed to
+     * @param input {@code BufferedReader} the standard input for the app
+     * @param output {@code OutputStreamWriter} the standard output for the app
+     */
+   
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
         if (args.size() == 0) {
@@ -52,6 +70,13 @@ public class grep implements Application {
         }
     }
 
+    /**
+     * Method to run the matching and write to the output the lines that match
+     * @param reader {@code BufferedReader} the standard input for the app
+     * @param output {@code OutputStreamWriter} the standard output for the app
+     * @param grepPattern The pattern to match
+     * @param fileName The file currently being looked at
+    */
     private void match(BufferedReader reader,OutputStreamWriter output, Pattern grepPattern,String fileName)
             throws IOException {
         String line = null;

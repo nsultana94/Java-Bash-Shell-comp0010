@@ -11,10 +11,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Application implementing the JSH cat function. 
+ * Takes one or more files (or input if no files are provided) and writes their content to output 
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+*/
 public class cat implements Application {
-    /**
-     * Application implementing the JSH cat function.
-     */
+
 
     public cat() throws IOException {}
 
@@ -22,8 +27,8 @@ public class cat implements Application {
     /**
      * Runs the Cat function. Takes one or more files (or input if no files are provided) and writes their content to output
      * @param args The files to be read from
-     * @param input standard input to be used if no files are provided
-     * @param output standard output to be written to
+     * @param input {@code BufferedReader} standard input to be used if no files are provided
+     * @param output {@code OutputStreamWriter} standard output to be written to
      * @throws IOException if files given are not able to be opened
      */
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{

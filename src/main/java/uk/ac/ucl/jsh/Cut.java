@@ -10,9 +10,28 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class implementing JSH Cut application. 
+ * Will take an input and cut certain bytes depending on the arguments
+ * -b n,m,k extract 1st, 2nd and 3rd byte from each line.
+ * -b 1-3,5-7 extract bytes from 1st to 3rd and from 5th to 7th from each line.
+ * -b -3,5- extract bytes from the beginning of line to 3rd, and from 5th to the end of line from each line
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
+
 public class Cut implements Application {
     public Cut() throws IOException {}
 
+    /**
+     * Method to run the Cut Application
+     * @param args the arguments to be passed into the app
+     * @param input {@code BufferedReader} the standard input for the app
+     * @param output {@code OutputStreamWriter} the standard output for the app
+     * @throws IOException
+     * @see Range
+     */
     @Override
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException {
         String currentDirectory = directory.getCurrentDirectory();
@@ -115,7 +134,12 @@ public class Cut implements Application {
   
     }
     
-    
+    /**
+     * Combines overlapping range objects
+     * @param intervals {@code ArrayList} of {@code Range} Objects 
+     * @return {@code ArrayList} of the resulting set of intervals
+     * @see Range
+     */
     public ArrayList<Range> overlapIntervals(ArrayList<Range> intervals) {
         ArrayList<Range> finalintervals = new ArrayList<Range>();
         List<Range> sortedRange = intervals.stream()

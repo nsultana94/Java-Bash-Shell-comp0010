@@ -12,22 +12,23 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-public class Sort implements Application {
     /**
      * The Sort Application for JSH
      * Takes files or standard input and sorts the lines
+     * Takes a file or standard input and sorts the lines lexicographically
+     * Optionally can be reversed using {@code -r} option
      */
+public class Sort implements Application {
     private Boolean reverse = false;
 
     public Sort() throws IOException {}
 
 
     /**
-     * Method to run sort
+     * Runs Sort by taking lines from input and sorts lexicographically to output
      * @param args Files and options to be used in the sorting
-     * @param input standard input 
-     * @param output standard output
+     * @param input {@code BufferedReader} the standard input for the app
+     * @param output {@code OutputStreamWriter} the standard output for the app
      * @throws IOException if files passed in args cannot be opened
      * @throws RuntimeException if wrong number of arguments given or wrong options given
      */
