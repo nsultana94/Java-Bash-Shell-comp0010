@@ -18,7 +18,8 @@ public class UnsafeDecorator implements Application {
 
     /**
      * Constructor 
-     * @param appIn App to decorate
+     * @param appIn App to create an Unsafe version of
+     * Unsafe versions of applications do not throw errors but write them to the standard output 
      */
     public UnsafeDecorator(Application appIn){
         app = appIn;
