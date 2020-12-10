@@ -36,7 +36,8 @@ public class find implements Application {
                     returnPaths.add(returnPath + "/" + targetDirectory.getName() + "/" + child.getName());
 
                 }
-                findFile(child, patternArg, returnPath + "/" + targetDirectory.getName(), returnPaths);
+                if(returnPath.compareTo("") == 0){findFile(child, patternArg, targetDirectory.getName(), returnPaths);}
+                else{findFile(child, patternArg, returnPath + "/" + targetDirectory.getName(), returnPaths);}
             }
         }
 
@@ -71,7 +72,7 @@ public class find implements Application {
         String patternArg;
 
         if (args.size() == 2) {
-            targetDirectory = new File(currentDirectory);
+            targetDirectory = new File(".");
             patternArg = args.get(1);
         } else {
             String pathArg = args.get(0);
