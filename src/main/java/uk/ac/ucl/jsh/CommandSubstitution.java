@@ -30,7 +30,6 @@ public class CommandSubstitution {
 
     public CommandSubstitution(String cmdsub) {
         rawCommand = cmdsub;
-
     }
     
     /**

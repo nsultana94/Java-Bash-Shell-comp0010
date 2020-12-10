@@ -20,5 +20,4 @@ public class JshTest {
         Scanner scn = new Scanner(in);
         assertEquals(scn.next(),"foo");
     }
-
 }
