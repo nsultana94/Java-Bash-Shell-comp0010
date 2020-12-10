@@ -44,8 +44,7 @@ public class Call implements Command {
      * @throws IOException if files attempted to be opened cannot be 
      */
 	public void eval(BufferedReader input, OutputStream output) throws IOException {
-        
-        
+        Boolean cmdsubboolean = false;
         
         String currentDirectory = directory.getCurrentDirectory();
         
@@ -56,16 +55,18 @@ public class Call implements Command {
         Matcher matcher = pattern.matcher(rawCommand);
         
         if (matcher.find() && commandsub == false){
-            commandsub = true;
+            cmdsubboolean = true;
             doCmdSub(input, output, matcher);
-            
         }
+        
+        
 
-        else
-        {
+        
         // return array of args - for each arg in arg evaluate that arg and then do any other args 
         ArrayList<String> args = tokenizeCommand(rawCommand, output);
         ArrayList<String> args1 = tokenizeCommand(rawCommand, output);
+
+        if((cmdsubboolean == true && args.size() > 0) || (cmdsubboolean == false)) {
         
         File inputFile = null;
         File outputFile = null;
@@ -73,7 +74,7 @@ public class Call implements Command {
         Boolean outputFileBool = false;
         String nextArg ="";
 
-        
+
 
         // check if there are input and output redirections
         for (int i = 0; i < args.size(); i++) {
@@ -88,7 +89,6 @@ public class Call implements Command {
             else{
                 nextArg = args.get(i);
             }
-            
             
             if (arg.equalsIgnoreCase("<")) {
                 if (inputFileBool == true) {
@@ -135,28 +135,21 @@ public class Call implements Command {
             }
             executeCommand(args1, input, output);
             }
-            
-
            
-           
-
-
         // input and output streams
         
-        
-
         /*
          * String quotedRegex = "'.[^\n']*'|`.[^\n`]*`|\"(`.[^\n`]`|.[^\n\"`])*\"";
          * String unquotedRegex = ".[^\"'`\n;|<>]"; String argumentRegex = "(" +
          * quotedRegex + "|" + unquotedRegex + ")+"; int inputFileArgIndex; int
          * outputFileArgIndex; int commandIndex; String command;
          */
+    
+        }
+    
 
-        
-        
-    }
 
-        
+ 
     /**
      * Takes a String command and converts this into a List of tokens. 
      * @param rawCommands The raw unprocessed string to be converted into tokens
