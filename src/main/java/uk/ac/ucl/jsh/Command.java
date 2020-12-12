@@ -17,8 +17,9 @@ public interface Command {
      * @param input {@code BufferedReader} Standard input for the call
      * @param output {@code OutputStreamWriter} Standard output for the call
      * @throws IOException 
+     * @throws InterruptedException
      */
-    public void eval(BufferedReader input, OutputStream output) throws IOException;
+    public void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException;
 
     CurrentDirectory directory = CurrentDirectory.getInstance();
 }

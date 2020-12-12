@@ -37,8 +37,7 @@ public class cat implements Application {
         Charset encoding = StandardCharsets.UTF_8;
         
         if (args.isEmpty()) {
-            reader = input;
-            write(reader,output);
+            write(input,output);
         } else {
             for (String arg : args) {
                 File currFile = new File(currentDirectory + File.separator + arg);
@@ -61,11 +60,11 @@ public class cat implements Application {
    Reader can either be the standard input or the output
    */
     private void write(BufferedReader reader,OutputStreamWriter output) throws IOException {
-        String line = null;
+        String line = "";
         while ((line = reader.readLine()) != null) {
             output.write(String.valueOf(line));
             output.write(System.getProperty("line.separator"));
             output.flush();
         }
-    }
+   }
 }

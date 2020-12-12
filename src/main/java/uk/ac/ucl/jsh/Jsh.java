@@ -14,18 +14,20 @@ import java.util.ArrayList;
  * @author Joshua Mukherjee
  */
 
-public class Jsh {
+public class Jsh{
 
     private static CurrentDirectory currentDirectory = CurrentDirectory.getInstance();
 
 
     /**
-     * Takes the string from the command line and runs JSH 
+     * Takes the string from the command line and runs JSH
+     * 
      * @param cmdline The input from the command line
-     * @param output Standard output
+     * @param output  Standard output
      * @throws IOException
+     * @throws InterruptedException
      */
-    public static void eval(String cmdline, OutputStream output) throws IOException {
+    public static void eval(String cmdline, OutputStream output) throws IOException, InterruptedException {
 
 
         JSHParser parser = new JSHParser();
@@ -34,8 +36,8 @@ public class Jsh {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         for (String rawCommand : rawCommands){
-            Call call = new Call(rawCommand);
-            call.eval(input, output);
+            pipe p = new pipe(rawCommand);
+            p.eval(input, output);
         } 
     }
 
@@ -65,7 +67,8 @@ public class Jsh {
                         String cmdline = input.readLine();
                         eval(cmdline, System.out);
                     } catch (Exception e) {
-                        System.out.println("jsh: " + e.getMessage());
+                        //e.printStackTrace();
+                        System.out.println("jsh: " + e.getMessage() + e.getClass());
                     }
                 }
             } finally {

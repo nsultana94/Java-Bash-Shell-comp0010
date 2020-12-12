@@ -7,7 +7,11 @@ import java.util.ArrayList;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.management.RuntimeErrorException;
+
 import java.io.OutputStreamWriter;
+import java.io.PipedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -22,13 +26,27 @@ import java.io.FileReader;
  * @author Joshua Mukherjee
  */
 
-public class Call implements Command {
+public class Call extends Thread implements Command {
 
     private String rawCommand;
     Boolean commandsub = false;
+    BufferedReader input;
+    OutputStream output;
     
-    
+    public void run(){
+        try {
+            eval(input, output);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }    
    
+    public String GetCommand(){
+        return rawCommand;
+    }
+
+
+
     /**
      * constructor to take the raw string input from the command line
      * @param rawC the String to be processed to be executed 
@@ -103,7 +121,7 @@ public class Call implements Command {
                     args1.remove(arg);
                     args1.remove(nextArg);
                 }
-            } else if (arg.equalsIgnoreCase(">")) {
+            }else if (arg.equalsIgnoreCase(">")) {
                 System.out.println(arg + " arg");
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction "  + nextArg);
@@ -126,15 +144,15 @@ public class Call implements Command {
                 }
             }
         }
-            if (outputFileBool == true) {
-        
-                output = new FileOutputStream(outputFile);
-            }
-            if (inputFileBool == true) {
-                input = new BufferedReader(new FileReader(inputFile));
-            }
-            executeCommand(args1, input, output);
-            }
+        if (outputFileBool == true) {
+    
+            output = new FileOutputStream(outputFile);
+        }
+        if (inputFileBool == true) {
+            input = new BufferedReader(new FileReader(inputFile));
+        }
+        executeCommand(args1, input, output);
+        }
            
         // input and output streams
         
@@ -144,8 +162,7 @@ public class Call implements Command {
          * quotedRegex + "|" + unquotedRegex + ")+"; int inputFileArgIndex; int
          * outputFileArgIndex; int commandIndex; String command;
          */
-    
-        }
+    }
     
 
 
@@ -179,6 +196,7 @@ public class Call implements Command {
         appArgs = new ArrayList<String>(args.subList(1, args.size()));
         Application command = applicationFactory.getApplication(appName, unsafe);
         command.exec(appArgs, input, new OutputStreamWriter(output));
+
     }
 
     /**
@@ -218,6 +236,23 @@ public class Call implements Command {
                 } 
              
             }
+        }
+
+        public void setInput(BufferedReader input) {
+            this.input = input;
+        }
+
+
+        public void setOutput(OutputStream output) {
+            this.output = output;
+        }
+
+        public BufferedReader getInput() {
+            return input;
+        }
+
+        public OutputStream getOutput() {
+            return output;
         }
     }
 
