@@ -63,7 +63,7 @@ public class Call extends Thread implements Command {
      */
 	public void eval(BufferedReader input, OutputStream output) throws IOException {
         Boolean cmdsubboolean = false;
-        
+        int argsdifference = 0;
         String currentDirectory = directory.getCurrentDirectory();
         
         //String regex = "`(.*?)`";
@@ -74,17 +74,17 @@ public class Call extends Thread implements Command {
         
         if (matcher.find() && commandsub == false){
             cmdsubboolean = true;
-            doCmdSub(input, output, matcher);
+            argsdifference = doCmdSub(input, output, matcher);
         }
-        
-        
 
         
         // return array of args - for each arg in arg evaluate that arg and then do any other args 
+        
         ArrayList<String> args = tokenizeCommand(rawCommand, output);
         ArrayList<String> args1 = tokenizeCommand(rawCommand, output);
 
-        if((cmdsubboolean == true && args.size() > 0) || (cmdsubboolean == false)) {
+
+        
         
         File inputFile = null;
         File outputFile = null;
@@ -162,7 +162,6 @@ public class Call extends Thread implements Command {
          * quotedRegex + "|" + unquotedRegex + ")+"; int inputFileArgIndex; int
          * outputFileArgIndex; int commandIndex; String command;
          */
-    }
     
 
 
@@ -175,7 +174,6 @@ public class Call extends Thread implements Command {
      * @throws IOException
      */
     public ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
-    
         glob glob_processor = new glob();
         ArrayList<String> args = glob_processor.get_tokens(rawCommand);
         return args;
@@ -206,18 +204,21 @@ public class Call extends Thread implements Command {
     * @param matcher The Regular Expression to find where the sub commands are
     * @throws IOException if cannot open file
     */
-    public void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
+    public int doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
+        
         String currentDirectory = directory.getCurrentDirectory();
         ArrayList<String> cmdsubinput = new ArrayList<String>();
         String cmdsub = "";
             cmdsub = matcher.group();
+            ArrayList<String> commandsubargs1 = tokenizeCommand(rawCommand, output);
             rawCommand = rawCommand.replace(cmdsub, "");
             cmdsub = cmdsub.replace("`", "");
             CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
             cmdsubinput = subcmd.get_output(input);
             ArrayList<String> commandsubargs = new ArrayList<String>();
             commandsubargs = tokenizeCommand(rawCommand, output);
-            System.out.println(commandsubargs+ " command sub");
+
+            int size = (commandsubargs1.size() - commandsubargs.size());
 
             for(String arg: cmdsubinput){
                 File file = new File(currentDirectory + File.separator + arg);
@@ -225,7 +226,6 @@ public class Call extends Thread implements Command {
                 if(file.exists()){
                     try {
                         input = new BufferedReader(new FileReader(file));
-                        System.out.println("help");
                         executeCommand(commandsubargs, input, output);
                     } catch (IOException e) {
                         throw new RuntimeException("head: cannot open " + file);
@@ -236,6 +236,8 @@ public class Call extends Thread implements Command {
                 } 
              
             }
+            return size;
+        
         }
 
         public void setInput(BufferedReader input) {
