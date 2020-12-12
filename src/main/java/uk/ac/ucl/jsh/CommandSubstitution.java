@@ -40,7 +40,7 @@ public class CommandSubstitution {
      */
 
     public ArrayList<String> get_output(BufferedReader input) throws IOException {
-        System.out.println(rawCommand);
+       
         PipedOutputStream output = new PipedOutputStream();
         ArrayList<String> result = new ArrayList<String>();
         
