@@ -3,6 +3,8 @@ package uk.ac.ucl.jsh;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Scanner;
@@ -28,27 +30,28 @@ public class JshTest {
         out = new PipedOutputStream(in);
         Jsh.eval("cut -b 1,2,3,4 testfile.txt", out);
         Scanner scn = new Scanner(in);
-        assertEquals(scn.next(),"this");
+        assertEquals(scn.next().toString(),"this");
     } 
-    /*
+    
     @Test
     public void testCut2() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
         Jsh.eval("cut -b -3,1-6 testfile.txt", out);
-        Scanner scn = new Scanner(in);
-        assertEquals(scn.next(),"this i");
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        
+        assertEquals(input.readLine(),"this i");
     }
-
+    
     @Test
     public void testCut3() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
         Jsh.eval("cut -b 1-3,4-9 testfile.txt", out);
-        Scanner scn = new Scanner(in);
-        assertEquals(scn.next(),"this is a");
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        assertEquals(input.readLine(),"this is a");
     }
 
     @Test
@@ -57,8 +60,8 @@ public class JshTest {
         PipedOutputStream out;
         out = new PipedOutputStream(in);
         Jsh.eval("cut -b -3,6- testfile.txt", out);
-        Scanner scn = new Scanner(in);
-        assertEquals(scn.next(),"thiis a test file");
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        assertEquals(input.readLine(),"thiis a test file");
     }
     @Test
     public void testCut5() throws Exception {
@@ -66,7 +69,7 @@ public class JshTest {
         PipedOutputStream out;
         out = new PipedOutputStream(in);
         Jsh.eval("cut -b 1-3,1-9 testfile.txt", out);
-        Scanner scn = new Scanner(in);
-        assertEquals(scn.next(),"this is a");
-    } */
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        assertEquals(input.readLine(),"this is a");
+    } 
 } 
