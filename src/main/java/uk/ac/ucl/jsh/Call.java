@@ -29,7 +29,7 @@ import java.io.FileReader;
 public class Call extends Thread implements Command {
 
     private String rawCommand;
-    Boolean commandsub = false;
+    
     BufferedReader input;
     OutputStream output;
     
@@ -62,8 +62,8 @@ public class Call extends Thread implements Command {
      * @throws IOException if files attempted to be opened cannot be 
      */
 	public void eval(BufferedReader input, OutputStream output) throws IOException {
-        Boolean cmdsubboolean = false;
-        int argsdifference = 0;
+        
+    
         String currentDirectory = directory.getCurrentDirectory();
         
         //String regex = "`(.*?)`";
@@ -72,9 +72,10 @@ public class Call extends Thread implements Command {
         Pattern pattern = Pattern.compile("`(.*?)`");
         Matcher matcher = pattern.matcher(rawCommand);
         
-        if (matcher.find() && commandsub == false){
-            cmdsubboolean = true;
-            argsdifference = doCmdSub(input, output, matcher);
+        if (matcher.find()){
+            
+            doCmdSub(input, output, matcher);
+            return;
         }
 
         
@@ -204,13 +205,12 @@ public class Call extends Thread implements Command {
     * @param matcher The Regular Expression to find where the sub commands are
     * @throws IOException if cannot open file
     */
-    public int doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
+    public void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
         
         String currentDirectory = directory.getCurrentDirectory();
         ArrayList<String> cmdsubinput = new ArrayList<String>();
         String cmdsub = "";
             cmdsub = matcher.group();
-            ArrayList<String> commandsubargs1 = tokenizeCommand(rawCommand, output);
             rawCommand = rawCommand.replace(cmdsub, "");
             cmdsub = cmdsub.replace("`", "");
             CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
@@ -218,7 +218,6 @@ public class Call extends Thread implements Command {
             ArrayList<String> commandsubargs = new ArrayList<String>();
             commandsubargs = tokenizeCommand(rawCommand, output);
 
-            int size = (commandsubargs1.size() - commandsubargs.size());
 
             for(String arg: cmdsubinput){
                 File file = new File(currentDirectory + File.separator + arg);
@@ -236,7 +235,7 @@ public class Call extends Thread implements Command {
                 } 
              
             }
-            return size;
+            
         
         }
 
