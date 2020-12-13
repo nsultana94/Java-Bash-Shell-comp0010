@@ -36,7 +36,6 @@ public class find implements Application {
             for (File child : targetDirListing) {
                 if (Pattern.matches(patternArg, child.getName())) {
                     argReturnPaths.add(returnPath + "/" + targetDirectory.getName() + "/" + child.getName());
-
                 }
                 if (returnPath.compareTo("") == 0) {
                     findFile(child, patternArg, targetDirectory.getName(), argReturnPaths);
@@ -45,7 +44,6 @@ public class find implements Application {
                 }
             }
         }
-
         return argReturnPaths;
     }
 
@@ -114,11 +112,11 @@ public class find implements Application {
         if (targetDirectory.listFiles() == null) {
             throw new RuntimeException("find: directory is empty");
         }
-        ArrayList<String> emptyPath = new ArrayList<String>();
 
         ArrayList<ArrayList<String>> allReturnPaths = new ArrayList<ArrayList<String>>();
 
         for (String patternArg : patternArgs) {
+            ArrayList<String> emptyPath = new ArrayList<String>();
             allReturnPaths.add(findFile(targetDirectory, patternArg, "", emptyPath));
         }
 
