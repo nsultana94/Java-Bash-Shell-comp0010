@@ -84,7 +84,71 @@ public class JshTest {
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "hi\nhe");
+        assertEquals(result, "ap\nAp\nlo\ndo\ndo");
     }
+ 
+    @Test
+    public void testSort() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("sort testfile2.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "Apple\napple\ndog\ndog\nlolly");
+    }
+    
+    /*
+    @Test
+    public void testSort2() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("sort -r testfile2.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "lolly\ndog\ndog\napple\nApple");
+    }
+    */
+
+    @Test
+    public void testSort3() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("sort testfile.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "this is a test file");
+    } 
+    
+    @Test
+    public void testUniq() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("uniq testfile2.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "apple\nApple\nlolly\ndog");
+    }
+
+    @Test
+    public void testUniq2() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("uniq -i testfile2.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "apple\nlolly\ndog");
+    } 
+    
+
 
 }
