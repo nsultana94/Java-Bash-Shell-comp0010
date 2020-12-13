@@ -42,7 +42,7 @@ public class Sort implements Application {
             throw new RuntimeException("sort: wrong argument " + args.get(0));
         }
 
-        if(args.size() != 0 && (args.size() == 1 && !args.get(0).equals("-r"))){
+        if(args.size() != 0 && (args.size() == 1 && !args.get(0).equals("-r"))|| (args.size() == 2)){
             String fileArg; 
             if(args.size() == 2){
                 reverse = true;
