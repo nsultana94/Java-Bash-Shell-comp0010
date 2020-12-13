@@ -69,6 +69,7 @@ public class find implements Application {
         } else if (args.size() == 2 && args.get(1).equals("-name")) {
             throw new RuntimeException("find: missing arguments");
         } else if (!(args.get(0).equals("-name")) && !(args.get(1).equals("-name"))) {
+            System.out.println(!args.get(0).equals("-name"));
             throw new RuntimeException("find: missing argument -name");
         }
 
