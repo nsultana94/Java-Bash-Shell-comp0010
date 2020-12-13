@@ -11,12 +11,22 @@ import java.util.ArrayList;
 public class pipe implements Command {
   private ArrayList<Call> calls = new ArrayList<Call>();
 
+  /**
+   * Pipes commands together. The ourput of one command is passed into the input of the next
+   * @param rawCommand The command to be split at pipe operators
+   * @throws IOException
+   */
   public pipe(String rawCommand) throws IOException {
     for (String command : rawCommand.split("\\|")) {
       calls.add(new Call(command.trim()));
     }
   }
 
+  /**
+   * runs the pipe. Sets up the pipedStreams and starts each command as a thread
+   * @param input {@code BufferedReader} The input to the whole pipe
+   * @param input {@code OutputStream} The output from the whole pipe
+   */
   public void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException {
     PipedOutputStream to_next = new PipedOutputStream();
     BufferedReader in = input;
