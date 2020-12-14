@@ -11,6 +11,13 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
 
+/**
+ * Implements a Pipe. The output of one command is passed into the input of the next
+ * @author Saachi Pahwa
+ * @author Naima Sultana 
+ * @author Joshua Mukherjee
+ */
+
 public class pipe implements Command {
   private ArrayList<Call> calls = new ArrayList<Call>();
 
@@ -55,6 +62,13 @@ public class pipe implements Command {
     }
   }
 
+  /**
+   * A Output stream that is safe to use System.out in
+   * Prevents closing System.out when closing other streams 
+   * @author Saachi Pahwa
+   * @author Naima Sultana 
+   * @author Joshua Mukherjee
+   */
   private class SystemSafeStream extends FilterOutputStream {
 
     public SystemSafeStream(OutputStream output) {
