@@ -284,18 +284,7 @@ public class JshTest {
      
       assertEquals(input.readLine(), directory.getCurrentDirectory()); }
 
-      @Test
-    public void testCd() throws Exception {
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out;
-        Dire
-        out = new PipedOutputStream(in);
-        Jsh.eval("cd testing", out);
-        out.close();
-        BufferedReader input = new BufferedReader(new InputStreamReader(in));
-        String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(directory.getCurrentDirectory(), "this is a test file\ntest file\nfile");
-    }
+     
      
     @Test
     public void testCat() throws Exception {
