@@ -61,11 +61,7 @@ public class tail implements Application {
             write(input,output,tailLines);
         }else{
             if (args.size() == 3) {
-                try {
-                    tailLines = Integer.parseInt(args.get(1));
-                } catch (Exception e) {
-                    throw new RuntimeException("tail: wrong argument " + args.get(1));
-                }
+                tailLines = get_tailLines(args.get(1));
                 tailArg = args.get(2);
             } else {
                 tailArg = args.get(0);
