@@ -19,7 +19,7 @@ public interface Command {
      * @throws IOException 
      * @throws InterruptedException
      */
-    public void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException;
+    void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException;
 
     CurrentDirectory directory = CurrentDirectory.getInstance();
 }
