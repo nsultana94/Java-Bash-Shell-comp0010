@@ -15,6 +15,7 @@ import java.io.PipedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilterOutputStream;
 
 //*.[^\n"'`;|]* | (".["|'\w*'|`\w`))* 
 
@@ -61,7 +62,7 @@ public class Call extends Thread implements Command {
      * @param output {@code OutputStreamWriter} the standard output for the command
      * @throws IOException if files attempted to be opened cannot be 
      */
-	public void eval(BufferedReader input, OutputStream output) throws IOException {
+	public synchronized void eval(BufferedReader input, OutputStream output) throws IOException {
         
     
         String currentDirectory = directory.getCurrentDirectory();
@@ -174,7 +175,7 @@ public class Call extends Thread implements Command {
      * @return ArrayList of tokens for the command
      * @throws IOException
      */
-    public ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
+    public synchronized ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
         glob glob_processor = new glob();
         ArrayList<String> args = glob_processor.get_tokens(rawCommand);
         return args;
@@ -186,7 +187,7 @@ public class Call extends Thread implements Command {
      * @param input The Standard input
      * @param output The standard output
      */
-    public void executeCommand(ArrayList<String> args, BufferedReader input, OutputStream output) throws IOException {
+    public synchronized void executeCommand(ArrayList<String> args, BufferedReader input, OutputStream output) throws IOException {
         ApplicationFactory applicationFactory = new ApplicationFactory();
         ArrayList<String> appArgs = new ArrayList<String>();
         String appName = args.get(0);
@@ -195,7 +196,7 @@ public class Call extends Thread implements Command {
         appArgs = new ArrayList<String>(args.subList(1, args.size()));
         Application command = applicationFactory.getApplication(appName, unsafe);
         command.exec(appArgs, input, new OutputStreamWriter(output));
-
+        output.close();
     }
 
     /**
@@ -205,39 +206,39 @@ public class Call extends Thread implements Command {
     * @param matcher The Regular Expression to find where the sub commands are
     * @throws IOException if cannot open file
     */
-    public void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
+    public synchronized void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
         
         String currentDirectory = directory.getCurrentDirectory();
         ArrayList<String> cmdsubinput = new ArrayList<String>();
         String cmdsub = "";
-            cmdsub = matcher.group();
-            rawCommand = rawCommand.replace(cmdsub, "");
-            cmdsub = cmdsub.replace("`", "");
-            CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
-            cmdsubinput = subcmd.get_output(input);
-            ArrayList<String> commandsubargs = new ArrayList<String>();
-            commandsubargs = tokenizeCommand(rawCommand, output);
+        cmdsub = matcher.group();
+        rawCommand = rawCommand.replace(cmdsub, "");
+        cmdsub = cmdsub.replace("`", "");
+        CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
+        cmdsubinput = subcmd.get_output(input);
+        ArrayList<String> commandsubargs = new ArrayList<String>();
+        commandsubargs = tokenizeCommand(rawCommand, output);
 
 
-            for(String arg: cmdsubinput){
-                File file = new File(currentDirectory + File.separator + arg);
-                
-                if(file.exists()){
-                    try {
-                        input = new BufferedReader(new FileReader(file));
-                        executeCommand(commandsubargs, input, output);
-                    } catch (IOException e) {
-                        throw new RuntimeException("head: cannot open " + file);
-                    }
+        for(String arg: cmdsubinput){
+            File file = new File(currentDirectory + File.separator + arg);
+            
+            if(file.exists()){
+                try {
+                    input = new BufferedReader(new FileReader(file));
+                    executeCommand(commandsubargs, input, output);
+                } catch (IOException e) {
+                    throw new RuntimeException("head: cannot open " + file);
                 }
-                else{
-                    System.out.println(("head: " + arg + ": No such file or directory"));
-                } 
-             
             }
+            else{
+                System.out.println(("head: " + arg + ": No such file or directory"));
+            } 
+            
+        }
             
         
-        }
+    }
 
         public void setInput(BufferedReader input) {
             this.input = input;
@@ -255,8 +256,8 @@ public class Call extends Thread implements Command {
         public OutputStream getOutput() {
             return output;
         }
-    }
-
     
+
+}
 
 

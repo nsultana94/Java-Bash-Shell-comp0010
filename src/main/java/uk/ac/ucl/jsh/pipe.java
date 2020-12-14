@@ -1,6 +1,9 @@
 package uk.ac.ucl.jsh;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -37,7 +40,7 @@ public class pipe implements Command {
       call.setInput(in);
       in = new BufferedReader(new InputStreamReader(new PipedInputStream(to_next)));
       if (i == calls.size() - 1) {
-        call.setOutput(output);
+        call.setOutput(new SystemSafeStream(output));
       } else {
         call.setOutput(to_next);
         to_next = new PipedOutputStream();
@@ -46,7 +49,21 @@ public class pipe implements Command {
 
     for (Call c : calls) {
       c.start();
+    }
+    for (Call c : calls) {
       c.join();
+    }
+  }
+
+  private class SystemSafeStream extends FilterOutputStream {
+
+    public SystemSafeStream(OutputStream output) {
+        super(output);
+    }
+
+    @Override
+    public void close() throws IOException {
+        out.flush();
     }
   }
 }
