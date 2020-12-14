@@ -37,7 +37,11 @@ public class Jsh{
 
         for (String rawCommand : rawCommands){
             pipe p = new pipe(rawCommand);
-            p.eval(input, output);
+            try{
+             p.eval(input, output);
+            }catch(RuntimeException e){
+                throw new RuntimeException(e.getMessage());
+            }
         } 
     }
 

@@ -31,14 +31,14 @@ public class Call extends Thread implements Command {
 
     private String rawCommand;
     
-    BufferedReader input;
-    OutputStream output;
+    private BufferedReader input;
+    private OutputStream output;
     
     public void run(){
         try {
             eval(input, output);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+           System.out.println("jsh: " + e.getMessage());
         }
     }    
    
