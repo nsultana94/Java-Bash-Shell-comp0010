@@ -4,20 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
-
 import java.io.OutputStreamWriter;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-
-
-//*.[^\n"'`;|]* | (".["|'\w*'|`\w`))* 
 
 /**
  * Call class to represent a call to an application.
@@ -41,12 +33,6 @@ public class Call extends Thread implements Command {
            System.out.println("jsh: " + e.getMessage());
         }
     }    
-   
-    public String GetCommand(){
-        return rawCommand;
-    }
-
-
 
     /**
      * constructor to take the raw string input from the command line
@@ -79,22 +65,16 @@ public class Call extends Thread implements Command {
             return;
         }
 
-        
         // return array of args - for each arg in arg evaluate that arg and then do any other args 
         
         ArrayList<String> args = tokenizeCommand(rawCommand, output);
         ArrayList<String> args1 = tokenizeCommand(rawCommand, output);
 
-
-        
-        
         File inputFile = null;
         File outputFile = null;
         Boolean inputFileBool = false;
         Boolean outputFileBool = false;
         String nextArg ="";
-
-
 
         // check if there are input and output redirections
         for (int i = 0; i < args.size(); i++) {
@@ -153,17 +133,6 @@ public class Call extends Thread implements Command {
         executeCommand(args1, input, output);
         }
            
-        // input and output streams
-        
-        /*
-         * String quotedRegex = "'.[^\n']*'|`.[^\n`]*`|\"(`.[^\n`]`|.[^\n\"`])*\"";
-         * String unquotedRegex = ".[^\"'`\n;|<>]"; String argumentRegex = "(" +
-         * quotedRegex + "|" + unquotedRegex + ")+"; int inputFileArgIndex; int
-         * outputFileArgIndex; int commandIndex; String command;
-         */
-    
-
-
  
     /**
      * Takes a String command and converts this into a List of tokens. 
@@ -225,11 +194,11 @@ public class Call extends Thread implements Command {
                     input = new BufferedReader(new FileReader(file));
                     executeCommand(commandsubargs, input, output);
                 } catch (IOException e) {
-                    throw new RuntimeException("head: cannot open " + file);
+                    throw new RuntimeException("cannot open " + file);
                 }
             }
             else{
-                System.out.println("head: " + arg + ": No such file or directory");
+                System.out.println(arg + ": No such file or directory");
             } 
             
         }
@@ -237,22 +206,22 @@ public class Call extends Thread implements Command {
         
     }
 
-        public void setInput(BufferedReader input) {
-            this.input = input;
-        }
+    public void setInput(BufferedReader input) {
+        this.input = input;
+    }
 
 
-        public void setOutput(OutputStream output) {
-            this.output = output;
-        }
+    public void setOutput(OutputStream output) {
+        this.output = output;
+    }
 
-        public BufferedReader getInput() {
-            return input;
-        }
+    public BufferedReader getInput() {
+        return input;
+    }
 
-        public OutputStream getOutput() {
-            return output;
-        }
+    public OutputStream getOutput() {
+        return output;
+    }
     
 
 }
