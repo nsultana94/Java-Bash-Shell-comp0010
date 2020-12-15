@@ -53,8 +53,6 @@ public class pipe implements Command {
 
     for (Call c : calls) {
       c.start();
-    }
-    for (Call c : calls) {
       c.join();
     }
   }
