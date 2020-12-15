@@ -1,7 +1,5 @@
 package uk.ac.ucl.jsh;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -43,7 +41,6 @@ public class pipe implements Command {
     Call call;
     for (int i = 0; i < calls.size(); i++) {
       call = calls.get(i);
-      // System.out.println(call.GetCommand());
       call.setInput(in);
       in = new BufferedReader(new InputStreamReader(new PipedInputStream(to_next)));
       if (i == calls.size() - 1) {
@@ -75,9 +72,15 @@ public class pipe implements Command {
         super(output);
     }
 
+    /**
+     * Doesnt close the underlying Stream. Instead flushes it,
+     * this is used to ensure {@code System.out} isnt closed
+     * @throws IOException
+     */
     @Override
     public void close() throws IOException {
         out.flush();
     }
   }
+
 }
