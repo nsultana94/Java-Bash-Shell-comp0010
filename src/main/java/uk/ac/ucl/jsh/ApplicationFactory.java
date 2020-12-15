@@ -62,6 +62,6 @@ public class ApplicationFactory {
         } else {
             throw new RuntimeException(appName + ": unknown application");
         }
-        return (unsafe ? new UnsafeDecorator(app) : app);
+        return unsafe ? new UnsafeDecorator(app) : app;
     }
 }

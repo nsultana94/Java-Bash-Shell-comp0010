@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.management.RuntimeErrorException;
+
 
 import java.io.OutputStreamWriter;
-import java.io.PipedOutputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FilterOutputStream;
+
 
 //*.[^\n"'`;|]* | (".["|'\w*'|`\w`))* 
 
@@ -191,8 +191,8 @@ public class Call extends Thread implements Command {
         ApplicationFactory applicationFactory = new ApplicationFactory();
         ArrayList<String> appArgs = new ArrayList<String>();
         String appName = args.get(0);
-        Boolean unsafe = ((rawCommand.charAt(0) == '_'))? true: false;
-        appName = (unsafe? appName.substring(1): appName);
+        Boolean unsafe = (rawCommand.charAt(0) == '_')? true: false;
+        appName = unsafe? appName.substring(1): appName;
         appArgs = new ArrayList<String>(args.subList(1, args.size()));
         Application command = applicationFactory.getApplication(appName, unsafe);
         command.exec(appArgs, input, new OutputStreamWriter(output));
@@ -232,7 +232,7 @@ public class Call extends Thread implements Command {
                 }
             }
             else{
-                System.out.println(("head: " + arg + ": No such file or directory"));
+                System.out.println("head: " + arg + ": No such file or directory");
             } 
             
         }

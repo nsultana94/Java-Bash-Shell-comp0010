@@ -35,14 +35,14 @@ public class Sort implements Application {
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         String currentDirectory = directory.getCurrentDirectory();
 
-        if ((args.size()>2)) {
+        if (args.size()>2) {
             throw new RuntimeException("sort: wrong arguments");
         }
         if (args.size() == 2 && !args.get(0).equals("-r")) {
             throw new RuntimeException("sort: wrong argument " + args.get(0));
         }
 
-        if(args.size() != 0 && (args.size() == 1 && !args.get(0).equals("-r"))|| (args.size() == 2)){
+        if(args.size() != 0 && (args.size() == 1 && !args.get(0).equals("-r"))|| args.size() == 2 ){
             String fileArg; 
             if(args.size() == 2){
                 reverse = true;

@@ -20,6 +20,6 @@ public interface Application {
      * @param output {@code OutputStreamWriter} The standard output
      * @throws IOException
      */
-    public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException;
+    void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException;
     CurrentDirectory directory = CurrentDirectory.getInstance(); 
 }
