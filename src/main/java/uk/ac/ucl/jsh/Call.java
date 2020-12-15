@@ -124,13 +124,11 @@ public class Call extends Thread implements Command {
                     args1.remove(nextArg);
                 }
             }else if (arg.equalsIgnoreCase(">")) {
-                System.out.println(arg + " arg");
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction "  + nextArg);
                 } else if (i == args.size() - 1) {
                     throw new RuntimeException(" no I/O file specified " + args.get(i));
                 } else if (!new File(currentDirectory + File.separator  + nextArg).exists()) {
-                    System.out.println(" file not exist");
                     outputFile = new File(currentDirectory + File.separator + nextArg);
                     outputFile.createNewFile();
                     outputFileBool = true;
@@ -138,7 +136,6 @@ public class Call extends Thread implements Command {
                     args1.remove(nextArg);
                 } else if (new File(currentDirectory + File.separator  + nextArg).exists())
                 {
-                    System.out.println(" file exist");
                     outputFile = new File(currentDirectory + File.separator + nextArg);
                     outputFileBool = true;
                     args1.remove(arg);

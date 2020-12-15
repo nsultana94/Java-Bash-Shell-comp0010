@@ -38,23 +38,17 @@ public class Ls implements Application {
         }
         try {
             File[] listOfFiles = currDir.listFiles();
-            boolean atLeastOnePrinted = false;
             for (File file : listOfFiles) {
                 if (!file.getName().startsWith(".")) {
                     output.write(file.getName());
-                    output.write("\t");
+                    output.write("\n");
                     output.flush();
-                    atLeastOnePrinted = true;
                 }
             }
-            if (atLeastOnePrinted) {
-                output.write(System.getProperty("line.separator"));
-                output.flush();
-            }
+
         } catch (NullPointerException e) {
             throw new RuntimeException("ls: no such directory");
         }
     }
-
 
 }
