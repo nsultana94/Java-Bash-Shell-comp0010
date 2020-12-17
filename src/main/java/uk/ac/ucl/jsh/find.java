@@ -80,16 +80,6 @@ public class find implements Application {
             }
         }
 
-        /*
-         * else if (!(args.size() == 3 || args.size() == 2)) { throw new
-         * RuntimeException("find: wrong arguments"); } else if ((args.size() == 2 &&
-         * !args.get(0).equals("-name"))) { throw new
-         * RuntimeException("find: wrong arguments " + args.get(0)); } else if
-         * ((args.size() == 3 && !args.get(1).equals("-name"))) { throw new
-         * RuntimeException("find: wrong arguments " + args.get(1)); }
-         */
-        // -name testfile.txt textfile2.txt
-
         File targetDirectory;
         ArrayList<String> patternArgs = new ArrayList<String>();
 

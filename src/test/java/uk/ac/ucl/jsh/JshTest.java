@@ -13,7 +13,8 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class JshTest {
-    CurrentDirectory directory = CurrentDirectory.getInstance(); 
+    CurrentDirectory directory = CurrentDirectory.getInstance();
+
     public JshTest() {
     }
 
@@ -98,16 +99,12 @@ public class JshTest {
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "ap\nAp\nlo\ndo\ndo");
     }
-   /* @Test(expected = RuntimeException.class)
-    public void CutExceptionNoArguments() throws Exception {
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out;
-        out = new PipedOutputStream(in);
-        Jsh.eval("cut", out);
-        out.close(); 
-    }
-    */
-
+    /*
+     * @Test(expected = RuntimeException.class) public void
+     * CutExceptionNoArguments() throws Exception { PipedInputStream in = new
+     * PipedInputStream(); PipedOutputStream out; out = new PipedOutputStream(in);
+     * Jsh.eval("cut", out); out.close(); }
+     */
 
     @Test
     public void testSort() throws Exception {
@@ -216,6 +213,7 @@ public class JshTest {
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "j\nk");
     }
+
     @Test
     public void testTail3() throws Exception {
         PipedInputStream in = new PipedInputStream();
@@ -276,16 +274,18 @@ public class JshTest {
         assertEquals(result, "this is a test file\ntest file\nfile");
     }
 
-    
-      @Test public void testPwd() throws Exception { PipedInputStream in = new
-      PipedInputStream(); PipedOutputStream out; out = new PipedOutputStream(in);
-      Jsh.eval("pwd", out); out.close(); BufferedReader input = new
-      BufferedReader(new InputStreamReader(in));
-     
-      assertEquals(input.readLine(), directory.getCurrentDirectory()); }
+    @Test
+    public void testPwd() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("pwd", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
 
-     
-     
+        assertEquals(input.readLine(), directory.getCurrentDirectory());
+    }
+
     @Test
     public void testCat() throws Exception {
         PipedInputStream in = new PipedInputStream();
@@ -321,6 +321,7 @@ public class JshTest {
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "Apple\napple\ndog\ndog\nlolly");
     }
+
     @Test
     public void IOexception1() throws Exception {
         PipedInputStream in = new PipedInputStream();
@@ -356,6 +357,7 @@ public class JshTest {
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "");
     }
+
     @Test
     public void testOutputRedirection() throws Exception {
         PipedInputStream in = new PipedInputStream();
@@ -370,7 +372,7 @@ public class JshTest {
         fileinput = new BufferedReader(new FileReader(file));
         String fileresult = fileinput.lines().collect(Collectors.joining("\n"));
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(fileresult,"Apple\napple\ndog\ndog\nlolly" );
+        assertEquals(fileresult, "Apple\napple\ndog\ndog\nlolly");
     }
 
     @Test
@@ -387,7 +389,7 @@ public class JshTest {
         fileinput = new BufferedReader(new FileReader(file));
         String fileresult = fileinput.lines().collect(Collectors.joining("\n"));
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(fileresult,"Apple\napple\ndog\ndog\nlolly" );
+        assertEquals(fileresult, "Apple\napple\ndog\ndog\nlolly");
     }
 
     @Test
@@ -414,7 +416,6 @@ public class JshTest {
         assertEquals(result, "");
     }
 
-
     @Test
     public void testFind1() throws Exception {
         PipedInputStream in = new PipedInputStream();
@@ -439,7 +440,7 @@ public class JshTest {
         assertEquals(result, "./testing/find.txt");
     }
 
-   /* @Test
+    @Test
     public void testFind3() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
@@ -448,8 +449,31 @@ public class JshTest {
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "/./testcmdsub.txt\n/./testfile.txt\n/./testfile2.txt\n/./testhead.txt");
+        assertEquals(result, "/./output.txt\n./testing/output.txt\n/./output2.txt\n/./testcmdsub.txt\n/./testfile.txt\n/./testfile2.txt\n/./testhead.txt");
     }
-    */
+
+    @Test
+    public void testFind4() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("find -name", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void testFind5() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("find testing", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
 
 }
