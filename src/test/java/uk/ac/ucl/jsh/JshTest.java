@@ -449,7 +449,8 @@ public class JshTest {
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "/./output.txt\n./testing/output.txt\n/./output2.txt\n/./testcmdsub.txt\n/./testfile.txt\n/./testfile2.txt\n/./testhead.txt");
+        assertEquals(result,
+                "/./output.txt\n./testing/output.txt\n/./output2.txt\n/./testcmdsub.txt\n/./testfile.txt\n/./testfile2.txt\n/./testhead.txt");
     }
 
     @Test
@@ -457,7 +458,7 @@ public class JshTest {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
-        Jsh.eval("find -name", out);
+        Jsh.eval("find testing -name", out);
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
@@ -469,7 +470,31 @@ public class JshTest {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
-        Jsh.eval("find testing", out);
+        Jsh.eval("find testing output.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void testFind6() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("find invaliddirectory?!| -name", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void testFind7() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("find not_a_directory -name", out);
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
