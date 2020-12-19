@@ -60,6 +60,7 @@ public class Call extends Thread implements Command {
         Matcher matcher = pattern.matcher(rawCommand);
         
         if (matcher.find()){
+            System.out.println("found");
             
             doCmdSub(input, output, matcher);
             return;
@@ -143,7 +144,7 @@ public class Call extends Thread implements Command {
      */
     public synchronized ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
         glob glob_processor = new glob();
-        ArrayList<String> args = glob_processor.get_tokens(rawCommand);
+        ArrayList<String> args = glob_processor.get_tokens(rawCommands);
         return args;
     } 
 
@@ -178,29 +179,23 @@ public class Call extends Thread implements Command {
         ArrayList<String> cmdsubinput = new ArrayList<String>();
         String cmdsub = "";
         cmdsub = matcher.group();
-        rawCommand = rawCommand.replace(cmdsub, "");
+       
         cmdsub = cmdsub.replace("`", "");
+        System.out.println(cmdsub);
         CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
         cmdsubinput = subcmd.get_output(input);
         ArrayList<String> commandsubargs = new ArrayList<String>();
-        commandsubargs = tokenizeCommand(rawCommand, output);
-
+        
 
         for(String arg: cmdsubinput){
-            File file = new File(currentDirectory + File.separator + arg);
+            String temp = rawCommand;
+            temp = temp.replace("`", "");
+            temp = temp.replace(cmdsub, arg);
+            commandsubargs = tokenizeCommand(temp, output);
+            executeCommand(commandsubargs, input, output);
+           
             
-            if(file.exists()){
-                try {
-                    input = new BufferedReader(new FileReader(file));
-                    executeCommand(commandsubargs, input, output);
-                } catch (IOException e) {
-                    throw new RuntimeException("cannot open " + file);
-                }
-            }
-            else{
-                System.out.println(arg + ": No such file or directory");
-            } 
-            
+          
         }
             
         
