@@ -131,11 +131,7 @@ public class find implements Application {
         }
 
         patternArg.replace("'", "");
-        System.out.println("patternArg after quotes removed: " + patternArg);
-
-        System.out.println("globbing");
         globbedPatternArgs = globbing(patternArg, targetDirectory);
-        System.out.println("globbedPatternArgs: " + globbedPatternArgs);
 
         ArrayList<ArrayList<String>> allReturnPaths = new ArrayList<ArrayList<String>>();
 
@@ -143,8 +139,6 @@ public class find implements Application {
             ArrayList<String> emptyPath = new ArrayList<>();
             allReturnPaths.add(findFile(targetDirectory, globPatternArg, "", emptyPath));
         }
-
-        System.out.println("globbing allReturnPaths " + allReturnPaths);
 
         for (ArrayList<String> argReturnPaths : allReturnPaths) {
             for (String path : argReturnPaths) {
