@@ -60,8 +60,7 @@ public class Call extends Thread implements Command {
         Matcher matcher = pattern.matcher(rawCommand);
         
         if (matcher.find()){
-            
-            
+          
             doCmdSub(input, output, matcher);
             return;
         }
@@ -175,12 +174,14 @@ public class Call extends Thread implements Command {
     */
     public synchronized void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
         
-        String currentDirectory = directory.getCurrentDirectory();
         ArrayList<String> cmdsubinput = new ArrayList<String>();
         String cmdsub = "";
         cmdsub = matcher.group();
+        String command = cmdsub;
+       
        
         cmdsub = cmdsub.replace("`", "");
+       
         
         CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
         cmdsubinput = subcmd.get_output(input);
@@ -189,9 +190,9 @@ public class Call extends Thread implements Command {
 
         for(String arg: cmdsubinput){
             String temp = rawCommand;
-            temp = temp.replace("`", "");
-            temp = temp.replace(cmdsub, arg);
+            temp = temp.replace(command, arg);
             commandsubargs = tokenizeCommand(temp, output);
+           
             executeCommand(commandsubargs, input, output);
            
             
