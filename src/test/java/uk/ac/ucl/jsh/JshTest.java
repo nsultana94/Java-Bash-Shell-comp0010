@@ -36,12 +36,5 @@ public class JshTest {
      * Jsh.eval("cut", out); out.close(); }
      */
 
-    
-    
-
-    
-
-    
-
    
 }

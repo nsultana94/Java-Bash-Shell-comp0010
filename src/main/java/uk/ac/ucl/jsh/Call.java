@@ -60,7 +60,7 @@ public class Call extends Thread implements Command {
         Matcher matcher = pattern.matcher(rawCommand);
         
         if (matcher.find()){
-            System.out.println("found");
+            
             
             doCmdSub(input, output, matcher);
             return;
@@ -181,7 +181,7 @@ public class Call extends Thread implements Command {
         cmdsub = matcher.group();
        
         cmdsub = cmdsub.replace("`", "");
-        System.out.println(cmdsub);
+        
         CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
         cmdsubinput = subcmd.get_output(input);
         ArrayList<String> commandsubargs = new ArrayList<String>();
