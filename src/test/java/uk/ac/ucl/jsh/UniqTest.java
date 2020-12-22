@@ -35,4 +35,41 @@ public class UniqTest{
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "apple\nlolly\ndog");
     }
+
+    @Test
+    public void UniqWrongOption() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("uniq -n testfile2.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+    @Test
+    public void UniqWrongNumberOfArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("uniq -i testfile2.txt hello", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void UniqFileDoesNotExist() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("uniq -i test.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+
 }

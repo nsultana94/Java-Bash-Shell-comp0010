@@ -38,4 +38,8 @@ public class Cd implements Application {
         directory.SetCurrentDirectory(dir.getCanonicalPath());
 
     }
+
+    public CurrentDirectory getDirectory() {
+        return directory;
+    }
 }

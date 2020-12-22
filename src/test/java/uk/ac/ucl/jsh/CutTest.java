@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
@@ -82,4 +83,67 @@ public class CutTest{
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "ap\nAp\nlo\ndo\ndo");
     }
+
+    @Test
+    public void CutTooManyArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("cut -b 1-2 testfile2.txt hello", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void CutTooLittleArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("cut -b", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void CutWrongOption() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("cut -n 1-2 testfile2.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void CutWrongOverlap() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("cut -b 1-2-- testfile2.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+    @Test
+    public void CutFileDoesNotExist() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("cut -b 1-2 test.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    
+
+
 }

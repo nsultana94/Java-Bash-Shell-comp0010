@@ -58,4 +58,76 @@ public class HeadTest{
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk");
     }
+
+    @Test
+    public void HeadWrongNumberOfArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("head -n 20 testhead.txt 20", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void HeadWrongNumberArgumentFileIncluded() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("head -3 testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void HeadWrongNumberArgument() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("head -3 20 testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void HeadIllegalNumberCount() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("head -n -2 testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void HeadWrongNumberArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("head -n two testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void HeadFileNotExist() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("head -n 20 test.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
 }

@@ -46,4 +46,88 @@ public class TailTest{
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "b\nc\nd\ne\nf\ng\nh\ni\nj\nk");
     }
+
+    @Test
+    public void testHeadLength() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("tail -n 20 testhead.txt", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk");
+    }
+
+    @Test
+    public void TailWrongNumberOfArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("tail -n 20 testhead.txt 20", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void TailWrongNumberArgumentFileIncluded() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("tail -3 testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void TailWrongNumberArgument() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("tail -3 20 testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void TailIllegalNumberCount() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("tail -n -2 testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void TailWrongNumberArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("tail -n two testhead.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void TailFileNotExist() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("tail -n 20 test.txt ", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
 }

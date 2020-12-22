@@ -1,6 +1,8 @@
 package uk.ac.ucl.jsh;
 
 import org.junit.Test;
+
+
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
@@ -13,6 +15,7 @@ import java.io.PipedOutputStream;
 import java.util.stream.Collectors;
 
 public class IOTest{
+    
     CurrentDirectory directory = CurrentDirectory.getInstance();
 
     @Test
@@ -88,13 +91,14 @@ public class IOTest{
         out = new PipedOutputStream(in);
         Jsh.eval("sort testfile2.txt > output2.txt", out);
         out.close();
-        BufferedReader input = new BufferedReader(new InputStreamReader(in));
-        String currentDirectory = directory.getCurrentDirectory();
-        File file = new File(currentDirectory + File.separator + "output2.txt");
+       
+        File file =  new File("output2.txt");
         fileinput = new BufferedReader(new FileReader(file));
         String fileresult = fileinput.lines().collect(Collectors.joining("\n"));
-        String result = input.lines().collect(Collectors.joining("\n"));
+        
+        
         assertEquals(fileresult, "Apple\napple\ndog\ndog\nlolly");
+        file.delete();
     }
 
     @Test

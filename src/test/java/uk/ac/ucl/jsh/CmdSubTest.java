@@ -11,7 +11,7 @@ import java.io.PipedOutputStream;
 import java.util.stream.Collectors;
 
 public class CmdSubTest{
-   /* @Test
+    @Test
     public void testCommandSubstituion() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
@@ -21,5 +21,5 @@ public class CmdSubTest{
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "apple\nApple\nlolly\ndog");
-    } */
+    } 
 }
