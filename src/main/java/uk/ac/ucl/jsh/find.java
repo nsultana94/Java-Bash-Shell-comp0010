@@ -102,13 +102,6 @@ public class find implements Application {
             throw new RuntimeException("find: wrong argument " + args.get(0));
         } else if ((args.size() == 3 && (!args.get(1).equals("-name")))) {
             throw new RuntimeException("find: wrong argument " + args.get(1));
-        } else if (args.size() == 3) {
-            try {
-                File firstArg = new File(args.get(0));
-                firstArg.getCanonicalPath();
-            } catch (IOException e) {
-                throw new RuntimeException("find: directory path name is invalid");
-            }
         }
 
         File targetDirectory;
@@ -123,9 +116,6 @@ public class find implements Application {
             targetDirectory = new File(pathArg);
             if (!targetDirectory.exists()) {
                 throw new RuntimeException("find: path does not exist " + args.get(0));
-            }
-            if (targetDirectory.listFiles() == null) {
-                throw new RuntimeException("find: directory is empty");
             }
             patternArg = args.get(2);
         }
