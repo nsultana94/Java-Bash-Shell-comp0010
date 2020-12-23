@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements a Pipe. The output of one command is passed into the input of the next
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  */
 
 public class pipe implements Command {
-  private ArrayList<Call> calls = new ArrayList<Call>();
+  private List<Thread> calls = new ArrayList<Thread>();
 
   /**
    * Pipes commands together. The ourput of one command is passed into the input of the next
@@ -40,7 +41,7 @@ public class pipe implements Command {
     BufferedReader in = input;
     Call call;
     for (int i = 0; i < calls.size(); i++) {
-      call = calls.get(i);
+      call = (Call) calls.get(i);
       call.setInput(in);
       in = new BufferedReader(new InputStreamReader(new PipedInputStream(to_next)));
       if (i == calls.size() - 1) {
@@ -51,11 +52,42 @@ public class pipe implements Command {
       }
     }
 
-    for (Call c : calls) {
+    for (Thread c : calls) {
       c.start();
+    }
+
+    while(RunningTheads(calls)){
+      for(Thread thread: calls){
+          if(thread.isInterrupted()){
+            intteruptAll(calls);
+          }
+        }
+    }
+    for (Thread c : calls) {
       c.join();
     }
   }
+
+  /**
+   * Private method to check if any {@code Thread} in a {@code List} of threads has been interupted
+   * This will occour when they throw an exception adn intterupt themselves
+   * @param threads A {@code List} of {@code Thread} objects
+   * @return {@code true} if there are running threads, {@code false} if not
+   */
+  private boolean RunningTheads(List<Thread> threads){
+    boolean result = false;
+    for(Thread t:threads){
+      result = result || t.isAlive();
+    }
+    return result;
+  }
+  
+  private void intteruptAll(List<Thread> threads){
+    for(Thread t: threads){
+      t.interrupt();
+    }
+  }
+
 
   /**
    * A Output stream that is safe to use System.out in
