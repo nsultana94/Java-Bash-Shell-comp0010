@@ -16,7 +16,8 @@ public class CmdSubTest{
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
-        Jsh.eval("uniq `uniq testcmdsub.txt`", out);
+        Call call = new Call("uniq `uniq testcmdsub.txt`");
+        call.eval(null, out);
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));

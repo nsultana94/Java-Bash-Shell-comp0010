@@ -46,7 +46,7 @@ public class Ls implements Application {
                 }
             }
 
-        } catch (NullPointerException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("ls: no such directory");
         }
     }
