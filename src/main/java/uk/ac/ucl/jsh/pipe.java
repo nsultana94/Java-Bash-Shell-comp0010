@@ -82,6 +82,11 @@ public class pipe implements Command {
     return result;
   }
   
+  /**
+   * Private method to end all {@code Thread}s in a {@code List}
+   * Used to terminate one part of a pipe if one other has been interrupted
+   * @param threads A {@code List} of {@code Thread} objects to be interrupted
+   */
   private void intteruptAll(List<Thread> threads){
     for(Thread t: threads){
       t.interrupt();
