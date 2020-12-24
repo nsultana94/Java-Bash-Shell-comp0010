@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -86,5 +85,25 @@ public class PipeTest {
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "hello ");
     }
+
+    @Test
+    public void endThrowsError() throws IOException, InterruptedException {
+        String command = "ls | head -n 0";
+        new pipe(command).eval(null, out);
+        out.close();
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
+
+    @Test
+    public void three() throws IOException, InterruptedException {
+        String command = "ls | cat | head -n 1";
+        new pipe(command).eval(null, out);
+        out.close();
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "Dockerfile");
+    }
+
+    
 
 }
