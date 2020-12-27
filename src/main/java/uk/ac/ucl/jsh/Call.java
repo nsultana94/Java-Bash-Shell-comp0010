@@ -108,6 +108,7 @@ public class Call extends Thread implements Command {
                     args1.remove(nextArg);
                 }
             }else if (arg.equalsIgnoreCase(">")) {
+                output.close();
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction "  + nextArg);
                 } else if (i == args.size() - 1) {

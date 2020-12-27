@@ -97,11 +97,11 @@ public class PipeTest {
 
     @Test
     public void three() throws IOException, InterruptedException {
-        String command = "ls | cat | head -n 1";
+        String command = "ls | grep jsh | cut -b 1";
         new pipe(command).eval(null, out);
         out.close();
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "Dockerfile");
+        assertEquals(result, "j");
     }
 
     
