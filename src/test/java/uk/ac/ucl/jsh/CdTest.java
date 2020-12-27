@@ -11,27 +11,24 @@ import java.io.PipedOutputStream;
 
 import java.util.stream.Collectors;
 
-public class CdTest{
+public class CdTest {
     CurrentDirectory directory = CurrentDirectory.getInstance();
-    
-   /* @Test
-    public void Cd() throws Exception {
-        Cd cd = new Cd ();
+
+    @Test
+    public void CdBasic() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         out = new PipedOutputStream(in);
-        OutputStreamWriter output = new OutputStreamWriter(out);
-        List<String> args = new ArrayList<String>();
-        args.add("testing");
-        cd.exec(args, input, output);
-        String CurrentDirectory = directory.getCurrentDirectory();
-        assertEquals((CurrentDirectory + "/" + "testing"), cd.getDirectory().getCurrentDirectory());
-        }  */
+        Jsh.eval("cd testing", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
 
-        @Test
-        public void CdMissingArguments() throws Exception {
-            PipedInputStream in = new PipedInputStream();
+    @Test
+    public void CdMissingArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
         Jsh.eval("cd", out);
@@ -39,11 +36,11 @@ public class CdTest{
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "");
-        }
+    }
 
-        @Test
-        public void CdTooManyArguments() throws Exception {
-            PipedInputStream in = new PipedInputStream();
+    @Test
+    public void CdTooManyArguments() throws Exception {
+        PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
         Jsh.eval("cd testing testing", out);
@@ -51,10 +48,10 @@ public class CdTest{
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "");
-        }
+    }
 
-        @Test
-        public void CdDirectoryDoesNotEixts() throws Exception {
+    @Test
+    public void CdDirectoryDoesNotEixts() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
@@ -63,7 +60,18 @@ public class CdTest{
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "");
-        }
+    }
 
+    @Test
+    public void CdRoot() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("cd ..", out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "");
+    }
 
 }
