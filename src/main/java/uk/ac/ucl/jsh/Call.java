@@ -97,8 +97,7 @@ public class Call extends Thread implements Command {
             }
 
             if (arg.equalsIgnoreCase("<")) {
-                System.out.println("input found");
-                System.out.println(nextArg + "next arg");
+
                 if (inputFileBool == true) {
                     throw new RuntimeException("more than one I/O in same direction " + nextArg);
                 } else if (i == args.size() - 1) {
@@ -124,8 +123,6 @@ public class Call extends Thread implements Command {
                     args1.remove(arg);
                 }
             } else if (arg.equalsIgnoreCase(">")) {
-                System.out.println("output found");
-                System.out.println(nextArg + "next arg");
                 output.close();
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction " + nextArg);
@@ -144,12 +141,10 @@ public class Call extends Thread implements Command {
                     args1.remove(nextArg);
                 }
             } else if (arg.charAt(0) == '>') {
-                System.out.println("output found");
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction " + arg);
                 }
                 arg = arg.replace(">", "");
-                System.out.println(arg + "arg");
                 if (!new File(currentDirectory + File.separator + arg).exists()) {
                     outputFile = new File(currentDirectory + File.separator + arg);
                     outputFile.createNewFile();
