@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import uk.ac.ucl.jsh.pipe.StopEverythingException;
+
 /**
  * Interface which will be implemented by classes to create command calls.
  * @author Saachi Pahwa
@@ -18,8 +20,9 @@ public interface Command {
      * @param output {@code OutputStreamWriter} Standard output for the call
      * @throws IOException 
      * @throws InterruptedException
+     * @throws StopEverythingException
      */
-    void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException;
+    void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException, StopEverythingException;
 
     CurrentDirectory directory = CurrentDirectory.getInstance();
 }

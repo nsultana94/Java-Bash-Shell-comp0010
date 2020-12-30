@@ -7,17 +7,19 @@ import java.io.OutputStream;
 
 import java.util.List;
 
+import uk.ac.ucl.jsh.pipe.StopEverythingException;
+
 /**
  * Main Class for the application
+ * 
  * @author Saachi Pahwa
- * @author Naima Sultana 
+ * @author Naima Sultana
  * @author Joshua Mukherjee
  */
 
-public class Jsh{
+public class Jsh {
 
     private static CurrentDirectory currentDirectory = CurrentDirectory.getInstance();
-
 
     /**
      * Takes the string from the command line and runs JSH
@@ -26,22 +28,23 @@ public class Jsh{
      * @param output  Standard output
      * @throws IOException
      * @throws InterruptedException
+     * @throws StopEverythingException
      */
-    public static void eval(String cmdline, OutputStream output) throws IOException, InterruptedException {
-
+    public static void eval(String cmdline, OutputStream output)
+            throws IOException, InterruptedException, StopEverythingException {
 
         JSHParser parser = new JSHParser();
         List<String> rawCommands = parser.get_sub_commands(cmdline);
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        for (String rawCommand : rawCommands){
+        for (String rawCommand : rawCommands) {
             pipe p = new pipe(rawCommand);
-            try{
-             p.eval(input, output);
-            }catch(RuntimeException e){
+            try {
+                p.eval(input, output);
+            } catch (RuntimeException e) {
                 throw new RuntimeException(e.getMessage());
-            }
+            } 
         } 
     }
 
@@ -70,6 +73,8 @@ public class Jsh{
                     try {
                         String cmdline = input.readLine();
                         eval(cmdline, System.out);
+                    } catch(StopEverythingException e){
+                        System.out.print("");
                     } catch (Exception e) {
                         //e.printStackTrace();
                         System.out.println("jsh: " + e.getMessage() + e.getClass());
