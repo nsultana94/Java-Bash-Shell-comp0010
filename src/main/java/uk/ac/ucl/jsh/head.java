@@ -105,7 +105,6 @@ public class head implements Application {
      */
     private int get_headLines(String arg){
 
-       
             int x =  Integer.parseInt(arg);
             if(x>=0){
                 return x;

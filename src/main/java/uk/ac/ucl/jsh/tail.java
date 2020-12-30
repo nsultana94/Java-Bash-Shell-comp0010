@@ -112,7 +112,7 @@ public class tail implements Application {
      * @return the number of lines to return
      */
     private int get_tailLines(String arg){
-      
+        int x =  Integer.parseInt(arg);
         if(x>=0){
             return x;
        }else{
