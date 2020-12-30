@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import uk.ac.ucl.jsh.pipe.StopEverythingException;
+// import uk.ac.ucl.jsh.pipe.StopEverythingException;
 
 /**
  * Interface which will be implemented by classes to create command calls.
@@ -22,7 +22,7 @@ public interface Command {
      * @throws InterruptedException
      * @throws StopEverythingException
      */
-    void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException, StopEverythingException;
+    void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException;
 
     CurrentDirectory directory = CurrentDirectory.getInstance();
 }

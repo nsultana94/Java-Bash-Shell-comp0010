@@ -7,7 +7,6 @@ import java.io.OutputStream;
 
 import java.util.List;
 
-import uk.ac.ucl.jsh.pipe.StopEverythingException;
 
 /**
  * Main Class for the application
@@ -31,10 +30,11 @@ public class Jsh {
      * @throws StopEverythingException
      */
     public static void eval(String cmdline, OutputStream output)
-            throws IOException, InterruptedException, StopEverythingException {
+            throws IOException, InterruptedException {
 
         JSHParser parser = new JSHParser();
         List<String> rawCommands = parser.get_sub_commands(cmdline);
+        Throwable ex;
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
@@ -42,6 +42,10 @@ public class Jsh {
             pipe p = new pipe(rawCommand);
             try {
                 p.eval(input, output);
+                if((ex = ExceptionHolder.getInstance().getException()) != null){
+                    throw new RuntimeException(ex.getMessage());
+                }
+                ExceptionHolder.getInstance().reset();
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getMessage());
             } 
@@ -65,7 +69,6 @@ public class Jsh {
         } else {
             System.out.println("Welcome to JSH!");
             BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            
             try {
                 while (true) {
                     String prompt = currentDirectory.getCurrentDirectory() + "> ";
@@ -73,12 +76,10 @@ public class Jsh {
                     try {
                         String cmdline = input.readLine();
                         eval(cmdline, System.out);
-                    } catch(StopEverythingException e){
-                        System.out.print("");
                     } catch (Exception e) {
-                        //e.printStackTrace();
-                        System.out.println("jsh: " + e.getMessage() + e.getClass());
+                        System.out.println("jsh: " + e.getMessage());
                     }
+                    
                 }
             } finally {
                 input.close();
