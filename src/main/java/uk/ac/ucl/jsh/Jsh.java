@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main Class for the application
@@ -31,7 +32,7 @@ public class Jsh{
 
 
         JSHParser parser = new JSHParser();
-        ArrayList<String> rawCommands = parser.get_sub_commands(cmdline);
+        List<String> rawCommands = parser.get_sub_commands(cmdline);
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 

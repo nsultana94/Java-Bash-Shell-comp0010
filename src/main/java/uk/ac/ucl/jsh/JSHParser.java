@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -21,13 +22,13 @@ public class JSHParser {
      * @param cmdline command line input
      * @return
      */
-    public ArrayList<String> get_sub_commands(String cmdline) {
+    public List<String> get_sub_commands(String cmdline) {
         CharStream parserInput = CharStreams.fromString(cmdline);
         JshGrammarLexer lexer = new JshGrammarLexer(parserInput);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JshGrammarParser parser = new JshGrammarParser(tokenStream);
         ParseTree tree = parser.command(); 
-        ArrayList<String> rawCommands = new ArrayList<String>();
+        List<String> rawCommands = new ArrayList<>();
         String lastSubcommand = "";
         for (int i = 0; i < tree.getChildCount(); i++) {
             if (!tree.getChild(i).getText().equals(";")) {

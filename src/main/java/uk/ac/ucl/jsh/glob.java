@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -28,9 +28,9 @@ public class glob {
      * @throws IOException
      */
     
-    public ArrayList<String> get_tokens(String rawCommand) throws IOException {
+    public List<String> get_tokens(String rawCommand) throws IOException {
         String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
-        ArrayList<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         Pattern regex = Pattern.compile(spaceRegex);
         Matcher regexMatcher = regex.matcher(rawCommand);
         String nonQuote;
@@ -40,7 +40,7 @@ public class glob {
                 tokens.add(quoted.substring(1, quoted.length() - 1));
             } else {
                 nonQuote = regexMatcher.group().trim();
-                ArrayList<String> globbingResult = new ArrayList<String>();
+                List<String> globbingResult = new ArrayList<>();
                 Path dir = Paths.get(currentDirectory.getCurrentDirectory());
                 DirectoryStream<Path> stream = Files.newDirectoryStream(dir, nonQuote);
                 for (Path entry : stream) {

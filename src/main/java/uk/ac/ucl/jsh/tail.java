@@ -89,7 +89,7 @@ public class tail implements Application {
      * @throws IOException
      */
     private void write(BufferedReader reader,OutputStreamWriter output,int tailLines) throws IOException {
-        ArrayList<String> storage = new ArrayList<>();
+        List<String> storage = new ArrayList<>();
         String line = null;
         while ((line = reader.readLine()) != null) {
             storage.add(line);

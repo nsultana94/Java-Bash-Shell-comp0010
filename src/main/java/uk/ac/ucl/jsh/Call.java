@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.OutputStreamWriter;
@@ -75,8 +76,8 @@ public class Call extends Thread implements Command {
         // return array of args - for each arg in arg evaluate that arg and then do any
         // other args
 
-        ArrayList<String> args = tokenizeCommand(rawCommand, output);
-        ArrayList<String> args1 = tokenizeCommand(rawCommand, output);
+        List<String> args = tokenizeCommand(rawCommand, output);
+        List<String> args1 = tokenizeCommand(rawCommand, output);
 
         File inputFile = null;
         File outputFile = null;
@@ -176,9 +177,9 @@ public class Call extends Thread implements Command {
      * @return ArrayList of tokens for the command
      * @throws IOException
      */
-    public synchronized ArrayList<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
+    public synchronized List<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
         glob glob_processor = new glob();
-        ArrayList<String> args = glob_processor.get_tokens(rawCommands);
+        List<String> args = glob_processor.get_tokens(rawCommands);
         return args;
     }
 
@@ -189,10 +190,10 @@ public class Call extends Thread implements Command {
      * @param input  The Standard input
      * @param output The standard output
      */
-    public synchronized void executeCommand(ArrayList<String> args, BufferedReader input, OutputStream output)
+    public synchronized void executeCommand(List<String> args, BufferedReader input, OutputStream output)
             throws IOException {
         ApplicationFactory applicationFactory = new ApplicationFactory();
-        ArrayList<String> appArgs = new ArrayList<String>();
+        List<String> appArgs = new ArrayList<>();
         String appName = args.get(0);
         Boolean unsafe = (rawCommand.charAt(0) == '_') ? true : false;
         appName = unsafe ? appName.substring(1) : appName;
@@ -212,7 +213,7 @@ public class Call extends Thread implements Command {
      */
     public synchronized void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
 
-        ArrayList<String> cmdsubinput = new ArrayList<String>();
+        List<String> cmdsubinput = new ArrayList<>();
         String cmdsub = "";
         cmdsub = matcher.group();
         String command = cmdsub;
@@ -221,7 +222,7 @@ public class Call extends Thread implements Command {
 
         CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
         cmdsubinput = subcmd.get_output(input);
-        ArrayList<String> commandsubargs = new ArrayList<String>();
+        List<String> commandsubargs = new ArrayList<>();
 
         for (String arg : cmdsubinput) {
             String temp = rawCommand;

@@ -63,9 +63,7 @@ public class pipe implements Command {
           }
         }
     }
-    for (Thread c : calls) {
-      c.join();
-    }
+
   }
 
   /**

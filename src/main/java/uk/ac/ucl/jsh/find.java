@@ -33,8 +33,8 @@ public class find implements Application {
      * @return {@code ArrayList} of files found
      */
 
-    public ArrayList<String> findFile(File targetDirectory, String patternArg, String returnPath,
-            ArrayList<String> argReturnPaths) {
+    public List<String> findFile(File targetDirectory, String patternArg, String returnPath,
+            List<String> argReturnPaths) {
         File[] targetDirListing = targetDirectory.listFiles();
         if (targetDirListing != null) {
             for (File child : targetDirListing) {
@@ -51,7 +51,7 @@ public class find implements Application {
         return argReturnPaths;
     }
 
-    public ArrayList<String> globbing(String rawCommand, File targetDirectory) throws IOException {
+    public List<String> globbing(String rawCommand, File targetDirectory) throws IOException {
         String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
         ArrayList<String> tokens = new ArrayList<String>();
         Pattern regex = Pattern.compile(spaceRegex);
@@ -106,7 +106,7 @@ public class find implements Application {
 
         File targetDirectory;
         String patternArg = "";
-        ArrayList<String> globbedPatternArgs = new ArrayList<String>();
+        List<String> globbedPatternArgs = new ArrayList<>();
 
         if (args.size() == 2) {
             targetDirectory = new File(".");
@@ -123,14 +123,14 @@ public class find implements Application {
         patternArg.replace("'", "");
         globbedPatternArgs = globbing(patternArg, targetDirectory);
 
-        ArrayList<ArrayList<String>> allReturnPaths = new ArrayList<ArrayList<String>>();
+        List<List<String>> allReturnPaths = new ArrayList<>();
 
         for (String globPatternArg : globbedPatternArgs) {
-            ArrayList<String> emptyPath = new ArrayList<>();
+            List<String> emptyPath = new ArrayList<>();
             allReturnPaths.add(findFile(targetDirectory, globPatternArg, "", emptyPath));
         }
 
-        for (ArrayList<String> argReturnPaths : allReturnPaths) {
+        for (List<String> argReturnPaths : allReturnPaths) {
             for (String path : argReturnPaths) {
                 output.write(path);
                 output.write(System.getProperty("line.separator"));

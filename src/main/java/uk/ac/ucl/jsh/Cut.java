@@ -74,7 +74,7 @@ public class Cut implements Application {
         while((line = br.readLine()) != null){
             StringBuilder newline = new StringBuilder();
             String arguments[] = args.get(1).split(",");
-            ArrayList<Range> intervals = new ArrayList<Range>();
+            List<Range> intervals = new ArrayList<>();
             
             // splits the arguments by ,
             
@@ -112,7 +112,7 @@ public class Cut implements Application {
                 }
             }
         
-            ArrayList<Range> finalintervals1 = overlapIntervals(intervals);
+            List<Range> finalintervals1 = overlapIntervals(intervals);
 
             for( Range r: finalintervals1 ){
                 if (r.end > line.length()){
@@ -140,8 +140,8 @@ public class Cut implements Application {
      * @return {@code ArrayList} of the resulting set of intervals
      * @see Range
      */
-    public ArrayList<Range> overlapIntervals(ArrayList<Range> intervals) {
-        ArrayList<Range> finalintervals = new ArrayList<Range>();
+    public List<Range> overlapIntervals(List<Range> intervals) {
+        List<Range> finalintervals = new ArrayList<>();
         List<Range> sortedRange = intervals.stream()
                                         .sorted(Comparator.comparing(Range::getStart))
                                         .collect(Collectors.toList());
