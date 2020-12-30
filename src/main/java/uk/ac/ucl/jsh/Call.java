@@ -33,7 +33,7 @@ public class Call extends Thread implements Command {
             eval(input, output);
         } catch (Exception e) {
             if (!(e.getMessage() == null)) {
-                System.out.println("jsh:" + e.getMessage());
+                ExceptionHolder.getInstance().setThrowable(e);
             }
             Thread.currentThread().interrupt();
         }

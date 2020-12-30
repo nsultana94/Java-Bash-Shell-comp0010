@@ -41,7 +41,7 @@ public class pipe implements Command {
    * @throws StopEverythingException
    */
   public void eval(BufferedReader input, OutputStream output)
-      throws IOException, InterruptedException, StopEverythingException {
+      throws IOException, InterruptedException {
     PipedOutputStream to_next = new PipedOutputStream();
     BufferedReader in = input;
     Call call;
@@ -65,7 +65,6 @@ public class pipe implements Command {
       for(Thread thread: calls){
           if(thread.isInterrupted()){
             intteruptAll(calls);
-            throw new StopEverythingException();
           }
         }
     }
@@ -122,14 +121,5 @@ public class pipe implements Command {
         out.flush();
     }
   }
-
-  public static class StopEverythingException extends Exception{
-
-    public StopEverythingException(){
-      super();
-    }
-  }
-
-
 
 }
