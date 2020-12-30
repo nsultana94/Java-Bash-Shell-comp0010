@@ -115,11 +115,11 @@ public class Call extends Thread implements Command {
                 if (inputFileBool == true) {
                     throw new RuntimeException("more than one I/O in same direction " + arg);
                 }
-                arg = arg.replace("<", "");
-                if (!new File(currentDirectory + File.separator + arg).exists()) {
-                    throw new RuntimeException("file does not exist " + arg);
+                String arg1 = arg.replace("<", "");
+                if (!new File(currentDirectory + File.separator + arg1).exists()) {
+                    throw new RuntimeException("file does not exist " + arg1);
                 } else {
-                    inputFile = new File(currentDirectory + File.separator + arg);
+                    inputFile = new File(currentDirectory + File.separator + arg1);
                     inputFileBool = true;
                     args1.remove(arg);
                 }
@@ -145,20 +145,21 @@ public class Call extends Thread implements Command {
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction " + arg);
                 }
-                arg = arg.replace(">", "");
-                if (!new File(currentDirectory + File.separator + arg).exists()) {
-                    outputFile = new File(currentDirectory + File.separator + arg);
+                String arg1 = arg.replace("<", "");
+                if (!new File(currentDirectory + File.separator + arg1).exists()) {
+                    outputFile = new File(currentDirectory + File.separator + arg1);
                     outputFile.createNewFile();
                     outputFileBool = true;
+                    
                     args1.remove(arg);
-                } else if (new File(currentDirectory + File.separator + arg).exists()) {
-                    outputFile = new File(currentDirectory + File.separator + arg);
+                } else if (new File(currentDirectory + File.separator + arg1).exists()) {
+                    outputFile = new File(currentDirectory + File.separator + arg1);
                     outputFileBool = true;
                     args1.remove(arg);
                 }
             }
         }
-
+        
         if (outputFileBool == true) {
 
             output = new FileOutputStream(outputFile);
