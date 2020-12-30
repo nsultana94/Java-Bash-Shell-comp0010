@@ -112,15 +112,12 @@ public class tail implements Application {
      * @return the number of lines to return
      */
     private int get_tailLines(String arg){
-        try {
-            int x =  Integer.parseInt(arg);
-            if(x>0){
-                return x;
-            }else{
+      
+        if(x>=0){
+            return x;
+       }else{
                 throw new RuntimeException("tail: illegal line count " + arg);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("tail: wrong argument " + arg);
-        }
+                        }
+        
     }
 }
