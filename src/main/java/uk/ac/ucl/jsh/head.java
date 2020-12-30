@@ -104,17 +104,16 @@ public class head implements Application {
      * @return the number of lines to return
      */
     private int get_headLines(String arg){
-        try {
+
+       
             int x =  Integer.parseInt(arg);
-            if(x>0){
+            if(x>=0){
                 return x;
             }else{
                 throw new RuntimeException("head: illegal line count " + arg);
             }
-        } catch (Exception e) {
-            throw new RuntimeException("head: wrong argument " + arg);
-        }
+        } 
     }
 
-}
+
 
