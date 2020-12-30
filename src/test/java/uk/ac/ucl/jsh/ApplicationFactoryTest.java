@@ -15,7 +15,7 @@ import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class ApplicationFactoryTest{
+public class ApplicationFactoryTest {
     PipedInputStream in;
     PipedOutputStream out;
     ArrayList<String> args;
@@ -38,7 +38,7 @@ public class ApplicationFactoryTest{
     @Test
     public void Pwd() throws Exception {
         Application app = applicationfactory.getApplication("pwd", false);
-        app.exec(args,null,output);
+        app.exec(args, null, output);
         out.close();
         assertEquals(input.readLine(), directory.getCurrentDirectory());
 
@@ -47,24 +47,23 @@ public class ApplicationFactoryTest{
     @Test
     public void Ls() throws Exception {
         Application app = applicationfactory.getApplication("ls", false);
-        app.exec(args,null,output);
+        app.exec(args, null, output);
         out.close();
         String result = input.lines().collect(Collectors.joining("\n"));
-        
+
         String CurrentDirectory = directory.getCurrentDirectory();
         File file = new File(CurrentDirectory);
         String[] files = file.list();
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < files.length; i++){
-            if(!(files[i].startsWith("."))){
+        for (int i = 0; i < files.length; i++) {
+            if (!(files[i].startsWith("."))) {
                 sb.append(files[i]);
-                if(i!= files.length -1)
-                {
+                if (i != files.length - 1) {
                     sb.append("\n");
                 }
-            } 
+            }
         }
-        
+
         assertEquals(result, sb.toString());
 
     }
@@ -72,10 +71,10 @@ public class ApplicationFactoryTest{
     @Test
     public void Cat() throws Exception {
         Application app = applicationfactory.getApplication("cat", false);
-        args.add("testfile.txt"); 
+        args.add("testfile.txt");
         args.add("testcmdsub.txt");
-    
-        app.exec(args, null ,output);
+
+        app.exec(args, null, output);
 
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
@@ -99,7 +98,7 @@ public class ApplicationFactoryTest{
     public void Tail() throws Exception {
         Application app = applicationfactory.getApplication("tail", false);
         args.add("testhead.txt");
-        app.exec(args,null,output);
+        app.exec(args, null, output);
         out.close();
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "b\nc\nd\ne\nf\ng\nh\ni\nj\nk");
@@ -109,20 +108,19 @@ public class ApplicationFactoryTest{
     @Test
     public void Grep() throws Exception {
         Application app = applicationfactory.getApplication("grep", false);
-        args.add("test"); 
+        args.add("test");
         args.add("testfile.txt");
         app.exec(args, null, output);
         out.close();
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "this is a test file\ntesting this\ntest file");
-    
 
     }
 
     @Test
     public void Cut() throws Exception {
         Application app = applicationfactory.getApplication("cut", false);
-        args.add("-b"); 
+        args.add("-b");
         args.add("-3,1-6");
         args.add("testfile.txt");
         app.exec(args, null, output);
@@ -131,24 +129,24 @@ public class ApplicationFactoryTest{
         assertEquals(result, "this i\ntestin\ntest f\nfile");
 
     }
+
     @Test
     public void Find() throws Exception {
         Application app = applicationfactory.getApplication("find", false);
-        args.add("testing"); 
+        args.add("testing");
         args.add("-name");
         args.add("'find.txt'");
         app.exec(args, null, output);
         out.close();
 
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "/testing/find.txt");
+        assertEquals(result, "testing/find.txt");
 
     }
 
     @Test(expected = RuntimeException.class)
     public void InvalidApplication() throws Exception {
         Application app = applicationfactory.getApplication("test", false);
-        
 
     }
 
@@ -156,7 +154,6 @@ public class ApplicationFactoryTest{
     public void Unsafe() throws Exception {
         Application app = applicationfactory.getApplication("test", true);
         app.exec(args, null, output);
-        
 
     }
 

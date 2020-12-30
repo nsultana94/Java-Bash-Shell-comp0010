@@ -39,13 +39,10 @@ public class find implements Application {
         if (targetDirListing != null) {
             for (File child : targetDirListing) {
                 if (Pattern.matches(patternArg, child.getName())) {
-                    argReturnPaths.add(returnPath + "/" + targetDirectory.getName() + "/" + child.getName());
+                    argReturnPaths.add(returnPath + "/" + child.getName());
                 }
-                if (returnPath.compareTo("") == 0) {
-                    findFile(child, patternArg, targetDirectory.getName(), argReturnPaths);
-                } else {
-                    findFile(child, patternArg, returnPath + "/" + targetDirectory.getName(), argReturnPaths);
-                }
+                findFile(child, patternArg, returnPath + "/" + child.getName(), argReturnPaths);
+
             }
         }
         return argReturnPaths;
@@ -109,7 +106,7 @@ public class find implements Application {
         List<String> globbedPatternArgs = new ArrayList<>();
 
         if (args.size() == 2) {
-            targetDirectory = new File(".");
+            targetDirectory = new File("./");
             patternArg = args.get(1);
         } else {
             String pathArg = args.get(0);
@@ -127,7 +124,7 @@ public class find implements Application {
 
         for (String globPatternArg : globbedPatternArgs) {
             List<String> emptyPath = new ArrayList<>();
-            allReturnPaths.add(findFile(targetDirectory, globPatternArg, "", emptyPath));
+            allReturnPaths.add(findFile(targetDirectory, globPatternArg, targetDirectory.getName(), emptyPath));
         }
 
         for (List<String> argReturnPaths : allReturnPaths) {

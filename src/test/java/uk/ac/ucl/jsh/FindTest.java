@@ -12,7 +12,7 @@ import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class FindTest{
+public class FindTest {
     PipedInputStream in;
     PipedOutputStream out;
     ArrayList<String> args;
@@ -31,7 +31,7 @@ public class FindTest{
 
     @Test
     public void FindDirectorySpecified() throws Exception {
-        args.add("testing"); 
+        args.add("testing");
         args.add("-name");
         args.add("'find.txt'");
         find find = new find();
@@ -39,7 +39,7 @@ public class FindTest{
         out.close();
 
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "/testing/find.txt");
+        assertEquals(result, "testing/find.txt");
     }
 
     @Test
@@ -50,12 +50,11 @@ public class FindTest{
         find.exec(args, null, output);
         out.close();
 
-        
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "./testing/find.txt");
     }
 
-    /*exceptions*/
+    /* exceptions */
 
     @Test(expected = RuntimeException.class)
     public void FindWrongOrderArgument() throws Exception {
@@ -64,7 +63,7 @@ public class FindTest{
         find find = new find();
         find.exec(args, null, output);
         out.close();
-        
+
     }
 
     @Test(expected = RuntimeException.class)
@@ -75,7 +74,7 @@ public class FindTest{
         find find = new find();
         find.exec(args, null, output);
         out.close();
-        
+
     }
 
     @Test(expected = RuntimeException.class)
@@ -87,7 +86,7 @@ public class FindTest{
         find find = new find();
         find.exec(args, null, output);
         out.close();
-        
+
     }
 
     @Test(expected = RuntimeException.class)
@@ -95,7 +94,7 @@ public class FindTest{
         find find = new find();
         find.exec(args, null, output);
         out.close();
-        
+
     }
 
     @Test(expected = RuntimeException.class)
