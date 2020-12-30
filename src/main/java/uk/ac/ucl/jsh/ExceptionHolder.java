@@ -10,8 +10,8 @@ package uk.ac.ucl.jsh;
  */
 
 public final class ExceptionHolder {
-    private Throwable e;
-    private static ExceptionHolder INSTANCE = null;
+    private volatile Throwable e;
+    private static volatile ExceptionHolder INSTANCE = null;
 
     private ExceptionHolder(){
     }
