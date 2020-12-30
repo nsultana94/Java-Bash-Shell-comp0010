@@ -22,7 +22,7 @@ public class PipeTest {
     BufferedReader input;
     CurrentDirectory directory = CurrentDirectory.getInstance();
 
-
+/*
     @Before
     public void setup() throws Exception {
         in = new PipedInputStream();
@@ -104,6 +104,6 @@ public class PipeTest {
         assertEquals(result, "j");
     }
 
-    
+  */  
 
 }

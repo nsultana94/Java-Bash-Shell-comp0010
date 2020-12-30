@@ -98,9 +98,9 @@ public class find implements Application {
             throw new RuntimeException("find: missing arguments");
         } else if (!(args.size() == 3 || args.size() == 2)) {
             throw new RuntimeException("find: wrong number of arguments");
-        } else if (args.size() == 2 && (!args.get(0).equals("-name"))) {
+        } else if (args.size() == 2 && !args.get(0).equals("-name")) {
             throw new RuntimeException("find: wrong argument " + args.get(0));
-        } else if ((args.size() == 3 && (!args.get(1).equals("-name")))) {
+        } else if (args.size() == 3 && !args.get(1).equals("-name")) {
             throw new RuntimeException("find: wrong argument " + args.get(1));
         }
 
@@ -120,7 +120,7 @@ public class find implements Application {
             patternArg = args.get(2);
         }
 
-        patternArg.replace("'", "");
+        patternArg = patternArg.replace("'", "");
         globbedPatternArgs = globbing(patternArg, targetDirectory);
 
         List<List<String>> allReturnPaths = new ArrayList<>();

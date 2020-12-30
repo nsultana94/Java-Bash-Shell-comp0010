@@ -33,7 +33,7 @@ public class Uniq implements Application {
         String filename;
         BufferedReader br;
 
-        if (args.isEmpty() || (args.size() == 1 && args.get(0).equals( "-i"))) {
+        if (args.isEmpty() || args.size() == 1 && args.get(0).equals( "-i")) {
             br = input;
             if(args.size() == 1){
                 case_checking = false;

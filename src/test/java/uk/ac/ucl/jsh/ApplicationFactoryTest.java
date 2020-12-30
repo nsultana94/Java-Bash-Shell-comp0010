@@ -57,7 +57,6 @@ public class ApplicationFactoryTest{
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < files.length; i++){
             if(!(files[i].startsWith("."))){
-                System.out.println(files[i]);
                 sb.append(files[i]);
                 if(i!= files.length -1)
                 {
