@@ -216,20 +216,38 @@ public class Call extends Thread implements Command {
 
         List<String> cmdsubinput = new ArrayList<>();
         String cmdsub = "";
+        String echoCommand = rawCommand;
+        
         cmdsub = matcher.group();
         String command = cmdsub;
+        
 
         cmdsub = cmdsub.replace("`", "");
 
         CommandSubstitution subcmd = new CommandSubstitution(cmdsub);
         cmdsubinput = subcmd.get_output(input);
         List<String> commandsubargs = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for(String i: cmdsubinput){
+            sb.append(i);
+            sb.append(" ");
+        }
+        
 
         for (String arg : cmdsubinput) {
             String temp = rawCommand;
-            temp = temp.replace(command, arg);
             commandsubargs = tokenizeCommand(temp, output);
 
+            if(commandsubargs.get(0).equals("echo")){
+                temp = temp.replace(command, sb.toString());
+                commandsubargs = tokenizeCommand(temp, output);
+                executeCommand(commandsubargs, input, output);
+                break;
+                
+            } 
+            
+            temp = temp.replace(command, arg);
+            commandsubargs = tokenizeCommand(temp, output);
             executeCommand(commandsubargs, input, output);
 
         }

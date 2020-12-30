@@ -61,7 +61,8 @@ public class CommandSubstitution {
             String[] arr = line.split(" ");  
             for(String word: arr){
                 result.add(word);
-            }  
+            } 
+            
 
             line = input1.readLine();
         }
