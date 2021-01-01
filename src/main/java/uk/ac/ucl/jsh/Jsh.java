@@ -27,7 +27,6 @@ public class Jsh {
      * @param output  Standard output
      * @throws IOException
      * @throws InterruptedException
-     * @throws StopEverythingException
      */
     public static void eval(String cmdline, OutputStream output)
             throws IOException, InterruptedException {

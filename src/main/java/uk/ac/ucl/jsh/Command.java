@@ -20,7 +20,6 @@ public interface Command {
      * @param output {@code OutputStreamWriter} Standard output for the call
      * @throws IOException 
      * @throws InterruptedException
-     * @throws StopEverythingException
      */
     void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException;
 
