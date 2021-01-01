@@ -68,7 +68,7 @@ public class Call extends Thread implements Command {
         Matcher matcher = pattern.matcher(rawCommand);
 
         if (matcher.find()) {
-
+            
             doCmdSub(input, output, matcher);
             return;
         }
