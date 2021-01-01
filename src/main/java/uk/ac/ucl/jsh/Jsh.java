@@ -45,10 +45,12 @@ public class Jsh {
                 if((ex = ExceptionHolder.getInstance().getException()) != null){
                     throw new RuntimeException(ex.getMessage());
                 }
-                ExceptionHolder.getInstance().reset();
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getMessage());
-            } 
+                
+            } finally{
+                ExceptionHolder.getInstance().reset();
+            }
         } 
     }
 

@@ -47,7 +47,7 @@ public final class ExceptionHolder {
      * Call once a exception has been dealt with to ensure exceptions are not handled twice
      */
     public synchronized void reset(){
-        e = null;
+        this.e = null;
     }
     
 }
