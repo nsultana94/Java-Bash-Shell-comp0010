@@ -1,4 +1,3 @@
-
 package uk.ac.ucl.jsh;
 
 import org.junit.Test;
@@ -10,10 +9,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class UnsafeDecoratorTest{
+public class CallTest{
+
     PipedInputStream in;
     PipedOutputStream out;
     ArrayList<String> args;
@@ -31,25 +33,17 @@ public class UnsafeDecoratorTest{
     }
 
     @Test
-    public void UnsafeDecorator() throws Exception {
-        UnsafeDecorator unsafe = new UnsafeDecorator(new Cut());
-        unsafe.exec(args,null,output);
-        out.close();
+    public void CallExecuteUnsafe() throws Exception {
         
+        
+        Call call = new Call("_cut");
+        call.eval(null, out);
+        out.close();
+    
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "jsh cut: wrong number of arguments");
     }
 
-    @Test
-    public void testSort() throws Exception {
-        UnsafeDecorator unsafe = new UnsafeDecorator(new Sort());
-        args.add("testfile2.txt");
-        unsafe.exec(args,null,output);
-        out.close();
-       
-        String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "Apple\napple\ndog\ndog\nlolly");
-    }
 
 
 }

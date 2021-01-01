@@ -145,7 +145,7 @@ public class Call extends Thread implements Command {
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction " + arg);
                 }
-                String arg1 = arg.replace("<", "");
+                String arg1 = arg.replace(">", "");
                 if (!new File(currentDirectory + File.separator + arg1).exists()) {
                     outputFile = new File(currentDirectory + File.separator + arg1);
                     outputFile.createNewFile();
