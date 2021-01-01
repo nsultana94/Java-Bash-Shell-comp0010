@@ -87,7 +87,6 @@ public class glob {
                 tokens.addAll(globbingResult);
             }
         }
-        System.out.println(tokens);
         return tokens;
     }
 
