@@ -216,7 +216,7 @@ public class Call extends Thread implements Command {
 
         List<String> cmdsubinput = new ArrayList<>();
         String cmdsub = "";
-        String echoCommand = rawCommand;
+        
         
         cmdsub = matcher.group();
         String command = cmdsub;
