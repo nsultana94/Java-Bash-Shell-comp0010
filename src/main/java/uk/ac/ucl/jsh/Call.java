@@ -228,9 +228,11 @@ public class Call extends Thread implements Command {
         cmdsubinput = subcmd.get_output(input);
         List<String> commandsubargs = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
-        for(String i: cmdsubinput){
-            sb.append(i);
-            sb.append(" ");
+        for(int i = 0; i < cmdsubinput.size(); i++){
+            sb.append(cmdsubinput.get(i));
+            if (i!= cmdsubinput.size()-1){
+                sb.append(" ");
+            }   
         }
         
 
