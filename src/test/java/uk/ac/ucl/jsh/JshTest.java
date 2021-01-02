@@ -44,6 +44,16 @@ public class JshTest {
         Scanner scn = new Scanner(in);
         assertEquals(scn.next(), "foo");
     }
+    @Test(expected = RuntimeException.class)
+    public void JshException() throws Exception {
+        
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        Jsh.eval("cut", out);
+        Scanner scn = new Scanner(in);
+        assertEquals(scn.next(), "jsh cut: wrong number of arguments");
+    }
 
     @Test
     public void jshMain() throws Exception {

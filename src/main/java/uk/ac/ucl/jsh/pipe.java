@@ -38,7 +38,8 @@ public class pipe implements Command {
    * 
    * @param input {@code BufferedReader} The input to the whole pipe
    * @param input {@code OutputStream} The output from the whole pipe
-   * @throws StopEverythingException
+   * @throws IOException
+   * @throws InterruptedException
    */
   public void eval(BufferedReader input, OutputStream output)
       throws IOException, InterruptedException {

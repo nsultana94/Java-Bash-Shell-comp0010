@@ -42,6 +42,15 @@ public class IOTest{
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "Apple\napple\ndog\ndog\nlolly");
     }
+    @Test
+    public void testInputRedirectionNoSpace() throws Exception {
+        Call call = new Call("sort <testfile2.txt");
+        call.eval(null, out);
+        out.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "Apple\napple\ndog\ndog\nlolly");
+    }
 
     @Test (expected = RuntimeException.class)
     public void IOexceptionTooManyInputRedirections() throws Exception {
@@ -53,7 +62,7 @@ public class IOTest{
 
     @Test(expected = RuntimeException.class)
     public void IOexceptionUnspecifiedFileRedirection() throws Exception {
-        Call call = new Call("sort < testfile2.txt <");
+        Call call = new Call("sort <");
         call.eval(null, out);
         out.close();
     }
@@ -65,11 +74,66 @@ public class IOTest{
         out.close();
     }
 
+    @Test(expected = RuntimeException.class)
+    public void IOexceptionFileNotExistNoSpace() throws Exception {
+        Call call = new Call("sort <test.txt");
+        call.eval(null, out);
+        out.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void InputDirectiomTooManyFilesNoSpACE() throws Exception {
+        Call call = new Call("sort <testfile2.txt <testfile.txt");
+        call.eval(null, out);
+        out.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void OutputDirectionTooManyFilesNoSpceCE() throws Exception {
+        Call call = new Call("sort >testfile2.txt >testfile.txt");
+        call.eval(null, out);
+        out.close();
+    }
+    @Test(expected = RuntimeException.class)
+    public void OutputRedirectionexceptionTooManyFiles() throws Exception {
+        Call call = new Call("sort > testfile.txt > test.txt");
+        call.eval(null, out);
+        out.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void OutputRedirectionExceptionUnspecifiedFile() throws Exception {
+        Call call = new Call("sort >");
+        call.eval(null, out);
+        out.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void OutputRedirectionTooManyFiles() throws Exception {
+        Call call = new Call("sort > testfile.txt >testfile.txt");
+        call.eval(null, out);
+        out.close();
+    }
+
+
     @Test
     public void testOutputRedirection() throws Exception {
        
         BufferedReader fileinput;
         Call call = new Call("sort testfile2.txt > output.txt");
+        call.eval(null, out);
+        out.close();
+        String currentDirectory = directory.getCurrentDirectory();
+        File file = new File(currentDirectory + File.separator + "output.txt");
+        fileinput = new BufferedReader(new FileReader(file));
+        String fileresult = fileinput.lines().collect(Collectors.joining("\n"));
+        assertEquals(fileresult, "Apple\napple\ndog\ndog\nlolly");
+    }
+    @Test
+    public void testOutputRedirectionNoSpace() throws Exception {
+       
+        BufferedReader fileinput;
+        Call call = new Call("sort testfile2.txt >output.txt");
         call.eval(null, out);
         out.close();
         String currentDirectory = directory.getCurrentDirectory();
@@ -86,7 +150,21 @@ public class IOTest{
         call.eval(null, out);
         out.close();
         String currentDirectory = directory.getCurrentDirectory();
-        File file = new File(currentDirectory + File.separator + "output.txt");
+        File file = new File(currentDirectory + File.separator + "output2.txt");
+        fileinput = new BufferedReader(new FileReader(file));
+        String fileresult = fileinput.lines().collect(Collectors.joining("\n"));
+        assertEquals(fileresult, "Apple\napple\ndog\ndog\nlolly");
+        file.delete();
+
+    }
+    @Test
+    public void testOutputRedirectionfilecreationnospace() throws Exception {
+        BufferedReader fileinput;
+        Call call = new Call("sort testfile2.txt >output2.txt");
+        call.eval(null, out);
+        out.close();
+        String currentDirectory = directory.getCurrentDirectory();
+        File file = new File(currentDirectory + File.separator + "output2.txt");
         fileinput = new BufferedReader(new FileReader(file));
         String fileresult = fileinput.lines().collect(Collectors.joining("\n"));
         assertEquals(fileresult, "Apple\napple\ndog\ndog\nlolly");
@@ -94,18 +172,5 @@ public class IOTest{
 
     }
 
-    @Test(expected = RuntimeException.class)
-    public void OutputRedirectionexceptionTooManyFiles() throws Exception {
-        Call call = new Call("sort > testfile.txt > test.txt");
-        call.eval(null, out);
-        out.close();
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void OutputRedirectionExceptionUnspecifiedFile() throws Exception {
-        Call call = new Call("sort > testfile.txt >");
-        call.eval(null, out);
-        out.close();
-    }
-
+    
 }

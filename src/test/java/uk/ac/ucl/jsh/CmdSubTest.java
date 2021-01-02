@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class CmdSubTest{
@@ -23,4 +23,19 @@ public class CmdSubTest{
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "apple\nApple\nlolly\ndog");
     } 
+
+    @Test
+    public void testCommandSubstituionEcho() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        
+        Call call = new Call("echo `echo foo`");
+        call.eval(null, out);
+        out.close();
+        Scanner scn = new Scanner(in);
+        assertEquals(scn.next(), "foo");
+        
+
+}
 }

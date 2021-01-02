@@ -68,7 +68,7 @@ public class Call extends Thread implements Command {
         Matcher matcher = pattern.matcher(rawCommand);
 
         if (matcher.find()) {
-
+            
             doCmdSub(input, output, matcher);
             return;
         }
@@ -145,7 +145,7 @@ public class Call extends Thread implements Command {
                 if (outputFileBool == true) {
                     throw new RuntimeException(" more than one I/O in same direction " + arg);
                 }
-                String arg1 = arg.replace("<", "");
+                String arg1 = arg.replace(">", "");
                 if (!new File(currentDirectory + File.separator + arg1).exists()) {
                     outputFile = new File(currentDirectory + File.separator + arg1);
                     outputFile.createNewFile();
@@ -228,9 +228,11 @@ public class Call extends Thread implements Command {
         cmdsubinput = subcmd.get_output(input);
         List<String> commandsubargs = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
-        for(String i: cmdsubinput){
-            sb.append(i);
-            sb.append(" ");
+        for(int i = 0; i < cmdsubinput.size(); i++){
+            sb.append(cmdsubinput.get(i));
+            if (i!= cmdsubinput.size()-1){
+                sb.append(" ");
+            }   
         }
         
 
