@@ -85,8 +85,8 @@ public class Call extends Thread implements Command {
         // return array of args - for each arg in arg evaluate that arg and then do any
         // other args
 
-        List<String> args = tokenizeCommand(rawCommand, output);
-        List<String> args1 = tokenizeCommand(rawCommand, output);
+        List<String> args = tokenizeCommand(rawCommand);
+        List<String> args1 = tokenizeCommand(rawCommand);
 
         File inputFile = null;
         File outputFile = null;
@@ -187,7 +187,7 @@ public class Call extends Thread implements Command {
      * @return ArrayList of tokens for the command
      * @throws IOException
      */
-    public synchronized List<String> tokenizeCommand(String rawCommands, OutputStream output) throws IOException {
+    public synchronized List<String> tokenizeCommand(String rawCommands) throws IOException {
         glob glob_processor = new glob();
         List<String> args = glob_processor.get_tokens(rawCommands);
         return args;
@@ -248,18 +248,18 @@ public class Call extends Thread implements Command {
 
         for (String arg : cmdsubinput) {
             String temp = rawCommand;
-            commandsubargs = tokenizeCommand(temp, output);
+            commandsubargs = tokenizeCommand(temp);
 
             if(commandsubargs.get(0).equals("echo")){
                 temp = temp.replace(command, sb.toString());
-                commandsubargs = tokenizeCommand(temp, output);
+                commandsubargs = tokenizeCommand(temp);
                 executeCommand(commandsubargs, input, output);
                 break;
                 
             } 
             
             temp = temp.replace(command, arg);
-            commandsubargs = tokenizeCommand(temp, output);
+            commandsubargs = tokenizeCommand(temp);
             executeCommand(commandsubargs, input, output);
 
         }

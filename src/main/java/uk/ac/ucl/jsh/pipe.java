@@ -26,7 +26,8 @@ public class pipe implements Command {
    * @throws IOException
    */
   public pipe(String rawCommand) throws IOException {
-    for (String command : rawCommand.split("\\|")) {
+    for (String command : rawCommand.split("\\|(?=(?:[^\"\']*\"[^\"\']*\")*[^\"\']*$)")) //Regex to avoid quoted | operators
+    {
       calls.add(new Call(command.trim()));
     }
   }
