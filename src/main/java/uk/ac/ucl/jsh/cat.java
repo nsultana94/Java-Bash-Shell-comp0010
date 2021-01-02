@@ -45,13 +45,18 @@ public class cat implements Application {
                     Path filePath = Paths.get(currentDirectory + File.separator + arg);
                     try{
                         reader = Files.newBufferedReader(filePath, encoding);
-                        write(reader,output);
                     } catch (IOException e) {
                         throw new RuntimeException("cat: cannot open " + arg);
+                    }
+                    try{
+                        write(reader,output);
+                    }catch (IOException e){
+                        System.out.println(e.getMessage());
                     }
                 } else {
                     throw new RuntimeException("cat: file does not exist");
                 }
+                
             }
         }
     }

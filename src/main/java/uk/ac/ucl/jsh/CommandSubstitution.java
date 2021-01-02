@@ -34,18 +34,20 @@ public class CommandSubstitution {
     
     /**
      * gets the output from command substitution
+     * 
      * @param input {@code BufferedReader} representing the standard input
-     * @return {@code ArrayList} 
-     * @throws IOException if output writing fails
+     * @return {@code ArrayList}
+     * @throws IOException          if output writing fails
+     * @throws InterruptedException
      */
 
-    public ArrayList<String> get_output(BufferedReader input) throws IOException {
+    public synchronized ArrayList<String> get_output(BufferedReader input) throws IOException, InterruptedException {
        
         PipedOutputStream output = new PipedOutputStream();
         ArrayList<String> result = new ArrayList<String>();
         
         PipedInputStream in = new PipedInputStream(output);
-        Call call = new Call(rawCommand);
+        pipe call = new pipe(rawCommand);
         call.eval(input,output);
         
         output.flush();
@@ -55,7 +57,6 @@ public class CommandSubstitution {
         
         BufferedReader input1 = new BufferedReader(reader);
         
-        //StringBuilder sb = new StringBuilder();
         String line = input1.readLine();
         while(line != null && line != ""){
             String[] arr = line.split(" ");  
@@ -67,11 +68,7 @@ public class CommandSubstitution {
             line = input1.readLine();
         }
        input1.close();
-        
-       // System.out.println(sb.toString());
-       // Reader sr = new StringReader(sb.toString());
-      //  BufferedReader cmdsubinput = new BufferedReader(sr);
-
+            
         return result;
 
     }
