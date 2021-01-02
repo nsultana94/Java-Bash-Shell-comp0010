@@ -3,16 +3,36 @@ package uk.ac.ucl.jsh;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import org.junit.After;
+import org.junit.Before;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
 
 public class JshTest {
     CurrentDirectory directory = CurrentDirectory.getInstance();
+    List<String> args = new ArrayList<String>();
 
-    public JshTest() {
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+    private final PrintStream originalErr = System.err;
+
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
+        System.setErr(originalErr);
     }
 
     @Test
@@ -25,14 +45,38 @@ public class JshTest {
         assertEquals(scn.next(), "foo");
     }
 
+    @Test
+    public void jshMain() throws Exception {
+        Jsh.main(new String[] { "echo", "foo" });
+        assertEquals("jsh: echo: unexpected argument\njsh: foo: unknown application\n", outContent.toString());
+    }
+
+    @Test
+    public void jshonearg() throws Exception {
+        Jsh.main(new String[] { "echo" });
+        assertEquals("jsh: wrong number of arguments\n", outContent.toString());
+
+    }
+
+    // runs forever : (
+    // @Test
+    // public void jshnoarg() throws Exception {
+    // Jsh.main(new String[] {});
+
+    // }
+
+    // @Test
+    // public void jshNoArg() throws Exception {
+    // Jsh.main(new String[] {});
+    // // BufferedReader input = new BufferedReader(new InputStreamReader(in));
+    // // String result = input.lines().collect(Collectors.joining("\n"));
+    // // assertEquals(result, "");
+    // }
     /*
      * @Test(expected = RuntimeException.class) public void
      * CutExceptionNoArguments() throws Exception { PipedInputStream in = new
      * PipedInputStream(); PipedOutputStream out; out = new PipedOutputStream(in);
      * Jsh.eval("cut", out); out.close(); }
      */
-
-
-    
 
 }
