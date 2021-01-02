@@ -50,7 +50,7 @@ public class find implements Application {
 
     public List<String> globbing(String rawCommand, File targetDirectory) throws IOException {
         String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
-        ArrayList<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         Pattern regex = Pattern.compile(spaceRegex);
         Matcher regexMatcher = regex.matcher(rawCommand);
         String nonQuote;
