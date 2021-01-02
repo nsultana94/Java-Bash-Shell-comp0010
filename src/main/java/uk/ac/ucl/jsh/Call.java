@@ -36,8 +36,16 @@ public class Call extends Thread implements Command {
                 ExceptionHolder.getInstance().setThrowable(e);
             }
             Thread.currentThread().interrupt();
+        }finally{
+            try {
+                output.close();
+            } catch (IOException e) {
+                if (!(e.getMessage() == null)) {
+                    ExceptionHolder.getInstance().setThrowable(e);
+                }
+                Thread.currentThread().interrupt();
+            }
         }
-
     }
 
     /**
@@ -55,9 +63,10 @@ public class Call extends Thread implements Command {
      * @param input  {@code BufferedReader} the standard input for the command to be
      *               executed
      * @param output {@code OutputStreamWriter} the standard output for the command
-     * @throws IOException if files attempted to be opened cannot be
+     * @throws IOException          if files attempted to be opened cannot be
+     * @throws InterruptedException
      */
-    public synchronized void eval(BufferedReader input, OutputStream output) throws IOException {
+    public synchronized void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException {
 
         String currentDirectory = directory.getCurrentDirectory();
 
@@ -201,7 +210,6 @@ public class Call extends Thread implements Command {
         appArgs = new ArrayList<String>(args.subList(1, args.size()));
         Application command = applicationFactory.getApplication(appName, unsafe);
         command.exec(appArgs, input, new OutputStreamWriter(output));
-        output.close();
     }
 
     /**
@@ -210,9 +218,11 @@ public class Call extends Thread implements Command {
      * @param input   The Standard input
      * @param output  The standard output
      * @param matcher The Regular Expression to find where the sub commands are
-     * @throws IOException if cannot open file
+     * @throws IOException          if cannot open file
+     * @throws InterruptedException
      */
-    public synchronized void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher) throws IOException {
+    public synchronized void doCmdSub(BufferedReader input, OutputStream output, Matcher matcher)
+            throws IOException, InterruptedException {
 
         List<String> cmdsubinput = new ArrayList<>();
         String cmdsub = "";
