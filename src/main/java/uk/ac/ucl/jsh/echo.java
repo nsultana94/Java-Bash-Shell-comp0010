@@ -27,8 +27,8 @@ public class echo implements Application {
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException{
         boolean atLeastOnePrinted = false;
         for (String arg : args) {
+            if(atLeastOnePrinted){output.write(" ");}
             output.write(arg);
-            output.write(" ");
             output.flush();
             atLeastOnePrinted = true;
         }
