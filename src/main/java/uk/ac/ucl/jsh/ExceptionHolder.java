@@ -43,7 +43,7 @@ public final class ExceptionHolder {
     }
 
     /**
-     * Resets the stored exception to nothing
+     * Resets the stored exception to {@code null}
      * Call once a exception has been dealt with to ensure exceptions are not handled twice
      */
     public synchronized void reset(){
