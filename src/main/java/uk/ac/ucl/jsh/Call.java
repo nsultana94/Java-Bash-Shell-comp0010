@@ -41,9 +41,9 @@ public class Call extends Thread implements Command {
                 output.close();
             } catch (IOException e) {
                 if (!(e.getMessage() == null)) {
-                    ExceptionHolder.getInstance().setThrowable(e);
-                }
-                Thread.currentThread().interrupt();
+                ExceptionHolder.getInstance().setThrowable(e);
+            }
+            Thread.currentThread().interrupt();
             }
         }
     }
