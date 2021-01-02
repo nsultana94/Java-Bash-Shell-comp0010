@@ -3,7 +3,9 @@ package uk.ac.ucl.jsh;
 
 /**
  * Singleton monitor class to store exceptions thrown
- * Allows one part of a system to access exceptions thrown by other parts
+ * When one call in a pipe throws an exception the {@code Throwable} Object is stored in this class. 
+ * The main class calling the pipe can then look at this class to see thee exception thrown
+ * Allows for the exceptions to be handled safely from another thread to the one throwing the exception
  * @author Saachi Pahwa
  * @author Naima Sultana 
  * @author Joshua Mukherjee
