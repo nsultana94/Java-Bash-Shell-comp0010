@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implements a Pipe. The output of one command is passed into the input of the next
+ * Implements a Pipe. The output of one command is passed into the input of the
+ * next
+ * 
  * @author Saachi Pahwa
- * @author Naima Sultana 
+ * @author Naima Sultana
  * @author Joshua Mukherjee
  */
 
@@ -21,7 +23,9 @@ public class pipe implements Command {
   private List<Thread> calls = new ArrayList<Thread>();
 
   /**
-   * Pipes commands together. The ourput of one command is passed into the input of the next
+   * Pipes commands together. The ourput of one command is passed into the input
+   * of the next
+   * 
    * @param rawCommand The command to be split at pipe operators
    * @throws IOException
    */
@@ -31,8 +35,6 @@ public class pipe implements Command {
     }
   }
 
-
-
   /**
    * runs the pipe. Sets up the pipedStreams and starts each command as a thread
    * 
@@ -41,8 +43,7 @@ public class pipe implements Command {
    * @throws IOException
    * @throws InterruptedException
    */
-  public void eval(BufferedReader input, OutputStream output)
-      throws IOException, InterruptedException {
+  public void eval(BufferedReader input, OutputStream output) throws IOException, InterruptedException {
     PipedOutputStream to_next = new PipedOutputStream();
     BufferedReader in = input;
     Call call;
@@ -62,64 +63,67 @@ public class pipe implements Command {
       c.start();
     }
 
-    while(RunningTheads(calls)){
-      for(Thread thread: calls){
-          if(thread.isInterrupted()){
-            intteruptAll(calls);
-          }
+    while (RunningTheads(calls)) {
+      for (Thread thread : calls) {
+        if (thread.isInterrupted()) {
+          interuptAll(calls);
         }
+      }
     }
-
 
   }
 
   /**
-   * Private method to check if any {@code Thread} in a {@code List} of threads has been interupted
-   * This will occour when they throw an exception adn intterupt themselves
+   * Private method to check if any {@code Thread} in a {@code List} of threads
+   * has been interupted This will occour when they throw an exception and
+   * interupt themselves
+   * 
    * @param threads A {@code List} of {@code Thread} objects
    * @return {@code true} if there are running threads, {@code false} if not
    */
-  private boolean RunningTheads(List<Thread> threads){
+  private boolean RunningTheads(List<Thread> threads) {
     boolean result = false;
-    for(Thread t:threads){
+    for (Thread t : threads) {
       result = result || t.isAlive();
     }
     return result;
   }
-  
+
   /**
-   * Private method to end all {@code Thread}s in a {@code List}
-   * Used to terminate one part of a pipe if one other has been interrupted
+   * Private method to end all {@code Thread}s in a {@code List} Used to terminate
+   * one part of a pipe if one other has been interrupted
+   * 
    * @param threads A {@code List} of {@code Thread} objects to be interrupted
    */
-  private void intteruptAll(List<Thread> threads){
-    for(Thread t: threads){
+  private void interuptAll(List<Thread> threads) {
+    for (Thread t : threads) {
       t.interrupt();
     }
   }
 
-
   /**
-   * A Output stream that is safe to use System.out in
-   * Prevents closing System.out when closing other streams 
+   * A Output stream that is safe to use System.out in Prevents closing System.out
+   * when closing other streams
+   * 
    * @author Saachi Pahwa
-   * @author Naima Sultana 
+   * @author Naima Sultana
    * @author Joshua Mukherjee
    */
   private class SystemSafeStream extends FilterOutputStream {
 
     public SystemSafeStream(OutputStream output) {
-        super(output);
+      super(output);
     }
 
     /**
-     * Doesnt close the underlying Stream. Instead flushes it,
-     * this is used to ensure {@code System.out} isnt closed
+     * Doesnt close the underlying Stream. Instead flushes it, this is used to
+     * ensure {@code System.out} isnt closed
+     * 
      * @throws IOException
      */
     @Override
     public void close() throws IOException {
-        out.flush();
+      out.flush();
     }
   }
 
