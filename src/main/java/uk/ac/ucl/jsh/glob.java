@@ -34,25 +34,30 @@ public class glob {
 
     public List<String> get_tokens(String rawCommand) throws IOException {
 
-        String spaceRegex = "[^\\s]+";
+        String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
         List<String> tokens = new ArrayList<>();
         Pattern regex = Pattern.compile(spaceRegex);
         Matcher regexMatcher = regex.matcher(rawCommand);
 
         while (regexMatcher.find()) {
 
-            if (regexMatcher.group(0) != null) {
+            if (regexMatcher.group(1) != null || regexMatcher.group(2) != null) {
+                tokens.addAll(doGlob(regexMatcher.group().trim()));
+            } else if (regexMatcher.group(0) != null) {
                 tokens.addAll(doGlob(regexMatcher.group().trim()));
             }
 
         }
+
+      
+
         return tokens;
     }
 
     /**
      * Actually runs the Globbing algorithm
      * 
-     * @param regexMatcher {@code Matcher} being used
+     * @param nonQuots {@code String} being used
      * @return {@code List} of tokens found
      * @throws IOException
      */
@@ -92,7 +97,7 @@ public class glob {
         }
 
         if (globbingResult.isEmpty()) {
-            globbingResult.add(nonQuote.replaceAll("'|\"", ""));
+            globbingResult.add(nonQuote.replaceAll("^[\"']+|[\"']+$", ""));
         }
         tokens.addAll(globbingResult);
         return tokens;
