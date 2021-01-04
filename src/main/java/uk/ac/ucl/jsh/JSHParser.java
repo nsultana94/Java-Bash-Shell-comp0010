@@ -30,7 +30,6 @@ public class JSHParser {
         ParseTree tree = parser.command(); 
         List<String> rawCommands = new ArrayList<>();
         String lastSubcommand = "";
-        System.out.println(tree.toStringTree());
         for (int i = 0; i < tree.getChildCount(); i++) {
             if (!tree.getChild(i).getText().equals(";")) {
                 lastSubcommand += tree.getChild(i).getText();
