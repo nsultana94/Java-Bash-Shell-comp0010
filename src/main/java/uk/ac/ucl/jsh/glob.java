@@ -33,17 +33,15 @@ public class glob {
      */
 
     public List<String> get_tokens(String rawCommand) throws IOException {
-        //highlight bits to not glob
-        //run glob
 
-        String spaceRegex = "[^\s]+";
+        String spaceRegex = "[^\\s]+";
         List<String> tokens = new ArrayList<>();
         Pattern regex = Pattern.compile(spaceRegex);
         Matcher regexMatcher = regex.matcher(rawCommand);
 
         while (regexMatcher.find()) {
 
-            if(regexMatcher.group(0) != null){
+            if (regexMatcher.group(0) != null) {
                 tokens.addAll(doGlob(regexMatcher.group().trim()));
             }
 
