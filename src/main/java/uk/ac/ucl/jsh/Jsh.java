@@ -32,6 +32,7 @@ public class Jsh {
             throws IOException, InterruptedException {
 
         JSHParser parser = new JSHParser();
+        ExceptionHolder.getInstance().reset();
         List<String> rawCommands = parser.get_sub_commands(cmdline);
         Throwable ex;
 
