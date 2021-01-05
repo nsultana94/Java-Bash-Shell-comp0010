@@ -43,11 +43,15 @@ public class CommandSubstitution {
 
     public synchronized ArrayList<String> get_output(BufferedReader input) throws IOException, InterruptedException {
        
-        PipedOutputStream output = new PipedOutputStream();
+     
         ArrayList<String> result = new ArrayList<String>();
         
+    
+        String[] commands = rawCommand.split(";", -1);
+        for(int i = 0; i < commands.length; i++){
+        PipedOutputStream output = new PipedOutputStream();
         PipedInputStream in = new PipedInputStream(output);
-        pipe call = new pipe(rawCommand);
+        pipe call = new pipe(commands[i]);
         call.eval(input,output);
         
         output.flush();
@@ -68,6 +72,9 @@ public class CommandSubstitution {
             line = input1.readLine();
         }
        input1.close();
+
+        }
+        
             
         return result;
 

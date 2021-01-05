@@ -36,6 +36,19 @@ public class CmdSubTest{
         Scanner scn = new Scanner(in);
         assertEquals(scn.next(), "foo");
         
+}
 
+@Test
+    public void testCommandSubstiutionSemicolon() throws Exception {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out;
+        out = new PipedOutputStream(in);
+        
+        Call call = new Call("echo `echo foo; echo bar`");
+        call.eval(null, out);
+        out.close();
+        Scanner scn = new Scanner(in);
+        assertEquals(scn.next(), "foo bar");
+        
 }
 }
