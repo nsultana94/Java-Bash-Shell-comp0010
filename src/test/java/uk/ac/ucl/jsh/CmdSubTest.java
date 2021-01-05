@@ -47,8 +47,9 @@ public class CmdSubTest{
         Call call = new Call("echo `echo foo; echo bar`");
         call.eval(null, out);
         out.close();
-        Scanner scn = new Scanner(in);
-        assertEquals(scn.next(), "foo bar");
+        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        String result = input.lines().collect(Collectors.joining("\n"));
+        assertEquals(result, "foo bar");
         
 }
 }
