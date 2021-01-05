@@ -32,6 +32,7 @@ public class Jsh {
             throws IOException, InterruptedException {
 
         JSHParser parser = new JSHParser();
+        ExceptionHolder.getInstance().reset();
         List<String> rawCommands = parser.get_sub_commands(cmdline);
         Throwable ex;
 
@@ -56,16 +57,16 @@ public class Jsh {
     public static void main(String[] args) throws IOException {
         if (args.length > 0) {
             if (args.length != 2) {
-                System.out.println("jsh: wrong number of arguments");
+                System.err.println("jsh: wrong number of arguments");
                 return;
             }
             if (!args[0].equals("-c")) {
-                System.out.println("jsh: " + args[0] + ": unexpected argument");
+                System.err.println("jsh: " + args[0] + ": unexpected argument");
             }
             try {
                 eval(args[1], System.out);
             } catch (Exception e) {
-                System.out.println("jsh: " + e.getMessage());
+                System.err.println("jsh: " + e.getMessage());
             }
         } else {
             System.out.println("Welcome to JSH!");
@@ -78,7 +79,7 @@ public class Jsh {
                         String cmdline = input.readLine();
                         eval(cmdline, System.out);
                     } catch (Exception e) {
-                        System.out.println("jsh: " + e.getMessage());
+                        System.err.println("jsh: " + e.getMessage());
                     }
                     
                 }

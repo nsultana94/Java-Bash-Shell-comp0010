@@ -106,7 +106,7 @@ public class head implements Application {
     private int get_headLines(String arg){
 
             int x =  Integer.parseInt(arg);
-            if(x>=0){
+            if(x>0){
                 return x;
             }else{
                 throw new RuntimeException("head: illegal line count " + arg);

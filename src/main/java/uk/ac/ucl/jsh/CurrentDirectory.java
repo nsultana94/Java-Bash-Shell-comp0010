@@ -10,8 +10,8 @@ package uk.ac.ucl.jsh;
 
 
 public final class CurrentDirectory {
-    private String currentDirectory;
-    private static CurrentDirectory INSTANCE = null;
+    private volatile String currentDirectory;
+    private volatile static CurrentDirectory INSTANCE = null;
 
     /**
      * Constructor creating the object initialised with the starting directory

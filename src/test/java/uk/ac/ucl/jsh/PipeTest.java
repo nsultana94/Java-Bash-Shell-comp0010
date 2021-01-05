@@ -22,7 +22,7 @@ public class PipeTest {
     BufferedReader input;
     CurrentDirectory directory = CurrentDirectory.getInstance();
 
-/*
+
     @Before
     public void setup() throws Exception {
         in = new PipedInputStream();
@@ -48,7 +48,6 @@ public class PipeTest {
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < files.length; i++){
             if(!(files[i].startsWith("."))){
-                System.out.println(files[i]);
                 sb.append(files[i]);
                 if(i!= files.length -1)
                 {
@@ -65,7 +64,7 @@ public class PipeTest {
         new pipe(command).eval(null, out);
         out.close();
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "hello ");
+        assertEquals(result, "hello");
     }
 
     @Test
@@ -83,7 +82,7 @@ public class PipeTest {
         new pipe(command).eval(null, out);
         out.close();
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "hello ");
+        assertEquals(result, "hello");
     }
 
     @Test
@@ -97,13 +96,12 @@ public class PipeTest {
 
     @Test
     public void three() throws IOException, InterruptedException {
-        String command = "ls | grep jsh | cut -b 1";
+        String command = "echo hello | cut -b 1 | cat";
         new pipe(command).eval(null, out);
         out.close();
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "j");
+        assertEquals(result, "h");
     }
 
-  */  
 
 }
