@@ -46,16 +46,15 @@ public class FindTest {
     }
 
     @Test
-    public void FindOnlyExactFileName() throws Exception {
-        args.add("testing");
+    public void FindDirectoryNotSpecified() throws Exception {
         args.add("-name");
-        args.add("'other.txt'");
+        args.add("find.txt");
         find find = new find();
         find.exec(args, null, output);
         out.close();
 
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "testing/find/other.txt");
+        assertEquals(result, "./testing/find.txt");
     }
 
     @Test
@@ -84,15 +83,16 @@ public class FindTest {
     }
 
     @Test
-    public void FindDirectoryNotSpecified() throws Exception {
+    public void FindOnlyExactFileName() throws Exception {
+        args.add("testing");
         args.add("-name");
-        args.add("find.txt");
+        args.add("'other.txt'");
         find find = new find();
         find.exec(args, null, output);
         out.close();
 
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "./testing/find.txt");
+        assertEquals(result, "testing/find/other.txt");
     }
 
     /* exceptions */
