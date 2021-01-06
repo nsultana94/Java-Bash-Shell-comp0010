@@ -34,7 +34,7 @@ public class GlobTest{
     }
 
     @Test
-    public void FindDirectoryNotSpecified() throws Exception {
+    public void GlobTest() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
