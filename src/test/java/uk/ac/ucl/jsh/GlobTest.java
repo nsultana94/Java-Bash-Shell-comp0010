@@ -13,9 +13,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GlobTest{
+public class GlobTest {
 
     PipedInputStream in;
     PipedOutputStream out;
@@ -34,11 +35,11 @@ public class GlobTest{
     }
 
     @Test
-    public void FindDirectoryNotSpecified() throws Exception {
+    public void GlobDirectorySpecified() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
-        Jsh.eval("echo testing/*", out);
+        Jsh.eval("echo testing/*.txt", out);
         Scanner scn = new Scanner(in);
         assertEquals(scn.next(), "testing/find.txt");
 
