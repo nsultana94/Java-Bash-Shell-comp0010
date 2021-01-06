@@ -39,17 +39,15 @@ public class CmdSubTest{
 }
 
 @Test
-    public void testCommandSubstiutionSemicolon() throws Exception {
+    public void testCommandSubstitutionSemicolon() throws Exception {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out;
         out = new PipedOutputStream(in);
-        
-        Call call = new Call("echo `echo foo; echo bar`");
-        call.eval(null, out);
+        Jsh.eval("echo `echo foo; echo bar` hi", out);
         out.close();
         BufferedReader input = new BufferedReader(new InputStreamReader(in));
         String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "foo bar");
+        assertEquals(result, "foo bar hi");
         
 }
 }

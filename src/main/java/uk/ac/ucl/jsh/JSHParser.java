@@ -44,6 +44,7 @@ public class JSHParser {
         Pattern pattern = Pattern.compile("`(.*)$");
         Pattern pattern2 = Pattern.compile("(.*?)`");
         StringBuilder sb = new StringBuilder();
+        
         for(int c = 0; c < rawCommands.size(); c++){
             Matcher matcher = pattern.matcher(rawCommands.get(c));
             if (matcher.find() && c != rawCommands.size() -1){
@@ -68,7 +69,8 @@ public class JSHParser {
                 }
             }
             
-        }
+            
+        } 
         
 
         return rawCommands;
