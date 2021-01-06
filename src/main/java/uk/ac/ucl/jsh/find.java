@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.ArrayList;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class implementing the JSH Application find. Takes a pattern of file to match
  * and recursivly looks for files matching that pattern
- * 
+ *
  * @author Saachi Pahwa
  * @author Naima Sultana
  * @author Joshua Mukherjee
@@ -24,55 +25,41 @@ import java.nio.file.Path;
 public class find implements Application {
 
     /**
-     * Method to recursivly find files matching a pattern
-     * 
+     * Method to walk through directory and find all files matching a pattern
+     *
      * @param targetDirectory directory to look in
-     * @param patternArg      Patterns to match to locate files
-     * @param returnPath      Accumulator for path followed
-     * @param returnPaths     Accumulator for files found
+     * @param patternArg      Pattern to match to locate files
+     * 
+     * @return {@code ArrayList} of file paths found
+     */
+
+    public List<String> findPattern(String patternArg, File targetDirectory) throws IOException {
+        String searchPath = patternArg.replaceAll("\\*", ".*");
+        if (!searchPath.contains("/")) {
+            searchPath = "/" + searchPath;
+        }
+        Pattern regex = Pattern.compile(searchPath);
+
+        try (Stream<Path> walk = Files.walk(targetDirectory.toPath())) {
+            return walk.filter(path -> doesPathMatch(path, regex)).map(Path::toString).collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Method to return whether a path name matches a regex
+     *
+     * @param path  path that is being compared
+     * @param regex regex to compare to path
      * @return {@code ArrayList} of files found
      */
 
-    public List<String> findFile(File targetDirectory, String patternArg, String returnPath,
-            List<String> argReturnPaths) {
-        File[] targetDirListing = targetDirectory.listFiles();
-        if (targetDirListing != null) {
-            for (File child : targetDirListing) {
-                if (Pattern.matches(patternArg, child.getName())) {
-                    argReturnPaths.add(returnPath + "/" + child.getName());
-                }
-                findFile(child, patternArg, returnPath + "/" + child.getName(), argReturnPaths);
-
-            }
+    private boolean doesPathMatch(Path path, Pattern regex) {
+        Matcher matcher = regex.matcher(path.toString());
+        ;
+        if (matcher.find()) {
+            return matcher.group(0) != null;
         }
-        return argReturnPaths;
-    }
-
-    public List<String> globbing(String rawCommand, File targetDirectory) throws IOException {
-        String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
-        List<String> tokens = new ArrayList<>();
-        Pattern regex = Pattern.compile(spaceRegex);
-        Matcher regexMatcher = regex.matcher(rawCommand);
-        String nonQuote;
-        while (regexMatcher.find()) {
-            if (regexMatcher.group(1) != null || regexMatcher.group(2) != null) {
-                String quoted = regexMatcher.group(0).trim();
-                tokens.add(quoted.substring(1, quoted.length() - 1));
-            } else {
-                nonQuote = regexMatcher.group().trim();
-                ArrayList<String> globbingResult = new ArrayList<String>();
-                Path dir = targetDirectory.toPath();
-                DirectoryStream<Path> stream = Files.newDirectoryStream(dir, nonQuote);
-                for (Path entry : stream) {
-                    globbingResult.add(entry.getFileName().toString());
-                }
-                if (globbingResult.isEmpty()) {
-                    globbingResult.add(nonQuote);
-                }
-                tokens.addAll(globbingResult);
-            }
-        }
-        return tokens;
+        return false;
     }
 
     public find() throws IOException {
@@ -80,7 +67,7 @@ public class find implements Application {
 
     /**
      * Method to run the Find Application
-     * 
+     *
      * @param args   the arguments to be passed into the app
      * @param input  {@code BufferedReader} the standard input for the app
      * @param output {@code OutputStreamWriter} the standard output for the app
@@ -89,7 +76,6 @@ public class find implements Application {
 
     @Override
     public void exec(List<String> args, BufferedReader input, OutputStreamWriter output) throws IOException {
-        // String currentDirectory = directory.getCurrentDirectory();
 
         if (args.isEmpty()) {
             throw new RuntimeException("find: missing arguments");
@@ -103,7 +89,6 @@ public class find implements Application {
 
         File targetDirectory;
         String patternArg = "";
-        List<String> globbedPatternArgs = new ArrayList<>();
 
         if (args.size() == 2) {
             targetDirectory = new File("./");
@@ -118,21 +103,13 @@ public class find implements Application {
         }
 
         patternArg = patternArg.replace("'", "");
-        globbedPatternArgs = globbing(patternArg, targetDirectory);
 
-        List<List<String>> allReturnPaths = new ArrayList<>();
+        List<String> allReturnPaths = findPattern(patternArg, targetDirectory);
 
-        for (String globPatternArg : globbedPatternArgs) {
-            List<String> emptyPath = new ArrayList<>();
-            allReturnPaths.add(findFile(targetDirectory, globPatternArg, targetDirectory.getName(), emptyPath));
-        }
-
-        for (List<String> argReturnPaths : allReturnPaths) {
-            for (String path : argReturnPaths) {
-                output.write(path);
-                output.write(System.getProperty("line.separator"));
-                output.flush();
-            }
+        for (String path : allReturnPaths) {
+            output.write(path);
+            output.write(System.getProperty("line.separator"));
+            output.flush();
         }
 
     }
