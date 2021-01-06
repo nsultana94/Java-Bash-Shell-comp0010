@@ -46,7 +46,7 @@ public class find implements Application {
     }
 
     /**
-     * Method to return whether a path name matches regex
+     * Method to return whether a path name matches a regex
      *
      * @param path  path that is being compared
      * @param regex regex to compare to path
