@@ -35,7 +35,7 @@ public class find implements Application {
 
     public List<String> findPattern(String patternArg, File targetDirectory) throws IOException {
         String searchPath = patternArg.replaceAll("\\*", ".*");
-        if (!searchPath.contains("/")) {
+        if (!(searchPath.charAt(0) == ('/'))) {
             searchPath = "/" + searchPath;
         }
         Pattern regex = Pattern.compile(searchPath);
