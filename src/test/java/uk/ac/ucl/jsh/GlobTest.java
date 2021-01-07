@@ -9,12 +9,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class GlobTest {
 
