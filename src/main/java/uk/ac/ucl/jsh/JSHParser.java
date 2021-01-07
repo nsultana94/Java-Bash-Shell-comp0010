@@ -44,7 +44,7 @@ public class JSHParser {
         Pattern pattern = Pattern.compile("`(.*)$");
         Pattern pattern2 = Pattern.compile("(.*?)`");
         StringBuilder sb = new StringBuilder();
-        
+        // algorithm dealing with case where semi-colon is in a command substitution.
         for(int c = 0; c < rawCommands.size(); c++){
             Matcher matcher = pattern.matcher(rawCommands.get(c));
             if (matcher.find() && c != rawCommands.size() -1){
