@@ -90,7 +90,6 @@ public class FindTest {
         find find = new find();
         find.exec(args, null, output);
         out.close();
-
         String result = input.lines().collect(Collectors.joining("\n"));
         assertEquals(result, "testing/find/other.txt");
     }

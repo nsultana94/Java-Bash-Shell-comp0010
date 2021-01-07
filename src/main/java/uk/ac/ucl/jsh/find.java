@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.ArrayList;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -36,14 +36,14 @@ public class Call extends Thread implements Command {
                 ExceptionHolder.getInstance().setThrowable(e);
             }
             Thread.currentThread().interrupt();
-        }finally{
+        } finally {
             try {
                 output.close();
             } catch (IOException e) {
                 if (!(e.getMessage() == null)) {
-                ExceptionHolder.getInstance().setThrowable(e);
-            }
-            Thread.currentThread().interrupt();
+                    ExceptionHolder.getInstance().setThrowable(e);
+                }
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -77,7 +77,7 @@ public class Call extends Thread implements Command {
         Matcher matcher = pattern.matcher(rawCommand);
 
         if (matcher.find()) {
-            
+
             doCmdSub(input, output, matcher);
             return;
         }
@@ -159,7 +159,7 @@ public class Call extends Thread implements Command {
                     outputFile = new File(currentDirectory + File.separator + arg1);
                     outputFile.createNewFile();
                     outputFileBool = true;
-                    
+
                     args1.remove(arg);
                 } else if (new File(currentDirectory + File.separator + arg1).exists()) {
                     outputFile = new File(currentDirectory + File.separator + arg1);
@@ -168,7 +168,7 @@ public class Call extends Thread implements Command {
                 }
             }
         }
-        
+
         if (outputFileBool == true) {
 
             output = new FileOutputStream(outputFile);
@@ -226,11 +226,9 @@ public class Call extends Thread implements Command {
 
         List<String> cmdsubinput = new ArrayList<>();
         String cmdsub = "";
-        
-        
+
         cmdsub = matcher.group();
         String command = cmdsub;
-        
 
         cmdsub = cmdsub.replace("`", "");
 
@@ -238,26 +236,25 @@ public class Call extends Thread implements Command {
         cmdsubinput = subcmd.get_output(input);
         List<String> commandsubargs = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < cmdsubinput.size(); i++){
+        for (int i = 0; i < cmdsubinput.size(); i++) {
             sb.append(cmdsubinput.get(i));
-            if (i!= cmdsubinput.size()-1){
+            if (i != cmdsubinput.size() - 1) {
                 sb.append(" ");
-            }   
+            }
         }
-        
 
         for (String arg : cmdsubinput) {
             String temp = rawCommand;
             commandsubargs = tokenizeCommand(temp);
 
-            if(commandsubargs.get(0).equals("echo")){
+            if (commandsubargs.get(0).equals("echo")) {
                 temp = temp.replace(command, sb.toString());
                 commandsubargs = tokenizeCommand(temp);
                 executeCommand(commandsubargs, input, output);
                 break;
-                
-            } 
-            
+
+            }
+
             temp = temp.replace(command, arg);
             commandsubargs = tokenizeCommand(temp);
             executeCommand(commandsubargs, input, output);
@@ -272,14 +269,6 @@ public class Call extends Thread implements Command {
 
     public void setOutput(OutputStream output) {
         this.output = output;
-    }
-
-    public BufferedReader getInput() {
-        return input;
-    }
-
-    public OutputStream getOutput() {
-        return output;
     }
 
 }
