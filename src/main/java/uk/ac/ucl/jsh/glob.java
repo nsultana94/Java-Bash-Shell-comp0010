@@ -34,7 +34,7 @@ public class glob {
 
     public List<String> get_tokens(String rawCommand) throws IOException {
 
-        String spaceRegex = "\s(?=(?:[^\"\']*[\"'][^\"\']*[\"'])*[^\"\']*$)";
+        String spaceRegex = "[ ](?=(?:[^\"\']*[\"'][^\"\']*[\"'])*[^\"\']*$)";
         // String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
         List<String> tokens = new ArrayList<>();
         Pattern regex = Pattern.compile(spaceRegex);
