@@ -7,7 +7,6 @@ import java.io.OutputStream;
 
 import java.util.List;
 
-
 /**
  * Main Class for the application
  * 
@@ -28,8 +27,7 @@ public class Jsh {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void eval(String cmdline, OutputStream output)
-            throws IOException, InterruptedException {
+    public static void eval(String cmdline, OutputStream output) throws IOException, InterruptedException {
 
         JSHParser parser = new JSHParser();
         ExceptionHolder.getInstance().reset();
@@ -42,16 +40,28 @@ public class Jsh {
             pipe p = new pipe(rawCommand);
             try {
                 p.eval(input, output);
-                if((ex = ExceptionHolder.getInstance().getException()) != null){
+                if ((ex = ExceptionHolder.getInstance().getException()) != null) {
                     throw new RuntimeException(ex.getMessage());
                 }
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getMessage());
-                
-            } finally{
+
+            } finally {
                 ExceptionHolder.getInstance().reset();
             }
-        } 
+        }
+    }
+
+    public static void doUserInput(BufferedReader input) {
+        String prompt = currentDirectory.getCurrentDirectory() + "> ";
+        System.out.print(prompt);
+        try {
+            String cmdline = input.readLine();
+            eval(cmdline, System.out);
+        } catch (Exception e) {
+            System.err.println("jsh: " + e.getMessage());
+        }
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -73,15 +83,7 @@ public class Jsh {
             BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
             try {
                 while (true) {
-                    String prompt = currentDirectory.getCurrentDirectory() + "> ";
-                    System.out.print(prompt);
-                    try {
-                        String cmdline = input.readLine();
-                        eval(cmdline, System.out);
-                    } catch (Exception e) {
-                        System.err.println("jsh: " + e.getMessage());
-                    }
-                    
+                    doUserInput(input);
                 }
             } finally {
                 input.close();

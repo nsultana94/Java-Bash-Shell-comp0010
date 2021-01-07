@@ -161,6 +161,16 @@ public class HeadTest{
     }
 
     @Test(expected = RuntimeException.class)
+    public void ZeroNumberCount() throws Exception {
+        args.add("-n");
+        args.add("0");
+        args.add("testhead.txt");
+        head head = new head();
+        head.exec(args, null, output);
+        out.close();
+    }
+
+    @Test(expected = RuntimeException.class)
     public void HeadWrongNumberArguments() throws Exception {
         args.add("-n");
         args.add("two");
