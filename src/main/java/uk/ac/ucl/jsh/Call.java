@@ -274,12 +274,6 @@ public class Call extends Thread implements Command {
         this.output = output;
     }
 
-    public BufferedReader getInput() {
-        return input;
-    }
-
-    public OutputStream getOutput() {
-        return output;
-    }
+    
 
 }

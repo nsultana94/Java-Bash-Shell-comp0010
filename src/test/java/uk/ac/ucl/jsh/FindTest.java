@@ -67,7 +67,7 @@ public class FindTest {
         out.close();
 
         var actual = input.lines().collect(toSet());
-        assertEquals(Set.of("testing/find.txt", "testing/find/other.txt", "testing/test-other.txt"), actual);
+        assertEquals(Set.of("testing/find.txt", "testing/find/other.txt"), actual);
     }
 
     @Test

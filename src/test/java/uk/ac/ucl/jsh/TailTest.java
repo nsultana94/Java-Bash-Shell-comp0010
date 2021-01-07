@@ -138,17 +138,6 @@ public class TailTest{
         
     }
 
-    /*@Test
-    public void TailWrongNumberArguments() throws Exception {
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out;
-        out = new PipedOutputStream(in);
-        Jsh.eval("tail -n two testhead.txt ", out);
-        out.close();
-        BufferedReader input = new BufferedReader(new InputStreamReader(in));
-        String result = input.lines().collect(Collectors.joining("\n"));
-        assertEquals(result, "");
-    } */
 
     @Test(expected = RuntimeException.class)
     public void TailFileNotExist() throws Exception {
